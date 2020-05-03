@@ -59,6 +59,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ClassStan.cs" />
     <Compile Include="Settings.cs" />
     <Page Include="Contols\SwitchButton.xaml">
       <SubType>Designer</SubType>

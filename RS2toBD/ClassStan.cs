@@ -1,0 +1,106 @@
+﻿using HWDiag;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows.Media;
+using System.Diagnostics;
+using LoggerInSystem;
+
+
+namespace RS2toBD
+{
+    class ClassStan
+    {
+        bool stan100ms; //данные по прокатке рулона, формируются таблица после прокатанного рулона. 
+        bool stan1s;    //данные по работе стана, формируются и через 1мин (~62 сообщения) скидываются в БД.
+        bool stan200ms; //сообщения формируются в течении 60 секунд и после этого записываются в БД.
+
+        private Prodave stan;
+        int Connect = 0;
+
+        Timer TTimer100ms;
+        Timer TTimerMessage;
+        Timer TTimerSQL;
+        Timer TTimer1s;
+        Timer TTimer250msNet;
+
+        
+        SolidColorBrush offLed = new SolidColorBrush(Color.FromRgb(160, 160, 160));
+        SolidColorBrush onOK = new SolidColorBrush(Color.FromRgb(130, 190, 125));
+        SolidColorBrush onError = new SolidColorBrush(Color.FromRgb(255, 0, 0));
+
+
+        public ClassStan(bool stan100ms, bool stan1s, bool stan200ms)
+        {
+            this.stan100ms = stan100ms;
+            this.stan1s = stan1s;
+            this.stan200ms = stan200ms;
+        }
+
+        public void Start()
+        {
+
+            //запуск таймеров 100ms(100ms), 101ms(SQL), 200ms(message), 1000ms(1s)
+            stan = new Prodave();
+            byte[] conn = new byte[] { 192, 168, 0, 11 }; //ip адресс контроллера
+            int res = stan.LoadConnection(Connect, 2, conn, 3, 0);
+
+            if (res != 0)
+            {
+                Console.WriteLine("Error connection! " + stan.Error(res));
+                LogSystem.WriteEventLog("ProDaveStan", "Test", "Error connection!. Error - " + stan.Error(res), EventLogEntryType.Error);
+                
+            }
+            else
+            {
+                LogSystem.WriteEventLog("ProDaveStan", "Test", "Connect OK!", EventLogEntryType.Information);
+
+                int resSAC = stan.SetActiveConnection(Connect);
+                if (resSAC == 0)
+                {
+                    Console.WriteLine("Соединение активно.");
+                    LogSystem.WriteEventLog("ProDaveStan", "Test", "Соединение активно.", EventLogEntryType.Information);
+
+
+
+                    //Connect100ms();
+                    TTimer100ms = new Timer(new TimerCallback(TicTimer100ms), null, 0, 100);
+
+                    TTimerMessage = new Timer(new TimerCallback(TicTimerMessage), null, 0, 200);
+                    TTimerSQL = new Timer(new TimerCallback(TicTimerSQL), null, 0, 101);
+                    TTimer1s = new Timer(new TimerCallback(TicTimer1s), null, 0, 1000);
+
+
+                    TTimer250msNet = new Timer(new TimerCallback(TicTimer250msNet), null, 0, 250);
+
+
+
+                }
+                else
+                {
+                    Console.WriteLine("Соединение не активировано. " + stan.Error(resSAC));
+                    LogSystem.WriteEventLog("ProDaveStan", "Test", "Соединение не активировано. " + stan.Error(resSAC), EventLogEntryType.Error);
+                    System.Diagnostics.Debug.WriteLine("Error - Соединение не активировано.");
+                    
+
+                }
+
+            }
+
+        }
+
+        public void Stop()
+        {
+            //TODO Закрытие таймеров
+            TTimer100ms.Dispose();
+            TTimerMessage.Dispose();
+            TTimerSQL.Dispose();
+            TTimer1s.Dispose();
+            TTimer250msNet.Dispose();
+        }
+    }
+
+}

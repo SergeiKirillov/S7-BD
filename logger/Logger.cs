@@ -8,7 +8,16 @@ using System.Xml;
 
 namespace LoggerInSystem
 {
-
+    public enum Direction
+    {
+        ERROR,
+        WARNING,
+        StanMessage,
+        StanMessageNull,
+        Stan1s,
+        StanPassportRulona,
+        StanPerevalki
+    }
 
     public class LogSystem
     {
@@ -17,6 +26,48 @@ namespace LoggerInSystem
         /// <param name="sourceName">Название источника</param>
         /// <param name="message">Сообщение</param>
         /// <param name="type">Тип сообщения</param>
+        /// 
+       
+
+        public static void WriteConsoleLog(Direction clMes, string message)
+        {
+            switch (clMes)
+            {
+                case Direction.ERROR:
+                    Console.BackgroundColor = ConsoleColor.Red;
+                    Console.ForegroundColor = ConsoleColor.Black;
+                    break;
+                case Direction.WARNING:
+                    break;
+                case Direction.StanMessage:
+                    Console.BackgroundColor = ConsoleColor.Yellow;
+                    Console.ForegroundColor = ConsoleColor.Black;
+                    break;
+                case Direction.StanMessageNull:
+                    Console.BackgroundColor = ConsoleColor.DarkYellow;
+                    Console.ForegroundColor = ConsoleColor.Black;
+                    break;
+                case Direction.Stan1s:
+                    Console.BackgroundColor = ConsoleColor.Green;
+                    Console.ForegroundColor = ConsoleColor.Black;
+                    break;
+                case Direction.StanPassportRulona:
+                    Console.BackgroundColor = ConsoleColor.Blue;
+                    Console.ForegroundColor = ConsoleColor.White;
+                    break;
+                case Direction.StanPerevalki:
+                    Console.BackgroundColor = ConsoleColor.DarkYellow;
+                    Console.ForegroundColor = ConsoleColor.Black;
+                    break;
+                default:
+                    break;
+            }
+            
+            Console.WriteLine(message);
+            Console.ResetColor();
+        }
+
+        
         public static void WriteEventLog(string eventLogName, string sourceName, string message, EventLogEntryType type)
         {
             try
@@ -88,5 +139,10 @@ namespace LoggerInSystem
                 Console.WriteLine(ex.Message);
             }
         }
+
+       
     }
+
+    
+
 }

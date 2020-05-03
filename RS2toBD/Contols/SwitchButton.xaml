@@ -1,0 +1,19 @@
+﻿<UserControl x:Class="RS2toBD.Contols.SwitchButton"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:RS2toBD.Contols"
+             mc:Ignorable="d" Height="154" Width="305">
+    
+   
+    <Viewbox>
+        <Grid Height="50" Width="100">
+            <Rectangle x:Name="RectSwitch" Fill="#FFA0A0A0" HorizontalAlignment="Left" Height="50" RadiusY="25" RadiusX="25" VerticalAlignment="Top" Width="100" MouseLeftButtonDown="Rectangle_MouseLeftButtonDown"/>
+            <Ellipse x:Name="CirclSwitch" Fill="#FFFFFFFD" HorizontalAlignment="Center" Height="46" VerticalAlignment="Center" Width="46" MouseLeftButtonDown="Ellipse_MouseLeftButtonDown"/>
+
+        </Grid>
+    </Viewbox>
+
+   
+</UserControl>

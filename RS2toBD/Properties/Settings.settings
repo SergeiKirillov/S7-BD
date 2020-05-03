@@ -1,0 +1,15 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="RS2toBD.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="strConnect" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Data Source = 192.168.0.46; Initial Catalog = rs2; User ID = rs2admin; Password = 159951</Value>
+    </Setting>
+    <Setting Name="intPort" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">5006</Value>
+    </Setting>
+    <Setting Name="strAdress" Type="System.String" Scope="User">
+      <Value Profile="(Default)">127.0.0.1</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

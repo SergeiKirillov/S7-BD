@@ -1,0 +1,34 @@
+﻿<Window x:Class="Stan_BD_prodave.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Stan_BD_prodave"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="350" Width="525" Closed="Window_Closed">
+  
+        <StackPanel>
+            <Button Name="btnSave" Content="Считывание данных с контроллера(ProDave)" Click="btnSave_Click" Height="30" Margin="103,0,103,0"/>
+            <Label Name="lbl1s" Content=""/>
+
+
+            <Label  Content="Пример записи в журнал событий"/>
+            <Button Name="btnLogSaveSatandart" Content="Write to the Application Event Log" Click="btnLogSaveSatandart_Click" Height="30" Width="200"/>
+            <Button Name="btnLogSave" Content="Запись в журнал событий" Click="btnLogSave_Click" Height="30" Width="200" />
+            <Button Name="btnLogSaveClassLogger" Content="Write to the Application Event Log with class LogSystem" Click="btnLogSaveClassLogger_Click" Height="30" Width="350"/>
+            
+        
+            <Grid>
+                <ListView Margin="10" Height="120"  Name="lstStatus">
+                    <!--<ListView.View>
+                        <GridView>
+                        <GridViewColumn Header="dateTime" Width="120" DisplayMemberBinding="{Binding dtMessage}" />
+                        <GridViewColumn Header="Message" Width="300" DisplayMemberBinding="{Binding strMessage}"/>
+                        <GridViewColumn Header="dateTime" Width="80" DisplayMemberBinding="{Binding strBlok}" />
+                    </GridView>
+                    </ListView.View>-->
+                </ListView>
+            </Grid>
+        </StackPanel>
+
+</Window>

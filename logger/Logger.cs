@@ -5,18 +5,21 @@ using System.Text;
 using Microsoft.Win32;
 using System.IO;
 using System.Xml;
+using System.Threading.Tasks;
+
 
 namespace LoggerInSystem
 {
     public enum Direction
     {
+        Ok,
         ERROR,
         WARNING,
-        StanMessage,
-        StanMessageNull,
-        Stan1s,
-        StanPassportRulona,
-        StanPerevalki
+        OkStanMessage,
+        OkStanMessageNull,
+        OkStan1s,
+        OkStanPassportRulona,
+        OkStanPerevalki
     }
 
     public class LogSystem
@@ -27,51 +30,113 @@ namespace LoggerInSystem
         /// <param name="message">Сообщение</param>
         /// <param name="type">Тип сообщения</param>
         /// 
-       
 
-        public static void WriteConsoleLog(Direction clMes, string message)
+        static string eventLogName = "ProDaveStan";
+
+        #region public метод который распределяет что куда писать в зависимости от переданного классаСообщения
+
+        public static void Write(string _className, Direction _clasMessage, string _MessageText)
+        {
+
+            switch (_clasMessage)
+            {
+
+                case Direction.ERROR:
+                    WriteConsoleLog(_clasMessage, _MessageText);
+                    WriteFileLog(_MessageText);
+                    WriteEventLog(_className, _MessageText, EventLogEntryType.Error);
+
+                    break;
+                case Direction.WARNING:
+                    WriteConsoleLog(_clasMessage, _MessageText);
+                    WriteFileLog(_MessageText);
+                    WriteEventLog(_className, _MessageText, EventLogEntryType.Warning);
+                    break;
+
+                case Direction.Ok:
+                    WriteConsoleLog(_clasMessage, _MessageText);
+                    WriteFileLog(_MessageText);
+                    WriteEventLog(_className, _MessageText, EventLogEntryType.Information);
+                    break;
+                case Direction.OkStanMessage:
+                    WriteConsoleLog(_clasMessage, _MessageText);
+                    break;
+                case Direction.OkStanMessageNull:
+                    WriteConsoleLog(_clasMessage, _MessageText);
+                    break;
+                case Direction.OkStan1s:
+                    WriteConsoleLog(_clasMessage, _MessageText);
+                    break;
+                case Direction.OkStanPassportRulona:
+                    WriteConsoleLog(_clasMessage, _MessageText);
+                    break;
+                case Direction.OkStanPerevalki:
+                    WriteConsoleLog(_clasMessage, _MessageText);
+                    break;
+                default:
+                    break;
+            }
+
+        }
+
+        #endregion
+
+
+
+
+        #region вывод на консоль
+        private static void WriteConsoleLog(Direction clMes, string message)
         {
             switch (clMes)
             {
+                case Direction.Ok:
+                    Console.BackgroundColor = ConsoleColor.Black;
+                    Console.ForegroundColor = ConsoleColor.White;
+                    break;
                 case Direction.ERROR:
                     Console.BackgroundColor = ConsoleColor.Red;
                     Console.ForegroundColor = ConsoleColor.Black;
                     break;
                 case Direction.WARNING:
                     break;
-                case Direction.StanMessage:
+                case Direction.OkStanMessage:
                     Console.BackgroundColor = ConsoleColor.Yellow;
                     Console.ForegroundColor = ConsoleColor.Black;
                     break;
-                case Direction.StanMessageNull:
+                case Direction.OkStanMessageNull:
                     Console.BackgroundColor = ConsoleColor.DarkYellow;
                     Console.ForegroundColor = ConsoleColor.Black;
                     break;
-                case Direction.Stan1s:
+                case Direction.OkStan1s:
                     Console.BackgroundColor = ConsoleColor.Green;
                     Console.ForegroundColor = ConsoleColor.Black;
                     break;
-                case Direction.StanPassportRulona:
+                case Direction.OkStanPassportRulona:
                     Console.BackgroundColor = ConsoleColor.Blue;
                     Console.ForegroundColor = ConsoleColor.White;
                     break;
-                case Direction.StanPerevalki:
+                case Direction.OkStanPerevalki:
                     Console.BackgroundColor = ConsoleColor.DarkYellow;
                     Console.ForegroundColor = ConsoleColor.Black;
                     break;
                 default:
                     break;
             }
-            
+
             Console.WriteLine(message);
             Console.ResetColor();
         }
+        #endregion
 
-        
-        public static void WriteEventLog(string eventLogName, string sourceName, string message, EventLogEntryType type)
+        #region Вывод в журнал сообщений виндоус
+        //private static void WriteEventLog(string eventLogName, string sourceName, string message, EventLogEntryType type)
+        private static void WriteEventLog(string sourceName, string message, EventLogEntryType type)
         {
+
             try
             {
+
+
                 EventLog log = new EventLog { Log = eventLogName };
                 if (string.IsNullOrEmpty(sourceName))
                 {
@@ -107,7 +172,7 @@ namespace LoggerInSystem
                         {
                             object dotNetInstallRoot = dotNetFrameworkSettings.GetValue("InstallRoot", null, RegistryValueOptions.None);
 
-                            if (dotNetInstallRoot!=null)
+                            if (dotNetInstallRoot != null)
                             {
                                 string eventMessageFileLocation = dotNetInstallRoot.ToString() +
                                         "v" +
@@ -124,8 +189,8 @@ namespace LoggerInSystem
                             }
 
 
-                            
-                            
+
+
                         }
 
                     }
@@ -139,10 +204,41 @@ namespace LoggerInSystem
                 Console.WriteLine(ex.Message);
             }
         }
+        #endregion
 
-       
+        #region Вывод в файл
+        private static void WriteFileLog(string message)
+        {
+            try
+            {
+                //Если не удачно то записываем в локальный файл
+                DateTime currenttime = DateTime.Now;
+                string pathProg = System.AppDomain.CurrentDomain.BaseDirectory.ToString() + "Log.txt";
+
+                using (System.IO.StreamWriter file = new System.IO.StreamWriter(pathProg, true))
+                {
+                    string tmptxt = String.Format("{0:dd.MM.yyyy HH:mm:ss} {1}", currenttime, message);
+                    file.WriteLine(tmptxt);
+                    file.Close();
+                }
+            }
+            catch
+            { }
+        }
+        
+        #endregion
+
+        #region Вывод сообщения в окно вывода VS
+        static void WriteOutputVSLog(string messageL)
+        {
+            System.Diagnostics.Debug.WriteLine(messageL);
+        }
+        
+        
+        #endregion
+
     }
 
-    
+
 
 }

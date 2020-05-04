@@ -18,6 +18,8 @@ namespace RS2toBD
         bool stan1s;    //данные по работе стана, формируются и через 1мин (~62 сообщения) скидываются в БД.
         bool stan200ms; //сообщения формируются в течении 60 секунд и после этого записываются в БД.
 
+        bool NetSend; //Передача данных по сети для создания визуализации на удаленном компьютере
+
         private Prodave stan;
         int Connect = 0;
 
@@ -33,73 +35,123 @@ namespace RS2toBD
         SolidColorBrush onError = new SolidColorBrush(Color.FromRgb(255, 0, 0));
 
 
-        public ClassStan(bool stan100ms, bool stan1s, bool stan200ms)
+        public ClassStan(bool stan100ms, bool stan1s, bool stan200ms, bool NetSend)
         {
             this.stan100ms = stan100ms;
             this.stan1s = stan1s;
             this.stan200ms = stan200ms;
+            this.NetSend = NetSend;
         }
 
+        #region Внешний метод  создаеющий соединение с контроллером и запускающий метод считывание данных с контроллера
         public void Start()
         {
+            
+            //Метод производит подключение к котроллеру и устанавливает связь
+            //Если соединение успешно то вызывает поток-таймеры. и внутри них выполнение действия по таймеру.
 
-            //запуск таймеров 100ms(100ms), 101ms(SQL), 200ms(message), 1000ms(1s)
-            stan = new Prodave();
-            byte[] conn = new byte[] { 192, 168, 0, 11 }; //ip адресс контроллера
-            int res = stan.LoadConnection(Connect, 2, conn, 3, 0);
-
-            if (res != 0)
+            try
             {
-                Console.WriteLine("Error connection! " + stan.Error(res));
-                LogSystem.WriteEventLog("ProDaveStan", "Test", "Error connection!. Error - " + stan.Error(res), EventLogEntryType.Error);
-                
-            }
-            else
-            {
-                LogSystem.WriteEventLog("ProDaveStan", "Test", "Connect OK!", EventLogEntryType.Information);
+                //запуск таймеров 100ms(100ms), 101ms(SQL), 200ms(message), 1000ms(1s)
+                stan = new Prodave();
+                byte[] conn = new byte[] { 192, 168, 0, 11 }; //ip адресс контроллера
+                int res = stan.LoadConnection(Connect, 2, conn, 3, 0);
 
-                int resSAC = stan.SetActiveConnection(Connect);
-                if (resSAC == 0)
+                if (res != 0)
                 {
-                    Console.WriteLine("Соединение активно.");
-                    LogSystem.WriteEventLog("ProDaveStan", "Test", "Соединение активно.", EventLogEntryType.Information);
-
-
-
-                    //Connect100ms();
-                    TTimer100ms = new Timer(new TimerCallback(TicTimer100ms), null, 0, 100);
-
-                    TTimerMessage = new Timer(new TimerCallback(TicTimerMessage), null, 0, 200);
-                    TTimerSQL = new Timer(new TimerCallback(TicTimerSQL), null, 0, 101);
-                    TTimer1s = new Timer(new TimerCallback(TicTimer1s), null, 0, 1000);
-
-
-                    TTimer250msNet = new Timer(new TimerCallback(TicTimer250msNet), null, 0, 250);
-
-
+                    LogSystem.Write("StanStart", Direction.ERROR, "Error connection!. Error - " + stan.Error(res));
+                    //LogSystem.WriteConsoleLog(Direction.ERROR, "Error connection! " + stan.Error(res));
+                    //LogSystem.WriteEventLog("ProDaveStan", "Test", "Error connection!. Error - " + stan.Error(res), EventLogEntryType.Error);
 
                 }
                 else
                 {
-                    Console.WriteLine("Соединение не активировано. " + stan.Error(resSAC));
-                    LogSystem.WriteEventLog("ProDaveStan", "Test", "Соединение не активировано. " + stan.Error(resSAC), EventLogEntryType.Error);
-                    System.Diagnostics.Debug.WriteLine("Error - Соединение не активировано.");
-                    
+
+                    //LogSystem.WriteEventLog("ProDaveStan", "Test", "Connect OK!", EventLogEntryType.Information);
+                    LogSystem.Write("StanStart", Direction.Ok, "Connect OK!");
+
+                    int resSAC = stan.SetActiveConnection(Connect);
+                    if (resSAC == 0)
+                    {
+                        //Console.WriteLine("Соединение активно.");
+
+                        //LogSystem.WriteConsoleLog(Direction.OK, "Соединение активно.");
+                        //LogSystem.WriteEventLog("ProDaveStan", "Test", "Соединение активно.", EventLogEntryType.Information);
+
+                        LogSystem.Write("StanStart", Direction.Ok, "Соединение активно.");
+
+                        TTimer100ms = new Timer(new TimerCallback(TicTimer100ms), null, 0, 100);
+                        TTimerMessage = new Timer(new TimerCallback(TicTimerMessage), null, 0, 200);
+                        TTimerSQL = new Timer(new TimerCallback(TicTimerSQL), null, 0, 101);
+                        TTimer1s = new Timer(new TimerCallback(TicTimer1s), null, 0, 1000);
+                        
+                    }
+                    else
+                    {
+
+                        //Console.WriteLine("Соединение не активировано. " + stan.Error(resSAC));
+                        //LogSystem.WriteConsoleLog(Direction.WARNING, "Соединение не активировано. " + stan.Error(resSAC));
+                        //LogSystem.WriteEventLog("ProDaveStan", "Test", "Соединение не активировано. " + stan.Error(resSAC), EventLogEntryType.Error);
+                        LogSystem.Write("StanStart", Direction.WARNING, "Соединение не активировано. " + stan.Error(resSAC));
+
+                        
+                        
+                    }
 
                 }
-
             }
+            catch (Exception)
+            {
 
+                throw;
+            }
         }
+
+        #endregion
+
+        #region считывание данных с контроллера и запись их в критичный буфер
+        private void TicTimer100ms(object state)
+        {
+
+         
+        }
+        #endregion
+
+
+        private void TicTimer1s(object state)
+        {
+            
+        }
+
+        private void TicTimerSQL(object state)
+        {
+            
+        }
+
+        private void TicTimerMessage(object state)
+        {
+            
+        }
+
+        
 
         public void Stop()
         {
-            //TODO Закрытие таймеров
-            TTimer100ms.Dispose();
-            TTimerMessage.Dispose();
-            TTimerSQL.Dispose();
-            TTimer1s.Dispose();
-            TTimer250msNet.Dispose();
+            try
+            {
+                //TODO Закрытие таймеров
+                TTimer100ms.Dispose();
+                TTimerMessage.Dispose();
+                TTimerSQL.Dispose();
+                TTimer1s.Dispose();
+                TTimer250msNet.Dispose();
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            
         }
     }
 

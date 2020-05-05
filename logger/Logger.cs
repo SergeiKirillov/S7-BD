@@ -16,13 +16,15 @@ namespace LoggerInSystem
         public bool EventToFile;
         public bool EventToSystem;
         public bool EventToDebug;
+        public EventLogEntryType elet;
 
-        public classEvents(bool eventToConsole, bool eventToFile, bool eventToSystem, bool eventToDebug)
+        public classEvents(bool eventToConsole, bool eventToFile, bool eventToSystem, bool eventToDebug, EventLogEntryType ELET)
         {
             EventToConsole = eventToConsole;
             EventToFile = eventToFile;
             EventToSystem = eventToSystem;
             EventToDebug = eventToDebug;
+            elet = ELET;
         }
     }
 
@@ -41,18 +43,18 @@ namespace LoggerInSystem
     public class LogSystem
     {
         
-        static string eventLogName = "ProDaveStan";
+        static string eventLogName = "ProDave";
 
         static Dictionary<Direction, classEvents> dicEvent = new Dictionary<Direction, classEvents>()
         {
-            [Direction.ERROR] = new classEvents(eventToConsole:true, eventToFile:true, eventToSystem:true, eventToDebug:true),
-            [Direction.WARNING] = new classEvents(eventToConsole: true, eventToFile: true, eventToSystem: true, eventToDebug: true),
-            [Direction.Ok] = new classEvents(eventToConsole: true, eventToFile: false, eventToSystem: true, eventToDebug: false),
-            [Direction.OkStan1s] = new classEvents(eventToConsole: true, eventToFile: false, eventToSystem: false, eventToDebug: false),
-            [Direction.OkStanMessage] = new classEvents(eventToConsole: true, eventToFile: false, eventToSystem: false, eventToDebug: false),
-            [Direction.OkStanMessageNull] = new classEvents(eventToConsole: true, eventToFile: false, eventToSystem: false, eventToDebug: false),
-            [Direction.OkStanPassportRulona] = new classEvents(eventToConsole: true, eventToFile: false, eventToSystem: false, eventToDebug: false),
-            [Direction.OkStanPerevalki] = new classEvents(eventToConsole: true, eventToFile: false, eventToSystem: false, eventToDebug: false),
+            [Direction.ERROR] = new classEvents(eventToConsole:true, eventToFile:true, eventToSystem:true, eventToDebug:true, ELET:EventLogEntryType.Error),
+            [Direction.WARNING] = new classEvents(eventToConsole: true, eventToFile: true, eventToSystem: true, eventToDebug: true, ELET: EventLogEntryType.Warning),
+            [Direction.Ok] = new classEvents(eventToConsole: true, eventToFile: false, eventToSystem: true, eventToDebug: false, ELET: EventLogEntryType.SuccessAudit),
+            [Direction.OkStan1s] = new classEvents(eventToConsole: true, eventToFile: false, eventToSystem: false, eventToDebug: false, ELET: EventLogEntryType.Information),
+            [Direction.OkStanMessage] = new classEvents(eventToConsole: true, eventToFile: false, eventToSystem: false, eventToDebug: false, ELET: EventLogEntryType.Information),
+            [Direction.OkStanMessageNull] = new classEvents(eventToConsole: true, eventToFile: false, eventToSystem: false, eventToDebug: false, ELET: EventLogEntryType.Information),
+            [Direction.OkStanPassportRulona] = new classEvents(eventToConsole: true, eventToFile: false, eventToSystem: false, eventToDebug: false, ELET: EventLogEntryType.Information),
+            [Direction.OkStanPerevalki] = new classEvents(eventToConsole: true, eventToFile: false, eventToSystem: false, eventToDebug: false, ELET: EventLogEntryType.Information),
             
         };
 
@@ -67,7 +69,7 @@ namespace LoggerInSystem
                 
                 if (value.EventToConsole) WriteConsoleLog(_clasMessage, _MessageText);
                 if (value.EventToFile) WriteFileLog(_MessageText);
-                if (value.EventToSystem) WriteEventLog(_className, _MessageText, _clasMessage);
+                if (value.EventToSystem) WriteEventLog(_className, _MessageText, value.elet);
                 if (value.EventToDebug) WriteOutputVSLog(_MessageText);
             }
             
@@ -123,47 +125,12 @@ namespace LoggerInSystem
 
         #region Вывод в журнал сообщений виндоус
         //private static void WriteEventLog(string eventLogName, string sourceName, string message, EventLogEntryType type)
-        private static void WriteEventLog(string sourceName, string message, Direction clasMessage)
+        private static void WriteEventLog(string sourceName, string message, EventLogEntryType type)
         {
 
             try
             {
-
-                EventLogEntryType type;
-                switch (clasMessage)
-                {
-                    case Direction.Ok:
-                        type = EventLogEntryType.SuccessAudit;
-                        break;
-                    case Direction.ERROR:
-                        type = EventLogEntryType.Error;
-                        break;
-                    case Direction.WARNING:
-                        type = EventLogEntryType.Warning;
-                        break;
-                    case Direction.OkStanMessage:
-                        type = EventLogEntryType.Information;
-                        break;
-                    case Direction.OkStanMessageNull:
-                        type = EventLogEntryType.Information;
-                        break;
-                    case Direction.OkStan1s:
-                        type = EventLogEntryType.Information;
-                        break;
-                    case Direction.OkStanPassportRulona:
-                        type = EventLogEntryType.Information;
-                        break;
-                    case Direction.OkStanPerevalki:
-                        type = EventLogEntryType.Information;
-                        break;
-                    default:
-                        type = EventLogEntryType.FailureAudit;
-                        break;
-                }
-
                 
-
-
                 EventLog log = new EventLog { Log = eventLogName };
                 if (string.IsNullOrEmpty(sourceName))
                 {

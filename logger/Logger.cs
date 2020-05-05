@@ -6,10 +6,26 @@ using Microsoft.Win32;
 using System.IO;
 using System.Xml;
 using System.Threading.Tasks;
-
+using System.Collections.Generic;
 
 namespace LoggerInSystem
 {
+    public class classEvents
+    {
+        public bool EventToConsole;
+        public bool EventToFile;
+        public bool EventToSystem;
+        public bool EventToDebug;
+
+        public classEvents(bool eventToConsole, bool eventToFile, bool eventToSystem, bool eventToDebug)
+        {
+            EventToConsole = eventToConsole;
+            EventToFile = eventToFile;
+            EventToSystem = eventToSystem;
+            EventToDebug = eventToDebug;
+        }
+    }
+
     public enum Direction
     {
         Ok,
@@ -24,66 +40,43 @@ namespace LoggerInSystem
 
     public class LogSystem
     {
-        //Запись в системный журнал приложений
-        /// <param name="eventLogName">Название лога</param>
-        /// <param name="sourceName">Название источника</param>
-        /// <param name="message">Сообщение</param>
-        /// <param name="type">Тип сообщения</param>
-        /// 
-
+        
         static string eventLogName = "ProDaveStan";
+
+        static Dictionary<Direction, classEvents> dicEvent = new Dictionary<Direction, classEvents>()
+        {
+            [Direction.ERROR] = new classEvents(eventToConsole:true, eventToFile:true, eventToSystem:true, eventToDebug:true),
+            [Direction.WARNING] = new classEvents(eventToConsole: true, eventToFile: true, eventToSystem: true, eventToDebug: true),
+            [Direction.Ok] = new classEvents(eventToConsole: true, eventToFile: false, eventToSystem: true, eventToDebug: false),
+            [Direction.OkStan1s] = new classEvents(eventToConsole: true, eventToFile: false, eventToSystem: false, eventToDebug: false),
+            [Direction.OkStanMessage] = new classEvents(eventToConsole: true, eventToFile: false, eventToSystem: false, eventToDebug: false),
+            [Direction.OkStanMessageNull] = new classEvents(eventToConsole: true, eventToFile: false, eventToSystem: false, eventToDebug: false),
+            [Direction.OkStanPassportRulona] = new classEvents(eventToConsole: true, eventToFile: false, eventToSystem: false, eventToDebug: false),
+            [Direction.OkStanPerevalki] = new classEvents(eventToConsole: true, eventToFile: false, eventToSystem: false, eventToDebug: false),
+            
+        };
+
 
         #region public метод который распределяет что куда писать в зависимости от переданного классаСообщения
 
         public static void Write(string _className, Direction _clasMessage, string _MessageText)
         {
-
-            switch (_clasMessage)
+            classEvents value;
+            if (dicEvent.TryGetValue(_clasMessage, out value))
             {
-
-                case Direction.ERROR:
-                    WriteConsoleLog(_clasMessage, _MessageText);
-                    WriteFileLog(_MessageText);
-                    WriteEventLog(_className, _MessageText, EventLogEntryType.Error);
-
-                    break;
-                case Direction.WARNING:
-                    WriteConsoleLog(_clasMessage, _MessageText);
-                    WriteFileLog(_MessageText);
-                    WriteEventLog(_className, _MessageText, EventLogEntryType.Warning);
-                    break;
-
-                case Direction.Ok:
-                    WriteConsoleLog(_clasMessage, _MessageText);
-                    WriteFileLog(_MessageText);
-                    WriteEventLog(_className, _MessageText, EventLogEntryType.Information);
-                    break;
-                case Direction.OkStanMessage:
-                    WriteConsoleLog(_clasMessage, _MessageText);
-                    break;
-                case Direction.OkStanMessageNull:
-                    WriteConsoleLog(_clasMessage, _MessageText);
-                    break;
-                case Direction.OkStan1s:
-                    WriteConsoleLog(_clasMessage, _MessageText);
-                    break;
-                case Direction.OkStanPassportRulona:
-                    WriteConsoleLog(_clasMessage, _MessageText);
-                    break;
-                case Direction.OkStanPerevalki:
-                    WriteConsoleLog(_clasMessage, _MessageText);
-                    break;
-                default:
-                    break;
+                
+                if (value.EventToConsole) WriteConsoleLog(_clasMessage, _MessageText);
+                if (value.EventToFile) WriteFileLog(_MessageText);
+                if (value.EventToSystem) WriteEventLog(_className, _MessageText, _clasMessage);
+                if (value.EventToDebug) WriteOutputVSLog(_MessageText);
             }
+            
+           
 
         }
 
         #endregion
-
-
-
-
+                
         #region вывод на консоль
         private static void WriteConsoleLog(Direction clMes, string message)
         {
@@ -130,11 +123,45 @@ namespace LoggerInSystem
 
         #region Вывод в журнал сообщений виндоус
         //private static void WriteEventLog(string eventLogName, string sourceName, string message, EventLogEntryType type)
-        private static void WriteEventLog(string sourceName, string message, EventLogEntryType type)
+        private static void WriteEventLog(string sourceName, string message, Direction clasMessage)
         {
 
             try
             {
+
+                EventLogEntryType type;
+                switch (clasMessage)
+                {
+                    case Direction.Ok:
+                        type = EventLogEntryType.SuccessAudit;
+                        break;
+                    case Direction.ERROR:
+                        type = EventLogEntryType.Error;
+                        break;
+                    case Direction.WARNING:
+                        type = EventLogEntryType.Warning;
+                        break;
+                    case Direction.OkStanMessage:
+                        type = EventLogEntryType.Information;
+                        break;
+                    case Direction.OkStanMessageNull:
+                        type = EventLogEntryType.Information;
+                        break;
+                    case Direction.OkStan1s:
+                        type = EventLogEntryType.Information;
+                        break;
+                    case Direction.OkStanPassportRulona:
+                        type = EventLogEntryType.Information;
+                        break;
+                    case Direction.OkStanPerevalki:
+                        type = EventLogEntryType.Information;
+                        break;
+                    default:
+                        type = EventLogEntryType.FailureAudit;
+                        break;
+                }
+
+                
 
 
                 EventLog log = new EventLog { Log = eventLogName };
@@ -143,14 +170,15 @@ namespace LoggerInSystem
                     sourceName = eventLogName;
                 }
 
-                log.Source = sourceName;
+                log.Source = eventLogName;
                 try
                 {
                     log.WriteEntry(message, type, 0, 0);
                     return;
                 }
-                catch
+                catch(Exception e)
                 {
+                    string kmkg = e.Message;
                 }
 
                 //Создание логера и источника
@@ -204,6 +232,11 @@ namespace LoggerInSystem
                 Console.WriteLine(ex.Message);
             }
         }
+
+        
+
+
+        
         #endregion
 
         #region Вывод в файл

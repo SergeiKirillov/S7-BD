@@ -123,11 +123,11 @@ namespace LoggerInSystem
         }
         #endregion
 
-        #region Вывод в журнал сообщений виндоус
+        #region Вывод в журнал сообщений виндоус (HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\EventLog)
         //private static void WriteEventLog(string eventLogName, string sourceName, string message, EventLogEntryType type)
         private static void WriteEventLog(string sourceName, string message, EventLogEntryType type)
         {
-
+            
             try
             {
                 
@@ -203,28 +203,41 @@ namespace LoggerInSystem
 
         private static void WriteEventLog2(string sourceName, string message, EventLogEntryType type)
         {
-            try
-            {
-                string Event = message;
-                string Source = sourceName;
-                string Log = eventLogName;
+            //try
+            //{
+            //    string Event = message;
+            //    string Source = sourceName;
+            //    string Log = eventLogName;
 
-                if (!EventLog.SourceExists(Source))
-                    EventLog.CreateEventSource(Source, Log);
+            //    if (!EventLog.SourceExists(Source))
+            //        EventLog.CreateEventSource(Source, Log);
 
-                using (EventLog eventLog = new EventLog(Log))
-                {
-                    eventLog.Source = sourceName;
-                    eventLog.WriteEntry(Event, type);
-                }
-            }
-            catch (Exception ex)
+            //    using (EventLog eventLog = new EventLog(Log))
+            //    {
+            //        eventLog.Source = sourceName;
+            //        eventLog.WriteEntry(Event, type);
+            //    }
+            //}
+            //catch (Exception ex)
+            //{
+            //    string myEx = ex.Message;
+            //    Console.WriteLine(myEx);
+
+            //}
+
+            string Event = "Application has started";
+            string Source = "My App";
+            string Log = "App";
+
+            if (!EventLog.SourceExists(Source))
+                EventLog.CreateEventSource(Source, Log);
+
+            using (EventLog eventLog = new EventLog("App"))
             {
-                string myEx = ex.Message;
-                Console.WriteLine(myEx);
-             
+                eventLog.Source = "My App";
+                eventLog.WriteEntry(Event, EventLogEntryType.Information);
             }
-            
+
         }
 
         #endregion

@@ -69,7 +69,7 @@ namespace LoggerInSystem
                 
                 if (value.EventToConsole) WriteConsoleLog(_clasMessage, _MessageText);
                 if (value.EventToFile) WriteFileLog(_MessageText);
-                if (value.EventToSystem) WriteEventLog(_className, _MessageText, value.elet);
+                if (value.EventToSystem) WriteEventLog2(_className, _MessageText, value.elet);
                 if (value.EventToDebug) WriteOutputVSLog(_MessageText);
             }
             
@@ -137,7 +137,7 @@ namespace LoggerInSystem
                     sourceName = eventLogName;
                 }
 
-                log.Source = eventLogName;
+                log.Source = sourceName;
                 try
                 {
                     log.WriteEntry(message, type, 0, 0);
@@ -148,51 +148,51 @@ namespace LoggerInSystem
                     string kmkg = e.Message;
                 }
 
-                //Создание логера и источника
-                byte[] rawEventData = Encoding.ASCII.GetBytes("");
-                string keyName = @"SYSTEM\CurrentControlSet\Services\EventLog\" + eventLogName;
-                var rkEventSource = Registry.LocalMachine.OpenSubKey(keyName + @"\" + sourceName);
+                ////Создание логера и источника
+                //byte[] rawEventData = Encoding.ASCII.GetBytes("");
+                //string keyName = @"SYSTEM\CurrentControlSet\Services\EventLog\" + eventLogName;
+                //var rkEventSource = Registry.LocalMachine.OpenSubKey(keyName + @"\" + sourceName);
 
-                if (rkEventSource == null)
-                {
-                    rkEventSource = Registry.LocalMachine.CreateSubKey(keyName + @"\" + sourceName);
-                }
+                //if (rkEventSource == null)
+                //{
+                //    rkEventSource = Registry.LocalMachine.CreateSubKey(keyName + @"\" + sourceName);
+                //}
 
-                object eventMessageFile = rkEventSource.GetValue("EventMessageFile");
-                if (eventMessageFile == null)
-                {
-                    using (var dotNetFrameworkSettings = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\.NetFramework\"))
-                    {
-                        if (dotNetFrameworkSettings != null)
-                        {
-                            object dotNetInstallRoot = dotNetFrameworkSettings.GetValue("InstallRoot", null, RegistryValueOptions.None);
+                //object eventMessageFile = rkEventSource.GetValue("EventMessageFile");
+                //if (eventMessageFile == null)
+                //{
+                //    using (var dotNetFrameworkSettings = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\.NetFramework\"))
+                //    {
+                //        if (dotNetFrameworkSettings != null)
+                //        {
+                //            object dotNetInstallRoot = dotNetFrameworkSettings.GetValue("InstallRoot", null, RegistryValueOptions.None);
 
-                            if (dotNetInstallRoot != null)
-                            {
-                                string eventMessageFileLocation = dotNetInstallRoot.ToString() +
-                                        "v" +
-                                        System.Environment.Version.Major.ToString() + "." +
-                                        System.Environment.Version.Minor.ToString() + "." +
-                                        System.Environment.Version.Build.ToString() +
-                                        @"\EventLogMessages.dll";
-                                if (File.Exists(eventMessageFileLocation))
-                                {
-                                    rkEventSource = Registry.LocalMachine.OpenSubKey(keyName + @"\" + sourceName, true);
-                                    rkEventSource.SetValue("EventMessageFile", eventMessageFileLocation, RegistryValueKind.String);
-                                }
+                //            if (dotNetInstallRoot != null)
+                //            {
+                //                string eventMessageFileLocation = dotNetInstallRoot.ToString() +
+                //                        "v" +
+                //                        System.Environment.Version.Major.ToString() + "." +
+                //                        System.Environment.Version.Minor.ToString() + "." +
+                //                        System.Environment.Version.Build.ToString() +
+                //                        @"\EventLogMessages.dll";
+                //                if (File.Exists(eventMessageFileLocation))
+                //                {
+                //                    rkEventSource = Registry.LocalMachine.OpenSubKey(keyName + @"\" + sourceName, true);
+                //                    rkEventSource.SetValue("EventMessageFile", eventMessageFileLocation, RegistryValueKind.String);
+                //                }
 
-                            }
-
-
+                //            }
 
 
-                        }
 
-                    }
-                }
 
-                rkEventSource.Close();
-                log.WriteEntry(message, type, 0, 0, rawEventData);
+                //        }
+
+                //    }
+                //}
+
+                //rkEventSource.Close();
+                //log.WriteEntry(message, type, 0, 0, rawEventData);
             }
             catch (Exception ex)
             {
@@ -200,10 +200,33 @@ namespace LoggerInSystem
             }
         }
 
-        
 
+        private static void WriteEventLog2(string sourceName, string message, EventLogEntryType type)
+        {
+            try
+            {
+                string Event = message;
+                string Source = sourceName;
+                string Log = eventLogName;
 
-        
+                if (!EventLog.SourceExists(Source))
+                    EventLog.CreateEventSource(Source, Log);
+
+                using (EventLog eventLog = new EventLog(Log))
+                {
+                    eventLog.Source = sourceName;
+                    eventLog.WriteEntry(Event, type);
+                }
+            }
+            catch (Exception ex)
+            {
+                string myEx = ex.Message;
+                Console.WriteLine(myEx);
+             
+            }
+            
+        }
+
         #endregion
 
         #region Вывод в файл

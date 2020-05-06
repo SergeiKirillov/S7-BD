@@ -42,6 +42,8 @@ namespace LoggerInSystem
 
     public class LogSystem
     {
+
+        
         
         static string eventLogName = "ProDave";
 
@@ -203,41 +205,28 @@ namespace LoggerInSystem
 
         private static void WriteEventLog2(string sourceName, string message, EventLogEntryType type)
         {
-            //try
-            //{
-            //    string Event = message;
-            //    string Source = sourceName;
-            //    string Log = eventLogName;
-
-            //    if (!EventLog.SourceExists(Source))
-            //        EventLog.CreateEventSource(Source, Log);
-
-            //    using (EventLog eventLog = new EventLog(Log))
-            //    {
-            //        eventLog.Source = sourceName;
-            //        eventLog.WriteEntry(Event, type);
-            //    }
-            //}
-            //catch (Exception ex)
-            //{
-            //    string myEx = ex.Message;
-            //    Console.WriteLine(myEx);
-
-            //}
-
-            string Event = "Application has started";
-            string Source = "My App";
-            string Log = "App";
-
-            if (!EventLog.SourceExists(Source))
-                EventLog.CreateEventSource(Source, Log);
-
-            using (EventLog eventLog = new EventLog("App"))
+            try
             {
-                eventLog.Source = "My App";
-                eventLog.WriteEntry(Event, EventLogEntryType.Information);
-            }
+                string Event = message;
+                //string Source = "My App";
+                string Source = sourceName;
+                string Log = "Application";
 
+                if (!EventLog.SourceExists(Source))
+                    EventLog.CreateEventSource(Source, Log);
+
+                using (EventLog eventLog = new EventLog(Log))
+                {
+                    eventLog.Source = Source;
+                    eventLog.WriteEntry(Event, type);
+                }
+            }
+            catch (Exception e)
+            {
+
+                string ex = e.Message;
+            }
+            
         }
 
         #endregion

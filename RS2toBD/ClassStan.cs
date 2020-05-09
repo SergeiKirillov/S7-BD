@@ -27,9 +27,9 @@ namespace RS2toBD
         Timer TTimerMessage;
         Timer TTimerSQL;
         Timer TTimer1s;
-        Timer TTimer250msNet;
+        //Timer TTimer250msNet;
 
-        
+
         SolidColorBrush offLed = new SolidColorBrush(Color.FromRgb(160, 160, 160));
         SolidColorBrush onOK = new SolidColorBrush(Color.FromRgb(130, 190, 125));
         SolidColorBrush onError = new SolidColorBrush(Color.FromRgb(255, 0, 0));
@@ -46,7 +46,7 @@ namespace RS2toBD
         #region Внешний метод  создаеющий соединение с контроллером и запускающий метод считывание данных с контроллера
         public void Start()
         {
-            
+
             //Метод производит подключение к котроллеру и устанавливает связь
             //Если соединение успешно то вызывает поток-таймеры. и внутри них выполнение действия по таймеру.
 
@@ -60,51 +60,32 @@ namespace RS2toBD
                 if (res != 0)
                 {
                     LogSystem.Write("StanStart", Direction.ERROR, "Error connection!. Error - " + stan.Error(res));
-                    //LogSystem.WriteConsoleLog(Direction.ERROR, "Error connection! " + stan.Error(res));
-                    //LogSystem.WriteEventLog("ProDaveStan", "Test", "Error connection!. Error - " + stan.Error(res), EventLogEntryType.Error);
 
                 }
                 else
                 {
-
-                    //LogSystem.WriteEventLog("ProDaveStan", "Test", "Connect OK!", EventLogEntryType.Information);
                     LogSystem.Write("StanStart", Direction.Ok, "Connect OK!");
 
                     int resSAC = stan.SetActiveConnection(Connect);
                     if (resSAC == 0)
                     {
-                        //Console.WriteLine("Соединение активно.");
-
-                        //LogSystem.WriteConsoleLog(Direction.OK, "Соединение активно.");
-                        //LogSystem.WriteEventLog("ProDaveStan", "Test", "Соединение активно.", EventLogEntryType.Information);
-
                         LogSystem.Write("StanStart", Direction.Ok, "Соединение активно.");
 
                         TTimer100ms = new Timer(new TimerCallback(TicTimer100ms), null, 0, 100);
                         TTimerMessage = new Timer(new TimerCallback(TicTimerMessage), null, 0, 200);
                         TTimerSQL = new Timer(new TimerCallback(TicTimerSQL), null, 0, 101);
                         TTimer1s = new Timer(new TimerCallback(TicTimer1s), null, 0, 1000);
-                        
+
                     }
                     else
                     {
-
-                        //Console.WriteLine("Соединение не активировано. " + stan.Error(resSAC));
-                        //LogSystem.WriteConsoleLog(Direction.WARNING, "Соединение не активировано. " + stan.Error(resSAC));
-                        //LogSystem.WriteEventLog("ProDaveStan", "Test", "Соединение не активировано. " + stan.Error(resSAC), EventLogEntryType.Error);
                         LogSystem.Write("StanStart", Direction.WARNING, "Соединение не активировано. " + stan.Error(resSAC));
 
-                        
-                        
                     }
 
                 }
             }
-            catch (Exception)
-            {
-
-                throw;
-            }
+            catch { /*все исключения кидаем в пустоту*/ }
         }
 
         #endregion
@@ -113,28 +94,28 @@ namespace RS2toBD
         private void TicTimer100ms(object state)
         {
 
-         
+
         }
         #endregion
 
 
         private void TicTimer1s(object state)
         {
-            
+
         }
 
         private void TicTimerSQL(object state)
         {
-            
+
         }
 
         private void TicTimerMessage(object state)
         {
-            
+
         }
 
-        
 
+        #region Метод выполняемый при остановке 
         public void Stop()
         {
             try
@@ -144,15 +125,27 @@ namespace RS2toBD
                 TTimerMessage.Dispose();
                 TTimerSQL.Dispose();
                 TTimer1s.Dispose();
-                TTimer250msNet.Dispose();
-            }
-            catch (Exception)
-            {
 
-                throw;
+
+                int result = stan.UnloadConnection(0);
+
+                if (result == 0)
+                {
+                    //LogSystem.WriteEventLog("ProDaveStan", "Test", "Close connection", EventLogEntryType.Information);
+                }
+                else
+                {
+                    LogSystem.Write("StanStop", Direction.ERROR, "Connect open. Warning - " + stan.Error(result));
+                }
+
             }
-            
+            catch (Exception ex)
+            {
+                LogSystem.Write("StanStop", Direction.WARNING, "Ошибка при остановке. " + ex.Message);
+            }
+
         }
+        #endregion
     }
 
 }

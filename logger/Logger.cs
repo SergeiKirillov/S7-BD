@@ -68,10 +68,27 @@ namespace LoggerInSystem
             classEvents value;
             if (dicEvent.TryGetValue(_clasMessage, out value))
             {
-                
+                //Проходимся по словарю и если класс ошибки совпадает с классом словаря со словаря вытаскиваем значения необходимые
+                // для распределения вывода
+                //
+                //к примеру 
+                //LogSystem.Write("StanStart", Direction.ERROR, "Error connection!. Error - " + stan.Error(res));
+                //Direction.Error соответствует в словаре 
+                //  eventToConsole:true
+                //  eventToFile:true
+                //  eventToSystem:true
+                //  eventToDebug:true 
+                //  ELET:EventLogEntryType.Error),
+                //соответственно вывод будет сделан на 
+                //  консоль -   WriteConsoleLog(_clasMessage, _MessageText);
+                //  в файл  -   WriteFileLog(_MessageText);
+                //  в журнал сообщений виндоус - WriteEventLogApplication(_className, _MessageText, value.elet);
+                //  в диагностическое окно VS - WriteOutputVSLog(_MessageText);
+
+
                 if (value.EventToConsole) WriteConsoleLog(_clasMessage, _MessageText);
                 if (value.EventToFile) WriteFileLog(_MessageText);
-                if (value.EventToSystem) WriteEventLog2(_className, _MessageText, value.elet);
+                if (value.EventToSystem) WriteEventLogApplication(_className, _MessageText, value.elet);
                 if (value.EventToDebug) WriteOutputVSLog(_MessageText);
             }
             
@@ -203,7 +220,7 @@ namespace LoggerInSystem
         }
 
 
-        private static void WriteEventLog2(string sourceName, string message, EventLogEntryType type)
+        private static void WriteEventLogApplication(string sourceName, string message, EventLogEntryType type)
         {
             try
             {

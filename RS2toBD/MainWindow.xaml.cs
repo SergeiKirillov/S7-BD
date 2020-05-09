@@ -425,7 +425,7 @@ namespace RS2toBD
         SolidColorBrush onOK = new SolidColorBrush(Color.FromRgb(130, 190, 125));
         SolidColorBrush onError = new SolidColorBrush(Color.FromRgb(255, 0, 0));
 
-
+        ClassStan clStan;
 
 
         static byte[] buffer;
@@ -1607,8 +1607,8 @@ namespace RS2toBD
 
         private void Stan_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            ClassStan stan = new ClassStan(stan100ms:true, stan1s:true, stan200ms:true, NetSend:false);
-            stan.Start();
+            clStan = new ClassStan(stan100ms:true, stan1s:true, stan200ms:true, NetSend:false);
+            clStan.Start();
 
         }
 
@@ -2668,8 +2668,8 @@ namespace RS2toBD
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-           // con.Close();
-           // Console.Write("Соедиение закрыто");
+            clStan.Stop();
+           
         }
 
         private void SQLconBD()

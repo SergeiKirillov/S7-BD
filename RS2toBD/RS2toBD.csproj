@@ -63,6 +63,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="ClassStan.cs" />
+    <Compile Include="PLCto.cs" />
     <Compile Include="Settings.cs" />
     <Page Include="Contols\SwitchButton.xaml">
       <SubType>Designer</SubType>

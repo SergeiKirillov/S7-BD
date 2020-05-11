@@ -1612,6 +1612,17 @@ namespace RS2toBD
 
         }
 
+        private void chkStan_Checked(object sender, RoutedEventArgs e)
+        {
+            clStan = new ClassStan(stan100ms: true, stan1s: true, stan200ms: true, NetSend: false);
+            clStan.Start();
+        }
+
+        private void chkStan_Unchecked(object sender, RoutedEventArgs e)
+        {
+            clStan.Stop();
+        }
+
         private void ConvertBufferSQLandWriteTable()
         {
             try

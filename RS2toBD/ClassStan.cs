@@ -20,30 +20,34 @@ namespace RS2toBD
 
         bool NetSend; //Передача данных по сети для создания визуализации на удаленном компьютере
 
-       
+        PLCto stan;
+
+
+
         public ClassStan(bool stan100ms, bool stan1s, bool stan200ms, bool NetSend)
         {
             this.stan100ms = stan100ms;
             this.stan1s = stan1s;
             this.stan200ms = stan200ms;
+
             this.NetSend = NetSend;
         }
 
         public void Start()
         {
            
-            PLCto stan = new PLCto();
+            stan = new PLCto();
             stan.SlotconnPC = 3;
             stan.RackconnPC = 0;
             stan.IPconnPLC= new byte[] { 192, 168, 0, 11 }; //Передаем адресс контроллера
-
-
+            stan.StartAdressTag = 3000; //старт адресов с 3000
+            stan.Amount = 315; //Размер буфера для принятия данных в байтах
             stan.Start();
         }
 
         public void Stop()
         {
-
+            stan.Stop();
         }
     }
 

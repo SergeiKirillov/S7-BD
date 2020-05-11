@@ -57,7 +57,8 @@
             
                 <Label Grid.Column="0" Grid.Row="0" Content="Запуск сбора данных с PLC Стан 1700"/>
                 <Contols:SwitchButton Grid.Column="1" Grid.Row="0" x:Name="SwitchPTO" Height="30" Width="100" MouseLeftButtonDown="SwitchPTO_MouseLeftButtonDown"/>
-                <Contols:SwitchButton Grid.Column="2" Grid.Row="0" x:Name="Stan" Height="30" Width="100" MouseLeftButtonDown="Stan_MouseLeftButtonDown"/>
+                <!--<Contols:SwitchButton Grid.Column="2" Grid.Row="0" x:Name="Stan" Height="30" Width="100" MouseLeftButtonDown="Stan_MouseLeftButtonDown"/>-->
+                <CheckBox Name="chkStan" Content="Запуск сбора данных со стана 1700" Grid.Column="2" Grid.Row="0" Height="30" Width="300" VerticalAlignment="Center" HorizontalAlignment="Center" Checked="chkStan_Checked" Unchecked="chkStan_Unchecked" />
                 <Label Grid.Column="0" Grid.Row="1" Content="Cкорость 4 кл (1 c.)"/>
                 <Label Grid.Column="1" Grid.Row="1" Name="lbl1s" Content=""/>
                 <Grid Grid.Column="2" Grid.Row="1">

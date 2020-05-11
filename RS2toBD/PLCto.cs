@@ -32,7 +32,8 @@ namespace RS2toBD
         Timer TTimer1s;
         //Timer TTimer250msNet;
 
-        #region Задаем IP адресс контроллера
+        #region Свойства определяющие настройки связи с контроллером
+
         private byte[] conn; //ip адресс контроллера
         public byte[] IPconnPLC
         {
@@ -53,9 +54,25 @@ namespace RS2toBD
             get { return rack; }
             set { rack = value; }
         }
+        private int startBuffer;
+        public int StartAdressTag
+        {
+            get { return startBuffer; }
+            set { startBuffer = value; }
+        }
+        private int amount;
+        public int Amount
+        {
+            get { return Amount; }
+            set { amount = value; }
+        }
         #endregion
 
-        
+        #region Свойства для формирования таблицы 101ms и запись в БД
+
+        #endregion
+
+
 
         public PLCto()
         {
@@ -126,28 +143,25 @@ namespace RS2toBD
         {
             try
             {
-                short[] buffer_array = new short[158];
+                //short[] buffer_array = new short[158];
 
                 DateTime dt100ms;
 
 
-                int amount = 315;
+                
 
 
                 //var buffer2 = new ushort[128];
                 int Byte_Col_r = 0;
 
-                int resultReadField = stan.field_read('M', 0, 3000, amount, out buffer, out Byte_Col_r);
+                int resultReadField = stan.field_read('M', 0, startBuffer, amount, out buffer, out Byte_Col_r);
                 if (resultReadField == 0)
                 {
-
                     dt100ms = DateTime.Now;
-
-
+                    
                     Thread PLS100ms = new Thread(BufferToBuffer);
                     PLS100ms.Start();
-
-
+                    
                 }
                 else
                 {
@@ -174,16 +188,18 @@ namespace RS2toBD
 
         #endregion
 
+        #region формирование таблицы рулонов и после окончания прокатки запись в БД
+        private void TicTimerSQL(object state)
+        {
+
+        }
+        #endregion
 
         private void TicTimer1s(object state)
         {
 
         }
 
-        private void TicTimerSQL(object state)
-        {
-
-        }
 
         private void TicTimerMessage(object state)
         {

@@ -1605,16 +1605,10 @@ namespace RS2toBD
 
         }
 
-        private void Stan_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            clStan = new ClassStan(stan100ms:true, stan1s:true, stan200ms:true, NetSend:false);
-            clStan.Start();
-
-        }
 
         private void chkStan_Checked(object sender, RoutedEventArgs e)
         {
-            clStan = new ClassStan(stan100ms: true, stan1s: true, stan200ms: true, NetSend: false);
+            clStan = new ClassStan(stan101ms: true, stan1s: true, stan200ms: true, NetSend: false);
             clStan.Start();
         }
 

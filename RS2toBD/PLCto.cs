@@ -3,9 +3,23 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using LoggerInSystem;
+
+
 using HWDiag;
+using System.Diagnostics.Eventing;
+using LoggerInSystem;
 using System.Threading;
+using System.Runtime.InteropServices;
+using System.Diagnostics;
+
+using System.Data.SqlClient;
+using System.Data;
+using System.Collections;
+
+using System.Net;
+using System.Net.Sockets;
+using System.IO;
+
 
 namespace RS2toBD
 {
@@ -24,7 +38,9 @@ namespace RS2toBD
         readonly object locker = new object();
         readonly object locker2 = new object();
 
-
+        DateTime dtSQL;
+        DateTime dt1s;
+        DateTime dtMessage;
 
         Timer TTimer100ms;
         Timer TTimerMessage;
@@ -63,14 +79,40 @@ namespace RS2toBD
         private int amount;
         public int Amount
         {
-            get { return Amount; }
+            get { return amount; }
             set { amount = value; }
         }
         #endregion
 
-        #region Свойства для формирования таблицы 101ms и запись в БД
-
+        #region plctodb101ms - Cвойство включения сбора информации с циклом 101ms
+        private bool plctodb101ms;  
+        public bool PLStoDB101ms
+        {
+            get {return plctodb101ms ; }
+            set {plctodb101ms=value; }
+        }
         #endregion
+
+        #region plctodbmessage - Cвойство включения сбора информации - сообщения
+        private bool plctodbmessage; 
+        public bool PLStoDBMessage
+        {
+            get {return plctodbmessage; }
+            set {plctodbmessage=value; }
+        }
+        #endregion
+
+        #region plctodb1s - Свойство включения сбора информации - 1сек
+        private bool plctodb1s;
+        public bool PLStoDB1s
+        {
+             get{return plctodb1s; }
+             set{plctodb1s=value; }
+        }
+        #endregion  
+
+
+
 
 
 
@@ -108,12 +150,13 @@ namespace RS2toBD
                     if (resSAC == 0)
                     {
                         LogSystem.Write("Start", Direction.Ok, "Соединение активно.");
-
+                        
                         TTimer100ms = new Timer(new TimerCallback(TicTimer100ms), null, 0, 100);
-                        TTimerMessage = new Timer(new TimerCallback(TicTimerMessage), null, 0, 200);
-                        TTimerSQL = new Timer(new TimerCallback(TicTimerSQL), null, 0, 101);
-                        TTimer1s = new Timer(new TimerCallback(TicTimer1s), null, 0, 1000);
 
+                        if (plctodbmessage) TTimerMessage = new Timer(new TimerCallback(TicTimerMessage), null, 0, 200);
+                        if (plctodb101ms) TTimerSQL = new Timer(new TimerCallback(TicTimerSQL), null, 0, 101);
+                        if (plctodb1s) TTimer1s = new Timer(new TimerCallback(TicTimer1s), null, 0, 1000);
+ 
                     }
                     else
                     {
@@ -185,25 +228,93 @@ namespace RS2toBD
 
         }
 
-
+        
         #endregion
 
         #region формирование таблицы рулонов и после окончания прокатки запись в БД
+
+        void BufferSQLToBufferPLC()
+        {
+            //критичная секция которая записывает значение в bufferPLC
+            lock (locker)
+            {
+                bufferSQL = bufferPLC;
+            }
+
+        }
+
         private void TicTimerSQL(object state)
         {
+            //??????вопрос с dispatcher????????
+            string numberTable;
+            try
+            {
+                //Console.WriteLine(string.Format("\t\t {0} ({1}) {2}", "SQL 101mc", DateTime.Now - dtSQL, Thread.CurrentThread.ManagedThreadId));
+                dtSQL = DateTime.Now;
 
+                //Из критичной секции получаем значения из PLC
+                Thread tSQL = new Thread(BufferSQLToBufferPLC);
+                tSQL.Start();
+
+
+
+                //TODO Формировать при сохранении рулона
+                #region  Формируем шифр таблицы (yyyyMMddсмена)
+
+                if (Convert.ToInt32(DateTime.Now.ToString("HH")) >= 7 && Convert.ToInt32(DateTime.Now.ToString("HH")) < 19)
+                {
+                    numberTable = DateTime.Now.ToString("yyyyMMdd") + "2";
+                }
+                else if (Convert.ToInt32(DateTime.Now.ToString("HH")) < 7)
+                {
+                    numberTable = DateTime.Now.ToString("yyyyMMdd") + "1";
+                }
+                else if (Convert.ToInt32(DateTime.Now.ToString("HH")) >= 19)
+                {
+                    numberTable = DateTime.Now.AddDays(1).ToString("yyyyMMdd") + "1";
+                }
+
+                #endregion
+
+            }
+            catch (Exception ex)
+            {
+                LogSystem.Write("Stan(101ms)-" + ex.Source, Direction.ERROR, "Stan(101ms) Error-" + ex.Message);
+
+            }
+            
         }
         #endregion
 
         private void TicTimer1s(object state)
         {
+            try
+            {
+                //Console.WriteLine(string.Format("\t\t {0} ({1}) {2}", "1c", DateTime.Now - dt1s, Thread.CurrentThread.ManagedThreadId));
+                //dt1s = DateTime.Now;
+
+            }
+            catch (Exception ex)
+            {
+
+                LogSystem.Write("Stan(1s)-" + ex.Source, Direction.ERROR, "Stan(1s) Error-" + ex.Message);
+            }
 
         }
 
 
         private void TicTimerMessage(object state)
         {
+            try
+            {
+                //Console.WriteLine(string.Format("\t\t {0} ({1}) {2}", "Message", DateTime.Now - dtMessage, Thread.CurrentThread.ManagedThreadId));
+                //dtMessage = DateTime.Now;
+            }
+            catch (Exception ex)
+            {
 
+                LogSystem.Write("Stan(Message)-" + ex.Source, Direction.ERROR, "Stan(Vtssage) Error-" + ex.Message);
+            }
         }
 
 

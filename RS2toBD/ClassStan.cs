@@ -14,7 +14,7 @@ namespace RS2toBD
 {
     class ClassStan
     {
-        bool stan100ms; //данные по прокатке рулона, формируются таблица после прокатанного рулона. 
+        bool stan101ms; //данные по прокатке рулона, формируются таблица после прокатанного рулона. 
         bool stan1s;    //данные по работе стана, формируются и через 1мин (~62 сообщения) скидываются в БД.
         bool stan200ms; //сообщения формируются в течении 60 секунд и после этого записываются в БД.
 
@@ -24,9 +24,9 @@ namespace RS2toBD
 
 
 
-        public ClassStan(bool stan100ms, bool stan1s, bool stan200ms, bool NetSend)
+        public ClassStan(bool stan101ms, bool stan1s, bool stan200ms, bool NetSend)
         {
-            this.stan100ms = stan100ms;
+            this.stan101ms = stan101ms;
             this.stan1s = stan1s;
             this.stan200ms = stan200ms;
 
@@ -42,8 +42,16 @@ namespace RS2toBD
             stan.IPconnPLC= new byte[] { 192, 168, 0, 11 }; //Передаем адресс контроллера
             stan.StartAdressTag = 3000; //старт адресов с 3000
             stan.Amount = 315; //Размер буфера для принятия данных в байтах
+
+            stan.PLStoDB101ms = stan101ms;
+            stan.PLStoDBMessage = stan200ms;
+            stan.PLStoDB1s = stan1s;
+
+
             stan.Start();
         }
+
+
 
         public void Stop()
         {

@@ -23,6 +23,19 @@ using System.IO;
 
 namespace RS2toBD
 {
+    class ContData
+    {
+        private int startbit;
+        private int coefficient;
+        private bool floatdata;
+        public ContData(int startBit, int Coefficient, bool floatData)
+        {
+            startbit = startBit;
+            coefficient = Coefficient;
+            floatdata = floatData;
+        }
+    }
+
     class PLCto
     {
         Prodave stan;
@@ -82,6 +95,18 @@ namespace RS2toBD
             get { return amount; }
             set { amount = value; }
         }
+        #endregion
+
+        #region Свойства определяющие как обрабатывать данные получаемые с контроллера
+        //таблица значений имени тега и его стартовогоБита 
+        private Dictionary<string, ContData> dt101ms;
+        public Dictionary<string, ContData> Data101ms
+        {
+            get { return dt101ms; }
+
+            set { dt101ms = value; }
+        }
+
         #endregion
 
         #region plctodb101ms - Cвойство включения сбора информации с циклом 101ms

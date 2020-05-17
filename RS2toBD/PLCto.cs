@@ -25,9 +25,9 @@ namespace RS2toBD
 {
     class ContData
     {
-        private int startbit;
-        private int coefficient;
-        private bool floatdata;
+        public int startbit;
+        public int coefficient;
+        public bool floatdata;
         public ContData(int startBit, int Coefficient, bool floatData)
         {
             startbit = startBit;
@@ -51,6 +51,8 @@ namespace RS2toBD
         readonly object locker = new object();
         readonly object locker2 = new object();
 
+        DataTable dt101ms;
+
         DateTime dtSQL;
         DateTime dt1s;
         DateTime dtMessage;
@@ -60,6 +62,10 @@ namespace RS2toBD
         Timer TTimerSQL;
         Timer TTimer1s;
         //Timer TTimer250msNet;
+
+        SqlConnection conBD;
+        string connectingString;
+
 
         #region Свойства определяющие настройки связи с контроллером
 
@@ -99,19 +105,19 @@ namespace RS2toBD
 
         #region Свойства определяющие как обрабатывать данные получаемые с контроллера
         //таблица значений имени тега и его стартовогоБита 
-        private Dictionary<string, ContData> dt101ms;
+        private Dictionary<string, ContData> dic101ms;
         public Dictionary<string, ContData> Data101ms
         {
-            get { return dt101ms; }
+            get { return dic101ms; }
 
-            set { dt101ms = value; }
+            set { dic101ms = value; }
         }
 
         #endregion
 
-        #region plctodb101ms - Cвойство включения сбора информации с циклом 101ms
+        #region plctodb101ms - Cвойство включения сбора информации с циклом 101ms для записи в БД
         private bool plctodb101ms;  
-        public bool PLStoDB101ms
+        public bool blPLStoDB101ms
         {
             get {return plctodb101ms ; }
             set {plctodb101ms=value; }
@@ -120,7 +126,7 @@ namespace RS2toBD
 
         #region plctodbmessage - Cвойство включения сбора информации - сообщения
         private bool plctodbmessage; 
-        public bool PLStoDBMessage
+        public bool blPLStoDBMessage
         {
             get {return plctodbmessage; }
             set {plctodbmessage=value; }
@@ -129,7 +135,7 @@ namespace RS2toBD
 
         #region plctodb1s - Свойство включения сбора информации - 1сек
         private bool plctodb1s;
-        public bool PLStoDB1s
+        public bool blPLStoDB1s
         {
              get{return plctodb1s; }
              set{plctodb1s=value; }
@@ -148,7 +154,7 @@ namespace RS2toBD
 
 
 
-        #region Внешний метод  создаеющий соединение с контроллером и запускающий метод считывание данных с контроллера
+        #region Start() Внешний метод  создаеющий соединение с контроллером и запускающий метод считывание данных с контроллера
         public void Start()
         {
 
@@ -157,6 +163,7 @@ namespace RS2toBD
 
             try
             {
+               
                 //запуск таймеров 100ms(100ms), 101ms(SQL), 200ms(message), 1000ms(1s)
                 stan = new Prodave();
                  
@@ -181,7 +188,16 @@ namespace RS2toBD
                         if (plctodbmessage) TTimerMessage = new Timer(new TimerCallback(TicTimerMessage), null, 0, 200);
                         if (plctodb101ms) TTimerSQL = new Timer(new TimerCallback(TicTimerSQL), null, 0, 101);
                         if (plctodb1s) TTimer1s = new Timer(new TimerCallback(TicTimer1s), null, 0, 1000);
- 
+
+                        #region В случае успешного подключения к контроллеру формируем таблицу для формирования данных и последующего сохранения в БД
+                        dt101ms = new DataTable();
+                        dt101ms.Columns.Add("dtStan", typeof(DateTime));//Для хранения даты и времени
+                        foreach (var item in dic101ms)
+                        {
+                            dt101ms.Columns.Add(item.Key, item.Value.floatdata?typeof(float): typeof(int));
+                        }
+                        #endregion
+
                     }
                     else
                     {
@@ -190,8 +206,10 @@ namespace RS2toBD
                     }
 
                 }
+
+                
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 /*все исключения кидаем в пустоту*/
                 LogSystem.Write("Start-"+ex.Source, Direction.ERROR, "Start Error-"+ex.Message);
@@ -277,30 +295,69 @@ namespace RS2toBD
                 //Console.WriteLine(string.Format("\t\t {0} ({1}) {2}", "SQL 101mc", DateTime.Now - dtSQL, Thread.CurrentThread.ManagedThreadId));
                 dtSQL = DateTime.Now;
 
+
                 //Из критичной секции получаем значения из PLC
                 Thread tSQL = new Thread(BufferSQLToBufferPLC);
                 tSQL.Start();
 
 
-
-                //TODO Формировать при сохранении рулона
-                #region  Формируем шифр таблицы (yyyyMMddсмена)
-
-                if (Convert.ToInt32(DateTime.Now.ToString("HH")) >= 7 && Convert.ToInt32(DateTime.Now.ToString("HH")) < 19)
+                if (bufferSQL == null)
                 {
-                    numberTable = DateTime.Now.ToString("yyyyMMdd") + "2";
-                }
-                else if (Convert.ToInt32(DateTime.Now.ToString("HH")) < 7)
-                {
-                    numberTable = DateTime.Now.ToString("yyyyMMdd") + "1";
-                }
-                else if (Convert.ToInt32(DateTime.Now.ToString("HH")) >= 19)
-                {
-                    numberTable = DateTime.Now.AddDays(1).ToString("yyyyMMdd") + "1";
-                }
+                    Console.WriteLine("Кол-во элементтов - 0 ");
 
-                #endregion
+                }
+                else
+                {
 
+                    DataRow dr101ms = dt101ms.NewRow();
+                    dr101ms["dtStan"] = DateTime.Now;
+
+                    foreach (var item in dic101ms)
+                    {
+                        if (item.Value.floatdata)
+                        {
+                            //Console.WriteLine(item.Key + " = " + item.Value.startbit + " - " + item.Value.coefficient);
+                            float a = (float)(BitConverter.ToInt16(bufferSQL, item.Value.startbit)) / item.Value.coefficient;
+                            //Console.WriteLine(a);
+                            dr101ms[item.Key] = a;
+                        }
+                        else
+                        {
+                            //Console.WriteLine(item.Key + " = " + item.Value.startbit + " - " + item.Value.coefficient);
+                            dr101ms[item.Key] = (BitConverter.ToInt16(bufferSQL, item.Value.startbit))/item.Value.coefficient;
+
+                        }
+                    }
+
+                    dt101ms.Rows.Add(dr101ms);
+
+                    //Console.WriteLine("В массиве строчек "+dt101ms.Rows.Count);
+
+
+
+
+                    //TODO Формировать при сохранении рулона
+                    #region  Формируем шифр таблицы (yyyyMMddсмена)
+
+                    if (Convert.ToInt32(DateTime.Now.ToString("HH")) >= 7 && Convert.ToInt32(DateTime.Now.ToString("HH")) < 19)
+                    {
+                        numberTable = DateTime.Now.ToString("yyyyMMdd") + "2";
+                    }
+                    else if (Convert.ToInt32(DateTime.Now.ToString("HH")) < 7)
+                    {
+                        numberTable = DateTime.Now.ToString("yyyyMMdd") + "1";
+                    }
+                    else if (Convert.ToInt32(DateTime.Now.ToString("HH")) >= 19)
+                    {
+                        numberTable = DateTime.Now.AddDays(1).ToString("yyyyMMdd") + "1";
+                    }
+
+                    #endregion
+                }
+            }
+            catch (NullReferenceException e)
+            {
+                Console.WriteLine("ytne");
             }
             catch (Exception ex)
             {
@@ -309,6 +366,8 @@ namespace RS2toBD
             }
             
         }
+
+       
         #endregion
 
         private void TicTimer1s(object state)
@@ -366,6 +425,7 @@ namespace RS2toBD
                     LogSystem.Write("StanStop", Direction.ERROR, "Connect open. Warning - " + stan.Error(result));
                 }
 
+                //TODO добавить закрытие сетевого соединения
             }
             catch (Exception ex)
             {
@@ -374,6 +434,8 @@ namespace RS2toBD
 
         }
         #endregion
+
+        
 
     }
 }

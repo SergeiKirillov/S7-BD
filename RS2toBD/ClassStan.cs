@@ -15,11 +15,11 @@ namespace RS2toBD
     
     class ClassStan
     {
-        bool stan101ms; //данные по прокатке рулона, формируются таблица после прокатанного рулона. 
-        bool stan1s;    //данные по работе стана, формируются и через 1мин (~62 сообщения) скидываются в БД.
-        bool stan200ms; //сообщения формируются в течении 60 секунд и после этого записываются в БД.
+        bool blstan101ms; //данные по прокатке рулона, формируются таблица после прокатанного рулона. 
+        bool blstan1s;    //данные по работе стана, формируются и через 1мин (~62 сообщения) скидываются в БД.
+        bool blstan200ms; //сообщения формируются в течении 60 секунд и после этого записываются в БД.
 
-        bool NetSend; //Передача данных по сети для создания визуализации на удаленном компьютере
+        bool blNetSend; //Передача данных по сети для создания визуализации на удаленном компьютере
 
         PLCto stan;
 
@@ -151,11 +151,11 @@ namespace RS2toBD
 
         public ClassStan(bool stan101ms, bool stan1s, bool stan200ms, bool NetSend)
         {
-            this.stan101ms = stan101ms;
-            this.stan1s = stan1s;
-            this.stan200ms = stan200ms;
+            this.blstan101ms = stan101ms;
+            this.blstan1s = stan1s;
+            this.blstan200ms = stan200ms;
 
-            this.NetSend = NetSend;
+            this.blNetSend = NetSend;
         }
 
         public void Start()
@@ -168,11 +168,12 @@ namespace RS2toBD
             stan.StartAdressTag = 3000; //старт адресов с 3000
             stan.Amount = 315; //Размер буфера для принятия данных в байтах
 
-            stan.PLStoDB101ms = stan101ms;
-            stan.Data101ms = stanData100ms;
+            stan.blPLStoDB101ms = blstan101ms;  //Битовый сигнал разрешающий обработки и запись в БД с циклом 101ms
+            stan.Data101ms = stanData100ms;     // Словарь значений Тег <-> поле БД
 
-            stan.PLStoDBMessage = stan200ms;
-            stan.PLStoDB1s = stan1s;
+
+            stan.blPLStoDBMessage = blstan200ms;
+            stan.blPLStoDB1s = blstan1s;
 
             
 

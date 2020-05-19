@@ -50,6 +50,9 @@ namespace RS2toBD
         byte[] bufferNet;
         readonly object locker = new object();
         readonly object locker2 = new object();
+        float speed4kl, H5_work, h5w, Bw, D_tek_mot, B_Work, D_pred_mot = 0, Ves_Work, Dlina_Work;
+        DateTime Time_Start, Time_Stop;
+
 
         DataTable dt101ms;
 
@@ -140,7 +143,13 @@ namespace RS2toBD
              get{return plctodb1s; }
              set{plctodb1s=value; }
         }
-        #endregion  
+        private bool PasportRulona;
+        public bool blPLSPasportRulona
+        {
+            get { return PasportRulona; }
+            set { PasportRulona=value; }
+        }
+        #endregion
 
 
 
@@ -189,14 +198,7 @@ namespace RS2toBD
                         if (plctodb101ms) TTimerSQL = new Timer(new TimerCallback(TicTimerSQL), null, 0, 101);
                         if (plctodb1s) TTimer1s = new Timer(new TimerCallback(TicTimer1s), null, 0, 1000);
 
-                        #region В случае успешного подключения к контроллеру формируем таблицу для формирования данных и последующего сохранения в БД
-                        dt101ms = new DataTable();
-                        dt101ms.Columns.Add("dtStan", typeof(DateTime));//Для хранения даты и времени
-                        foreach (var item in dic101ms)
-                        {
-                            dt101ms.Columns.Add(item.Key, item.Value.floatdata?typeof(float): typeof(int));
-                        }
-                        #endregion
+                        CreateTable(); //В случае успешного подключения к контроллеру формируем таблицу для формирования данных и последующего сохранения в БД
 
                     }
                     else
@@ -214,6 +216,18 @@ namespace RS2toBD
                 /*все исключения кидаем в пустоту*/
                 LogSystem.Write("Start-"+ex.Source, Direction.ERROR, "Start Error-"+ex.Message);
             }
+        }
+        private void CreateTable()
+        {
+            #region Формируем таблицу для формирования данных и последующего сохранения в БД
+            dt101ms = new DataTable();
+            dt101ms.Reset();
+            dt101ms.Columns.Add("dtStan", typeof(DateTime));//Для хранения даты и времени
+            foreach (var item in dic101ms)
+            {
+                dt101ms.Columns.Add(item.Key, item.Value.floatdata ? typeof(float) : typeof(int));
+            }
+            #endregion
         }
 
         #endregion
@@ -333,26 +347,76 @@ namespace RS2toBD
 
                     //Console.WriteLine("В массиве строчек "+dt101ms.Rows.Count);
 
-
-
-
-                    //TODO Формировать при сохранении рулона
-                    #region  Формируем шифр таблицы (yyyyMMddсмена)
-
-                    if (Convert.ToInt32(DateTime.Now.ToString("HH")) >= 7 && Convert.ToInt32(DateTime.Now.ToString("HH")) < 19)
+                    if (PasportRulona)
                     {
-                        numberTable = DateTime.Now.ToString("yyyyMMdd") + "2";
-                    }
-                    else if (Convert.ToInt32(DateTime.Now.ToString("HH")) < 7)
-                    {
-                        numberTable = DateTime.Now.ToString("yyyyMMdd") + "1";
-                    }
-                    else if (Convert.ToInt32(DateTime.Now.ToString("HH")) >= 19)
-                    {
-                        numberTable = DateTime.Now.AddDays(1).ToString("yyyyMMdd") + "1";
+                        D_tek_mot = (float)(BitConverter.ToInt16(bufferSQL, 20)) / 1000;
+                        
+                        h5w = (float)(BitConverter.ToInt16(bufferSQL, 12)) / 1000;
+                        
+                        speed4kl = (float)(BitConverter.ToInt16(bufferSQL, 6)) / 100;
+                        
+                        Bw = BitConverter.ToInt16(bufferSQL, 14);
+
+                        #region Формирование признака окончания прокатки рулона
+                        if (D_tek_mot>D_pred_mot)
+                        {
+                            if (D_tek_mot<0.615)
+                            {
+                                Time_Start = DateTime.Now;
+                            }
+                        }
+
+                        if ((Time_Start != new DateTime()) && (H5_work == 0) && (D_tek_mot>0.7)&&(speed4kl>2))
+                        {
+                            H5_work = h5w;
+                            B_Work = Bw;
+                        }
+
+                        #endregion
+
+                        #region Окончание прокатки рулона 
+                        Console.WriteLine("Time_Start="+ Time_Start+ "  H5_work="+ H5_work+ "  D_tek_mot=" + D_tek_mot+ "  D_pred_mot=" + D_pred_mot);
+                        if ((Time_Start != new DateTime()) && (H5_work != 0) && (D_tek_mot < 0.610) && (D_tek_mot < D_pred_mot))
+                        {
+                            #region  Формируем шифр таблицы (yyyyMMddсмена)
+
+                            if (Convert.ToInt32(DateTime.Now.ToString("HH")) >= 7 && Convert.ToInt32(DateTime.Now.ToString("HH")) < 19)
+                            {
+                                numberTable = DateTime.Now.ToString("yyyyMMdd") + "2";
+                            }
+                            else if (Convert.ToInt32(DateTime.Now.ToString("HH")) < 7)
+                            {
+                                numberTable = DateTime.Now.ToString("yyyyMMdd") + "1";
+                            }
+                            else if (Convert.ToInt32(DateTime.Now.ToString("HH")) >= 19)
+                            {
+                                numberTable = DateTime.Now.AddDays(1).ToString("yyyyMMdd") + "1";
+                            }
+                            #endregion
+
+                            Console.WriteLine("Кол-во строк в таблице - "+dt101ms.Rows.Count.ToString());
+
+                            //TODO после записи удаляем таблицу и заново создаем
+                            dt101ms.Reset();
+                            Console.WriteLine("Очистка таблицы");
+
+                            Console.WriteLine("Кол-во строк в таблице после очистки - " + dt101ms.Rows.Count.ToString());
+
+
+                        }
+                        #endregion
+
+
+
+
+
+
+
                     }
 
-                    #endregion
+
+
+
                 }
             }
             catch (NullReferenceException e)

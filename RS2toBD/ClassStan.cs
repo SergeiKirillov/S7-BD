@@ -170,6 +170,7 @@ namespace RS2toBD
 
             stan.blPLStoDB101ms = blstan101ms;  //Битовый сигнал разрешающий обработки и запись в БД с циклом 101ms
             stan.Data101ms = stanData100ms;     // Словарь значений Тег <-> поле БД
+            stan.blPLSPasportRulona=true;
 
 
             stan.blPLStoDBMessage = blstan200ms;

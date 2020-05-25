@@ -8,7 +8,8 @@ using System.Text;
 using HWDiag;
 using System.Diagnostics.Eventing;
 using LoggerInSystem;
-using System.Threading;
+//using System.Threading;
+using System.Timers;
 using System.Runtime.InteropServices;
 using System.Diagnostics;
 
@@ -191,12 +192,18 @@ using System.IO;
                     if (resSAC == 0)
                     {
                         LogSystem.Write("Start", Direction.Ok, "Соединение активно.");
-                        
-                        TTimer100ms = new Timer(new TimerCallback(TicTimer100ms), null, 0, 100);
 
-                    if (plctodbmessage)  TTimerMessage = new Timer(new TimerCallback(TicTimerMessage), null, 0, 200);
-                        if (plctodb101ms) TTimerSQL = new Timer(new TimerCallback(TicTimerSQL), null, 0, 101);
-                        if (plctodb1s) TTimer1s = new Timer(new TimerCallback(TicTimer1s), null, 0, 1000);
+
+                        //TTimer100ms = new Timer(new TimerCallback(TicTimer100ms), null, 0, 100);
+                        TTimer100ms = new Timer(100);
+                        TTimer100ms.Elapsed += TicTimer100ms;
+                        TTimer100ms.AutoReset = true;
+                        TTimer100ms.Enabled = true;
+
+
+                       // if (plctodbmessage)  TTimerMessage = new Timer(new TimerCallback(TicTimerMessage), null, 0, 200);
+                       // if (plctodb101ms) TTimerSQL = new Timer(new TimerCallback(TicTimerSQL), null, 0, 101);
+                       // if (plctodb1s) TTimer1s = new Timer(new TimerCallback(TicTimer1s), null, 0, 1000);
 
                         CreateTable(); //В случае успешного подключения к контроллеру формируем таблицу для формирования данных и последующего сохранения в БД
 
@@ -233,8 +240,9 @@ using System.IO;
         #endregion
 
         #region считывание данных с контроллера и запись их в критичный буфер
-        private void TicTimer100ms(object state)
+        private void TicTimer100ms(object source, ElapsedEventArgs e)
         {
+        Console.WriteLine(e.SignalTime.ToString("HH:mm:ss.fff"));
             Connect100ms();
         }
 
@@ -246,7 +254,7 @@ using System.IO;
                 //short[] buffer_array = new short[158];
 
                 DateTime dt100ms;
-
+            
 
                 
 
@@ -259,8 +267,8 @@ using System.IO;
                 {
                     dt100ms = DateTime.Now;
                     
-                    Thread PLS100ms = new Thread(BufferToBuffer);
-                    PLS100ms.Start();
+                   // Thread PLS100ms = new Thread(BufferToBuffer);
+                   // PLS100ms.Start();
                     
                 }
                 else
@@ -273,6 +281,7 @@ using System.IO;
                 LogSystem.Write("100ms", Direction.ERROR, "ИСТОЧНИК: " + ex.Source.ToString() + ".  ОШИБКА: " + ex.Message.ToString());
             }
 
+            Console.WriteLine("Контроллер 100ms-"+DateTime.Now.ToString("HH:mm:ss.fff"));
         }
 
         void BufferToBuffer()
@@ -301,6 +310,7 @@ using System.IO;
         }
 
         private void TicTimerSQL(object state)
+        
         {
             //??????вопрос с dispatcher????????
             string numberTable;
@@ -314,8 +324,8 @@ using System.IO;
 
 
                 //Из критичной секции получаем значения из PLC
-                Thread tSQL = new Thread(BufferSQLToBufferPLC);
-                tSQL.Start();
+                //Thread tSQL = new Thread(BufferSQLToBufferPLC);
+                //tSQL.Start();
 
 
                 if (bufferSQL == null)

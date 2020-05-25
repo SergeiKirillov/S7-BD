@@ -194,7 +194,7 @@ using System.IO;
                         
                         TTimer100ms = new Timer(new TimerCallback(TicTimer100ms), null, 0, 100);
 
-                        if (plctodbmessage) TTimerMessage = new Timer(new TimerCallback(TicTimerMessage), null, 0, 200);
+                    if (plctodbmessage)  TTimerMessage = new Timer(new TimerCallback(TicTimerMessage), null, 0, 200);
                         if (plctodb101ms) TTimerSQL = new Timer(new TimerCallback(TicTimerSQL), null, 0, 101);
                         if (plctodb1s) TTimer1s = new Timer(new TimerCallback(TicTimer1s), null, 0, 1000);
 
@@ -306,6 +306,9 @@ using System.IO;
             string numberTable;
             try
             {
+
+                //Console.WriteLine("Поток ="+Thread.CurrentThread.ManagedThreadId.ToString());
+
                 //Console.WriteLine(string.Format("\t\t {0} ({1}) {2}", "SQL 101mc", DateTime.Now - dtSQL, Thread.CurrentThread.ManagedThreadId));
                 dtSQL = DateTime.Now;
 

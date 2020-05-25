@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Threading;
 
 namespace RS2toBDconsole
 {
@@ -9,9 +11,30 @@ namespace RS2toBDconsole
     {
         static void Main(string[] args)
         {
-            ClassStan clStan = new ClassStan(stan101ms: true, stan1s: true, stan200ms: true, NetSend: false);
-            clStan.Start();
+            ClassStan clStan;
+
+            if (ConsoleKey.S == Console.ReadKey().Key)
+            {
+                if (Console.ReadKey().Key == ConsoleKey.S)
+                {
+                    clStan = new ClassStan(stan101ms: true, stan1s: false, stan200ms: false, NetSend: false);
+                    Thread StanThreadMain = new Thread(new ThreadStart(clStan.Start));
+                    StanThreadMain.Start();
+
+                    
+                }
+
+                if (Console.ReadKey().Key == ConsoleKey.P)
+                {
+                    clStan = new ClassStan(stan101ms: false, stan1s: false, stan200ms: false, NetSend: false);
+                    clStan.Stop();
+                }
+
+            }
+
             Console.ReadKey();
+
+
         }
     }
 }

@@ -172,6 +172,10 @@ using System.IO;
 
             try
             {
+                buffer = new byte[amount];
+                bufferPLC = new byte[amount];
+                bufferSQL = new byte[amount];
+
                
                 //запуск таймеров 100ms(100ms), 101ms(SQL), 200ms(message), 1000ms(1s)
                 stan = new Prodave();
@@ -194,7 +198,7 @@ using System.IO;
                         
                         TTimer100ms = new Timer(new TimerCallback(TicTimer100ms), null, 0, 100);
 
-                    if (plctodbmessage)  TTimerMessage = new Timer(new TimerCallback(TicTimerMessage), null, 0, 200);
+                        if (plctodbmessage)  TTimerMessage = new Timer(new TimerCallback(TicTimerMessage), null, 0, 200);
                         if (plctodb101ms) TTimerSQL = new Timer(new TimerCallback(TicTimerSQL), null, 0, 101);
                         if (plctodb1s) TTimer1s = new Timer(new TimerCallback(TicTimer1s), null, 0, 1000);
 
@@ -247,13 +251,14 @@ using System.IO;
 
                 DateTime dt100ms;
 
-
+                //Console.WriteLine("-"+DateTime.Now.ToString("HH:mm:ss.fff"));
                 
 
 
                 //var buffer2 = new ushort[128];
                 int Byte_Col_r = 0;
 
+            buffer = null;
                 int resultReadField = stan.field_read('M', 0, startBuffer, amount, out buffer, out Byte_Col_r);
                 if (resultReadField == 0)
                 {
@@ -280,6 +285,7 @@ using System.IO;
             //критичная секция которая записывает значение в bufferPLC
             lock (locker)
             {
+                bufferPLC = null;
                 bufferPLC = buffer;
             }
 
@@ -295,6 +301,7 @@ using System.IO;
             //критичная секция которая записывает значение в bufferPLC
             lock (locker)
             {
+                bufferSQL = null;
                 bufferSQL = bufferPLC;
             }
 
@@ -312,7 +319,7 @@ using System.IO;
                 //Console.WriteLine(string.Format("\t\t {0} ({1}) {2}", "SQL 101mc", DateTime.Now - dtSQL, Thread.CurrentThread.ManagedThreadId));
                 dtSQL = DateTime.Now;
 
-
+                
                 //Из критичной секции получаем значения из PLC
                 Thread tSQL = new Thread(BufferSQLToBufferPLC);
                 tSQL.Start();
@@ -350,12 +357,12 @@ using System.IO;
                         }
 
                         dt101ms.Rows.Add(dr101ms);
-                     //   Console.WriteLine(" Кол-во строк в таблице=" +  dt101ms.Rows.Count);
+                        //Console.WriteLine(" Кол-во строк в таблице=" +  dt101ms.Rows.Count);
                     }
 
                    
 
-                    //Console.WriteLine("В массиве строчек "+dt101ms.Rows.Count);
+                    Console.Write(".");
 
                     if (PasportRulona)
                     {

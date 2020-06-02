@@ -13,6 +13,10 @@ namespace RS2toBDconsole
         {
             ClassStan clStan;
 
+            Console.WriteLine("Для выбора стана нажмите - s");
+            Console.WriteLine("     Для запуска стана нажмите - s");
+            Console.WriteLine("     Для остановки стана нажмите - p");
+
             if (ConsoleKey.S == Console.ReadKey().Key)
             {
                 if (Console.ReadKey().Key == ConsoleKey.S)

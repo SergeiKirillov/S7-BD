@@ -258,7 +258,7 @@ using System.IO;
                 //var buffer2 = new ushort[128];
                 int Byte_Col_r = 0;
 
-            buffer = null;
+                //buffer = null;
                 int resultReadField = stan.field_read('M', 0, startBuffer, amount, out buffer, out Byte_Col_r);
                 if (resultReadField == 0)
                 {
@@ -280,36 +280,38 @@ using System.IO;
 
         }
 
-        void BufferToBuffer()
+    
+    void BufferToBuffer()
+    {
+        //критичная секция которая записывает значение в bufferPLC
+        lock (locker)
         {
-            //критичная секция которая записывает значение в bufferPLC
-            lock (locker)
-            {
-                bufferPLC = null;
-                bufferPLC = buffer;
-            }
-
+            
+            //Array.Clear(bufferPLC, 0, bufferPLC.Length);
+            bufferPLC = buffer;
         }
 
-        
-        #endregion
+    }
 
-        #region формирование таблицы рулонов и после окончания прокатки запись в БД
+    #endregion
 
-        void BufferSQLToBufferPLC()
+    #region формирование таблицы рулонов и после окончания прокатки запись в БД
+
+    
+    void BufferSQLToBufferPLC()
+    {
+        //критичная секция которая записывает значение в bufferPLC
+        lock (locker)
         {
-            //критичная секция которая записывает значение в bufferPLC
-            lock (locker)
-            {
-                bufferSQL = null;
-                bufferSQL = bufferPLC;
-            }
-
+            //Array.Clear(bufferSQL, 0, bufferSQL.Length);
+            bufferSQL = bufferPLC;
         }
 
-        private void TicTimerSQL(object state)
+    }
+
+    private void TicTimerSQL(object state)
         {
-            //??????вопрос с dispatcher????????
+            
             string numberTable;
             try
             {
@@ -327,17 +329,22 @@ using System.IO;
 
                 if (bufferSQL == null)
                 {
-                    Console.WriteLine("Кол-во элементтов - 0 ");
-
+                    //Console.WriteLine("Кол-во элементтов - 0 ");
+                    Console.WriteLine("0");
                 }
                 else
                 {
+                    //Console.WriteLine(bufferSQL);
 
                     if (blRulonSaveData101ms)
+                    //if (true)
                     {
+                        
                         //Формируем строку для таблицы и ее записываем при условии что начата прокатка рулона
                         DataRow dr101ms = dt101ms.NewRow();
                         dr101ms["dtStan"] = DateTime.Now;
+
+                        
 
                         foreach (var item in dic101ms)
                         {
@@ -347,7 +354,8 @@ using System.IO;
                                 float a = (float)(BitConverter.ToInt16(bufferSQL, item.Value.startbit)) / item.Value.coefficient;
                                 //Console.WriteLine(a);
                                 dr101ms[item.Key] = a;
-                            }
+                                                               
+                        }
                             else
                             {
                                 //Console.WriteLine(item.Key + " = " + item.Value.startbit + " - " + item.Value.coefficient);
@@ -356,23 +364,33 @@ using System.IO;
                             }
                         }
 
+                    
+
+
                         dt101ms.Rows.Add(dr101ms);
+                        
                         //Console.WriteLine(" Кол-во строк в таблице=" +  dt101ms.Rows.Count);
+                        Console.Write(".");
+                    }
+                    else
+                    {
+                        Console.Write("_");
                     }
 
                    
 
-                    Console.Write(".");
+                    
 
                     if (PasportRulona)
                     {
+
+                    //Данные по прокатываемому рулону
                         D_tek_mot = (float)(BitConverter.ToInt16(bufferSQL, 20)) / 1000;
-                        
                         h5w = (float)(BitConverter.ToInt16(bufferSQL, 12)) / 1000;
-                        
                         speed4kl = (float)(BitConverter.ToInt16(bufferSQL, 6)) / 100;
-                        
                         Bw = BitConverter.ToInt16(bufferSQL, 14);
+
+                    //Console.WriteLine(D_tek_mot+" - "+h5w+" - "+speed4kl+" - "+Bw);
 
                         #region Формирование признака окончания прокатки рулона
                         if (D_tek_mot>D_pred_mot)
@@ -380,7 +398,13 @@ using System.IO;
                             if (D_tek_mot<0.615)
                             {
                                 Time_Start = DateTime.Now;
-                                blRulonSaveData101ms = true; //включаем сбор данных по прокатке рулона
+                                blRulonSaveData101ms = false; //включаем сбор данных по прокатке рулона
+                                Console.Write(D_tek_mot);
+                            }
+                            else
+                            {
+                                blRulonSaveData101ms = true;
+                                Console.Write(D_tek_mot);
                             }
                         }
 
@@ -457,13 +481,7 @@ using System.IO;
 
                         D_pred_mot = D_tek_mot;
                         #endregion
-
-
-
-
-
-
-
+                    
                     }
 
 
@@ -473,10 +491,11 @@ using System.IO;
             }
             catch (NullReferenceException e)
             {
-                Console.WriteLine("ytne");
+                //Console.WriteLine("ytne");
             }
             catch (Exception ex)
             {
+                
                 LogSystem.Write("Stan(101ms)-" + ex.Source, Direction.ERROR, "Stan(101ms) Error-" + ex.Message);
 
             }

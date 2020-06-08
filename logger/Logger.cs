@@ -63,7 +63,7 @@ namespace LoggerInSystem
 
         #region public метод который распределяет что куда писать в зависимости от переданного классаСообщения
 
-        public static void Write(string _className, Direction _clasMessage, string _MessageText)
+        public static void Write(string _className, Direction _clasMessage, string _MessageText, int _CurX, int _CurY)
         {
             classEvents value;
             if (dicEvent.TryGetValue(_clasMessage, out value))
@@ -86,7 +86,7 @@ namespace LoggerInSystem
                 //  в диагностическое окно VS - WriteOutputVSLog(_MessageText);
 
 
-                if (value.EventToConsole) WriteConsoleLog(_clasMessage, _MessageText);
+                if (value.EventToConsole) WriteConsoleLog(_clasMessage, _MessageText, _CurX, _CurY);
                 if (value.EventToFile) WriteFileLog(_MessageText);
                 if (value.EventToSystem) WriteEventLogApplication(_className, _MessageText, value.elet);
                 if (value.EventToDebug) WriteOutputVSLog(_MessageText);
@@ -99,7 +99,7 @@ namespace LoggerInSystem
         #endregion
                 
         #region вывод на консоль
-        private static void WriteConsoleLog(Direction clMes, string message)
+        private static void WriteConsoleLog(Direction clMes, string message, int curx, int cury)
         {
             switch (clMes)
             {
@@ -137,8 +137,10 @@ namespace LoggerInSystem
                     break;
             }
 
-            Console.WriteLine(message);
+            Console.SetCursorPosition(curx, cury);
+            Console.WriteLine(DateTime.Now +" - "+message);
             Console.ResetColor();
+            
         }
         #endregion
 

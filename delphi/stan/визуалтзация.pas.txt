@@ -1,0 +1,26 @@
+procedure write_tcp;stdcall;
+var
+ buffer_tcp:buffer_array;
+ SS:TSocket;
+ Addr:TSockAddr;
+ Data:TWSAData;
+ ResCon,ResConn:Integer;
+begin
+   WSAStartup($101,Data);
+   SS:=Socket(AF_Inet,Sock_Stream,0);
+   Addr.sin_family:=AF_Inet;
+   Addr.sin_port:=HToNS(10000);
+   Addr.sin_addr.S_addr:=Inet_Addr('127.0.0.1');
+   FillChar(Addr.Sin_Zero,SizeOf(Addr.Sin_Zero),0);
+   ResCon:=5;
+    while true do begin
+        sleep(250);
+         critical_buffer_tcp(buffer_tcp,buffer_s400);
+         if ResCon<>0 then
+         ResCon:=Connect(SS,Addr,SizeOf(TSockAddr));
+        //  SendTo(SS,buffer_tcp,SizeOf(buffer_tcp),0,Addr,SizeOf(Addr));
+         Send(SS,buffer_tcp,SizeOf(buffer_tcp),0);
+        //  ShutDown(SS,SD_Both);
+        //  CloseSocket(SS);
+    end;
+end;

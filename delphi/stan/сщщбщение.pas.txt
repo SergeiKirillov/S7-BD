@@ -1,0 +1,2067 @@
+procedure write_mess;stdcall;
+var
+ Byte_Signal,Byte_Signal_minus:TByte_Signal;
+ My_Query,V,BaseName,BaseDel:String;
+ FormDateTime:ShortString;
+ rc_rm:bool;
+ res,ViewCount:Integer;
+ Byte_Col_mess,Bytes_Read:DWORD;
+ //my_con_m,My_conn_m:pmysql;
+ buffer_m:buffer_array_mess;
+ TekTime,DaySignal:TDateTime;
+ chema,emuls,regim,predel,polosa5,trazm,tmot,
+ Vent_101G_m,Vent_102G_m,Vent_103G_m,Vent_105G_m,Vent_106G_m,
+ Vent_podpor_PA1_m,Vent_112G_m,Vent_111G_m,Vent_110G_m,
+ Vent_108G_m,Vent_107G_m,Vent_podpor_PA2_m,Vent_1kl_m,
+ Vent_2kl_m,Vent_3kl_m,Vent_4kl_m,Vent_5kl_m,Vent_mot_m,
+ Vent_podpor_GP1_m,Vent_podpor_GP2_m,Vent_NV_m:String;
+ str_error:string;
+
+begin
+    // my_con_m:=mysql_init(nil);
+    // My_conn_m:=mysql_real_connect(my_con_m,PChar('localhost'),
+    //          PChar('termo'),PChar('1234567890'),PChar('standb'),
+    //          3306,PChar('3306'),0);
+    // mysql_select_db(my_con_m,PChar('standb'));
+     Byte_Col_mess:=SizeOf(buffer_m);
+     rc_rm:=false;
+     ViewCount:=0;
+    while true do begin
+        sleep(200);
+
+        // 26.03.2015 9:57:20 -- из read_S400
+        //1-critical_buffer_plc(buffer_s400,buffer_19);
+        //2-
+        //    buffer_mm[0]:=buffer_s400[33];
+        //    buffer_mm[1]:=buffer_s400[34];
+        //    buffer_mm[2]:=buffer_s400[35];
+        //    buffer_mm[3]:=buffer_s400[51];
+        //    buffer_mm[4]:=buffer_s400[52];
+        //    buffer_mm[5]:=buffer_s400[53];
+        //    buffer_mm[6]:=buffer_s400[54];
+        //    buffer_mm[7]:=buffer_s400[55];
+        //    buffer_mm[8]:=buffer_s400[3];
+        //    buffer_mm[9]:=buffer_s400[156];
+        //    buffer_mm[10]:=buffer_s400[155];
+        //3-critical_buffer_mess(buffer_mess,buffer_mm);
+        //4-critical_buffer_mess(buffer_m,buffer_mess);
+        //    |
+        //    |
+        //   \/
+        critical_buffer_mess(buffer_m,buffer_mess);
+
+
+         TekTime:=Now;
+         DaySignal:=TekTime-EncodeTime(12,0,0,0)
+         -EncodeTime(12,0,0,0)-EncodeTime(12,0,0,0)
+         -EncodeTime(12,0,0,0)-EncodeTime(12,0,0,0)
+         -EncodeTime(12,0,0,0)-EncodeTime(12,0,0,0)
+         -EncodeTime(12,20,0,0);
+         BaseName:='stan_mess_'+FormatDateTime('yyyy_mm_dd',(TekTime));
+         FormDateTime:=FormatDateTime('yyyy-mm-dd hh:nn:ss.zzz',(TekTime));
+
+         //--------------------------------------------------------------------
+         //Swap - перестановка местами старший и младший байт
+         //Функция Ord возвращает целочисленное значение для любого перечислимого типа Arg. Ord(True)=1
+         // --------------------------------------------------------------------
+         //     1.Производим перестановку в buffer_m[]. Swap(buffer_m[])
+         //     2.AND побитово с числом. Swap(buffer_m[0]) and 1=1
+         //     3.Преобразум True в 1, а False в 0() Ord(Swap(buffer_m[0]) and 1=1);
+         //--------------------------------------------------------------------
+         //mb3067(m151.0-m151.7)
+         Byte_Signal.RegTD:=Ord(Swap(buffer_m[0]) and 1=1);
+         Byte_Signal.RegRazg:=Ord(Swap(buffer_m[0])and 2=2);
+         Byte_Signal.RegNO:=Ord(Swap(buffer_m[0])and 4=4);
+         Byte_Signal.RegFO:=Ord(Swap(buffer_m[0])and 8=8);
+         Byte_Signal.Vip:=Ord(Swap(buffer_m[0])and 16=16);
+         Byte_Signal.T10:=Ord(Swap(buffer_m[0]) and 32=32);
+         Byte_Signal.T20:=Ord(Swap(buffer_m[0])and 64=64);
+         Byte_Signal.T30:=Ord(Swap(buffer_m[0])and 128=128);
+         //mb3066(m150.0-m150.7)
+         Byte_Signal.ZS:=Ord(Swap(buffer_m[0])and 256=256);
+         Byte_Signal.TD:=Ord(Swap(buffer_m[0])and 512=512);
+         Byte_Signal.RS:=Ord(Swap(buffer_m[0])and 1024=1024);
+         Byte_Signal.NO:=Ord(Swap(buffer_m[0])and 2048=2048);
+         Byte_Signal.FO:=Ord(Swap(buffer_m[0])and 4096=4096);
+         Byte_Signal.MaxSpeedPeregr:=Ord(Swap(buffer_m[0])and 8192=8192);
+         Byte_Signal.UstavkaSpeed:=Ord(Swap(buffer_m[0])and 16384=16384);
+         Byte_Signal.MaxSpeed:=Ord(Swap(buffer_m[0])and 32768=32768);
+         //mb3069(m153.0-m153.7)
+         Byte_Signal.LKmot:=Ord(Swap(buffer_m[1])and 1=1);          //LKmot
+         Byte_Signal.LKrazm:=Ord(Swap(buffer_m[1])and 2=2);          //LKrazm
+         Byte_Signal.Got_64kg:=Ord(Swap(buffer_m[1])and 4=4);
+         Byte_Signal.Rnz12:=Ord(Swap(buffer_m[1])and 8=8);
+         Byte_Signal.Rnz23:=Ord(Swap(buffer_m[1])and 16=16);
+         Byte_Signal.Rnz34:=Ord(Swap(buffer_m[1])and 32=32);
+         Byte_Signal.GrtVkl:=Ord(Swap(buffer_m[1])and 64=64);
+         Byte_Signal.TrtVkl:=Ord(Swap(buffer_m[1])and 128=128);
+         //mb3068(m152.0-m152.7)
+         Byte_Signal.T40:=Ord(Swap(buffer_m[1]) and 256=256);
+         Byte_Signal.Tmot:=Ord(Swap(buffer_m[1]) and 512=512);
+         Byte_Signal.Trazm:=Ord(Swap(buffer_m[1]) and 1024=1024);
+         Byte_Signal.LK1:=Ord(Swap(buffer_m[1]) and 2048=2048);   //LK1
+         Byte_Signal.LK2:=Ord(Swap(buffer_m[1]) and 4096=4096);   //LK2
+         Byte_Signal.LK3:=Ord(Swap(buffer_m[1]) and 8192=8192);   //LK3
+         Byte_Signal.LK4:=Ord(Swap(buffer_m[1]) and 16384=16384); //LK4
+         Byte_Signal.LK5:=Ord(Swap(buffer_m[1]) and 32768=32768); //LK5
+         //mb3071(m155.0-m155.7)
+         Byte_Signal.NalPol:=Ord(Swap(buffer_m[2]) and 1=1);
+         Byte_Signal.Knp:=Ord(Swap(buffer_m[2]) and 2=2);
+         Byte_Signal.GotStan:=Ord(Swap(buffer_m[2]) and 4=4);
+         Byte_Signal.MaxV1:=Ord(Swap(buffer_m[2]) and 8=8);
+         Byte_Signal.MaxV2:=Ord(Swap(buffer_m[2]) and 16=16);
+         Byte_Signal.MaxV3:=Ord(Swap(buffer_m[2]) and 32=32);
+         Byte_Signal.MaxV4:=Ord(Swap(buffer_m[2]) and 64=64);
+         Byte_Signal.MaxV5:=Ord(Swap(buffer_m[2]) and 128=128);
+         //mb3070(m154.0-m154.7)
+         Byte_Signal.RKDVVkl:=Ord(Swap(buffer_m[2]) and 256=256);
+         Byte_Signal.RpvVkl:=Ord(Swap(buffer_m[2]) and 512=512);
+         Byte_Signal.Rnv12:=Ord(Swap(buffer_m[2]) and 1024=1024);
+         Byte_Signal.Rnv23:=Ord(Swap(buffer_m[2]) and 2048=2048);
+         Byte_Signal.Rnv34:=Ord(Swap(buffer_m[2]) and 4096=4096);
+         Byte_Signal.Rnz45:=Ord(Swap(buffer_m[2]) and 8192=8192);
+         Byte_Signal.Rtv:=Ord(Swap(buffer_m[2]) and 16384=16384);
+         Byte_Signal.Got_100kg:=Ord(Swap(buffer_m[2]) and 32768=32768);
+         //m3103.0-m3103.7
+         Byte_Signal.g12:=Ord(Swap(buffer_m[3]) and 1=1);
+         Byte_Signal.g13:=Ord(Swap(buffer_m[3])and 2=2);
+         Byte_Signal.g14:=Ord(Swap(buffer_m[3])and 4=4);
+         Byte_Signal.g15:=Ord(Swap(buffer_m[3])and 8=8);
+         Byte_Signal.g16:=Ord(Swap(buffer_m[3])and 16=16);
+         Byte_Signal.NatshUsl:=Ord(Swap(buffer_m[3])and 32=32);
+         Byte_Signal.GotEmuls:=Ord(Swap(buffer_m[3])and 64=64);
+         Byte_Signal.g17:=Ord(Swap(buffer_m[3])and 128=128);
+         //m3102.0-m3102.7
+         Byte_Signal.g18:=Ord(Swap(buffer_m[3])and 256=256);
+         Byte_Signal.g19:=Ord(Swap(buffer_m[3])and 512=512);
+         Byte_Signal.g20:=Ord(Swap(buffer_m[3])and 1024=1024);
+         Byte_Signal.temp_POU:=Ord(Swap(buffer_m[3])and 2048=2048);
+         Byte_Signal.davl_redukt:=Ord(Swap(buffer_m[3])and 4096=4096);
+         Byte_Signal.davl_PGT:=Ord(Swap(buffer_m[3])and 8192=8192);
+         Byte_Signal.temp_privod:=Ord(Swap(buffer_m[3])and 16384=16384);
+         Byte_Signal.got_sinhr:=Ord(Swap(buffer_m[3])and 32768=32768);
+         //m3105.0-m3105.7
+         Byte_Signal.OgragdMot:=Ord(Swap(buffer_m[4])and 1=1);
+         Byte_Signal.ZaxlestOtMot:=Ord(Swap(buffer_m[4])and 2=2);
+         Byte_Signal.NOTempGP:=Ord(Swap(buffer_m[4])and 4=4);//bpv
+         Byte_Signal.Peregr1:=Ord(Swap(buffer_m[4])and 8=8);
+         Byte_Signal.Peregr2:=Ord(Swap(buffer_m[4])and 16=16);
+         Byte_Signal.Peregr3:=Ord(Swap(buffer_m[4])and 32=32);
+         Byte_Signal.Peregr4:=Ord(Swap(buffer_m[4])and 64=64);
+         Byte_Signal.Peregr5:=Ord(Swap(buffer_m[4])and 128=128);
+         //m3104.0-m3104.7
+         Byte_Signal.NOSinxr:=Ord(Swap(buffer_m[4])and 256=256);
+         Byte_Signal.NOPanPultStar:=Ord(Swap(buffer_m[4])and 512=512);
+         Byte_Signal.NOPURazm:=Ord(Swap(buffer_m[4])and 1024=1024);
+         Byte_Signal.NOPU1:=Ord(Swap(buffer_m[4])and 2048=2048);
+         Byte_Signal.NOPU2:=Ord(Swap(buffer_m[4])and 4096=4096);
+         Byte_Signal.NOPU3:=Ord(Swap(buffer_m[4])and 8192=8192);
+         Byte_Signal.NOPU4:=Ord(Swap(buffer_m[4])and 16384=16384);
+         Byte_Signal.NOPU5:=Ord(Swap(buffer_m[4])and 32768=32768);
+         //m3107.0-m3107.7
+         Byte_Signal.FOPanPultStar:=Ord(Swap(buffer_m[5])and 1=1);
+         Byte_Signal.FOPU5:=Ord(Swap(buffer_m[5])and 2=2);
+         Byte_Signal.AOPUR:=Ord(Swap(buffer_m[5])and 4=4);
+         Byte_Signal.TrazmProval:=Ord(Swap(buffer_m[5])and 8=8);
+         Byte_Signal.T12proval:=Ord(Swap(buffer_m[5])and 16=16);
+         Byte_Signal.T23proval:=Ord(Swap(buffer_m[5])and 32=32);
+         Byte_Signal.T34proval:=Ord(Swap(buffer_m[5])and 64=64);
+         Byte_Signal.T45proval:=Ord(Swap(buffer_m[5])and 128=128);
+         //m3106.0-m3106.7
+         Byte_Signal.Vent_101G:=Ord(Swap(buffer_m[5])and 256=256);
+         Byte_Signal.Vent_102G:=Ord(Swap(buffer_m[5])and 512=512);
+         Byte_Signal.Vent_103G:=Ord(Swap(buffer_m[5])and 1024=1024);
+         Byte_Signal.Vent_105G:=Ord(Swap(buffer_m[5])and 2048=2048);
+         Byte_Signal.Vent_106G:=Ord(Swap(buffer_m[5])and 4096=4096);
+         Byte_Signal.Vent_podpor_PA1:=Ord(Swap(buffer_m[5])and 8192=8192);
+         Byte_Signal.Vent_112G:=Ord(Swap(buffer_m[5])and 16384=16384);
+         Byte_Signal.Vent_111G:=Ord(Swap(buffer_m[5])and 32768=32768);
+         //m3109.0-m3109.7
+         Byte_Signal.Vent_110G:=Ord(Swap(buffer_m[6])and 1=1);
+         Byte_Signal.Vent_108G:=Ord(Swap(buffer_m[6])and 2=2);
+         Byte_Signal.Vent_107G:=Ord(Swap(buffer_m[6])and 4=4);
+         Byte_Signal.Vent_podpor_PA2:=Ord(Swap(buffer_m[6])and 8=8);
+         Byte_Signal.Vent_1kl:=Ord(Swap(buffer_m[6])and 16=16);
+         Byte_Signal.Vent_2kl:=Ord(Swap(buffer_m[6])and 32=32);
+         Byte_Signal.Vent_3kl:=Ord(Swap(buffer_m[6])and 64=64);
+         Byte_Signal.Vent_4kl:=Ord(Swap(buffer_m[6])and 128=128);
+         //m3108.0-m3108.7
+         Byte_Signal.FOPU4:=Ord(Swap(buffer_m[6])and 256=256);
+         Byte_Signal.FOPU3:=Ord(Swap(buffer_m[6])and 512=512);
+         Byte_Signal.FOPU2:=Ord(Swap(buffer_m[6])and 1024=1024);
+         Byte_Signal.FOPU1:=Ord(Swap(buffer_m[6])and 2048=2048);
+         Byte_Signal.FOPUR:=Ord(Swap(buffer_m[6])and 4096=4096);
+         Byte_Signal.AOSUSknopka:=Ord(Swap(buffer_m[6])and 8192=8192);
+         Byte_Signal.AO5Klet:=Ord(Swap(buffer_m[6])and 16384=16384);
+         //Byte_Signal.OgrRt3nv:=Ord(Swap(buffer_m[6])and 32768=32768);
+         //m3111.0-m3111.7
+         //Byte_Signal.OgrRdn3vv:=Ord(Swap(buffer_m[7])and 1=1);
+         //Byte_Signal.Ig140pr3vv:=Ord(Swap(buffer_m[7])and 2=2);
+         Byte_Signal.KnAOsus:=Ord(Swap(buffer_m[7])and 4=4);
+         Byte_Signal.SmGot:=Ord(Swap(buffer_m[7])and 8=8);
+         Byte_Signal.KteRazm:=Ord(Swap(buffer_m[7])and 16=16);
+         Byte_Signal.AOrele:=Ord(Swap(buffer_m[7])and 32=32);
+         Byte_Signal.FOknop:=Ord(Swap(buffer_m[7])and 64=64);
+         //Byte_Signal.R56:=Ord(Swap(buffer[7])and 128=128);
+         //m3110.0-m3110.7
+         Byte_Signal.Vent_5kl:=Ord(Swap(buffer_m[7])and 256=256);
+         Byte_Signal.Vent_mot:=Ord(Swap(buffer_m[7])and 512=512);
+         Byte_Signal.Vent_podpor_GP1:=Ord(Swap(buffer_m[7])and 1024=1024);
+         Byte_Signal.Vent_podpor_GP2:=Ord(Swap(buffer_m[7])and 2048=2048);
+         Byte_Signal.Vent_NV:=Ord(Swap(buffer_m[7])and 4096=4096);
+         Byte_Signal.Dv2pr09sec3vv:=Ord(Swap(buffer_m[7])and 8192=8192);
+         //Byte_Signal.OgrRsRt3vv:=Ord(Swap(buffer_m[7])and 16384=16384);
+         //Byte_Signal.OgrRt3vv:=Ord(Swap(buffer_m[7])and 32768=32768);
+
+        //Запись в таблицу каждый пятый проход
+        //1 проход=sleep200
+        //5*200=1000->1c
+        //после прохода сбрасываем в 0
+        if ViewCount=5 then
+        begin
+          chema:='Разобрана';
+          if Byte_Signal.GotStan>0 then chema:='Собрана';
+
+          emuls:='Не готова';
+          if Byte_Signal.GotEmuls>0 then emuls:='Готова';
+
+          regim:='Форсированный останов';
+          if Byte_Signal.RegRazg>0 then regim:='Разгон';
+
+          if Byte_Signal.RegTD>0 then regim:='Так держать';
+
+          if Byte_Signal.RegNO>0 then regim:='Нормальный останов';
+
+          predel:='Ноль скорости';
+          if Byte_Signal.Vip>0 then predel:='Выпуск';
+
+          if Byte_Signal.UstavkaSpeed>0 then predel:='Уставка скорости';
+
+          if Byte_Signal.MaxSpeed>0 then predel:='Максимальная скорость';
+
+          if Byte_Signal.MaxSpeedPeregr>0 then predel:='Перегруз по скорости';
+
+          polosa5:='Нет';
+          if Byte_Signal.NalPol>0 then polosa5:='Есть';
+
+          trazm:='Нет';
+          if Byte_Signal.Trazm>0 then trazm:='Есть';
+
+          tmot:='Нет';
+          if Byte_Signal.Tmot>0 then tmot:='Есть';
+
+          Vent_101G_m:='Выключен';
+          if Byte_Signal.Vent_101G>0 then Vent_101G_m:='Включен';
+
+          Vent_102G_m:='Выключен';
+          if Byte_Signal.Vent_102G>0 then Vent_102G_m:='Включен';
+
+          Vent_103G_m:='Выключен';
+          if Byte_Signal.Vent_103G>0 then Vent_103G_m:='Включен';
+
+          Vent_105G_m:='Выключен';
+          if Byte_Signal.Vent_105G>0 then Vent_105G_m:='Включен';
+
+          Vent_106G_m:='Выключен';
+          if Byte_Signal.Vent_106G>0 then Vent_106G_m:='Включен';
+
+          Vent_112G_m:='Выключен';
+          if Byte_Signal.Vent_112G>0 then Vent_112G_m:='Включен';
+
+          Vent_111G_m:='Выключен';
+          if Byte_Signal.Vent_111G>0 then Vent_111G_m:='Включен';
+
+          Vent_110G_m:='Выключен';
+          if Byte_Signal.Vent_110G>0 then Vent_110G_m:='Включен';
+
+          Vent_108G_m:='Выключен';
+          if Byte_Signal.Vent_108G>0 then Vent_108G_m:='Включен';
+
+          Vent_107G_m:='Выключен';
+          if Byte_Signal.Vent_107G>0 then Vent_107G_m:='Включен';
+
+          Vent_podpor_PA1_m:='Выключен';
+          if Byte_Signal.Vent_podpor_PA1>0 then Vent_podpor_PA1_m:='Включен';
+
+          Vent_podpor_PA2_m:='Выключен';
+          if Byte_Signal.Vent_podpor_PA2>0 then Vent_podpor_PA2_m:='Включен';
+
+          Vent_1kl_m:='Выключен';
+          if Byte_Signal.Vent_1kl>0 then Vent_1kl_m:='Включен';
+
+          Vent_2kl_m:='Выключен';
+          if Byte_Signal.Vent_2kl>0 then Vent_2kl_m:='Включен';
+
+          Vent_3kl_m:='Выключен';
+          if Byte_Signal.Vent_3kl>0 then Vent_3kl_m:='Включен';
+
+          Vent_4kl_m:='Выключен';
+          if Byte_Signal.Vent_4kl>0 then Vent_4kl_m:='Включен';
+
+          Vent_5kl_m:='Выключен';
+          if Byte_Signal.Vent_5kl>0 then Vent_5kl_m:='Включен';
+
+          Vent_mot_m:='Выключен';
+          if Byte_Signal.Vent_mot>0 then Vent_mot_m:='Включен';
+
+          Vent_podpor_GP1_m:='Выключен';
+          if Byte_Signal.Vent_podpor_GP1>0 then Vent_podpor_GP1_m:='Включен';
+
+          Vent_podpor_GP2_m:='Выключен';
+          if Byte_Signal.Vent_podpor_GP2>0 then Vent_podpor_GP2_m:='Включен';
+
+          Vent_NV_m:='Выключен';
+          if Byte_Signal.Vent_NV>0 then Vent_NV_m:='Включен';
+
+          My_Query:='truncate wiev;';
+          // mysql_real_query(my_con_m,PChar(My_Query),StrLen(PChar(My_Query)));
+           My_Query:='insert wiev values ('
+           +''''+chema+''','''
+           +emuls+''','''
+           +regim+''','''
+           +predel+''','''
+           +polosa5+''','''
+           +trazm+''','''
+           +tmot+''','''
+           +Vent_101G_m+''','''
+           +Vent_102G_m+''','''
+           +Vent_103G_m+''','''
+           +Vent_105G_m+''','''
+           +Vent_106G_m+''','''
+           +Vent_podpor_PA1_m+''','''
+           +Vent_112G_m+''','''
+           +Vent_111G_m+''','''
+           +Vent_110G_m+''','''
+           +Vent_108G_m+''','''
+           +Vent_107G_m+''','''
+           +Vent_podpor_PA2_m+''','''
+           +Vent_1kl_m+''','''
+           +Vent_2kl_m+''','''
+           +Vent_3kl_m+''','''
+           +Vent_4kl_m+''','''
+           +Vent_5kl_m+''','''
+           +Vent_mot_m+''','''
+           +Vent_podpor_GP1_m+''','''
+           +Vent_podpor_GP2_m+''','''
+           +Vent_NV_m+''','''
+           +FloatToStr(buffer_m[9])+''');';
+        //   mysql_real_query(my_con_m,PChar(My_Query),
+        //                    StrLen(PChar(My_Query)));
+        //после прохода сбрасываем в 0
+          ViewCount:=0;
+        end;
+        ViewCount:=ViewCount+1;
+        V:=IntToStr(buffer_m[8]);
+        My_Query:=
+        'insert into '+BaseName+' values';
+
+        //----------------------------------------------------------------------
+        // (Byte_Signal_minus.TD-Byte_Signal.TD)<0
+        //Если предыдущий сигнал минл текущий сигнал меньше 0 то условие
+        //Изменение от 0 в 1
+        //----------------------------------------------------------------------
+
+        //Изменение от 0 в 1
+        if (Byte_Signal_minus.TD-Byte_Signal.TD)<0 then
+        begin
+          My_Query:=My_Query
+          +'(1,'''
+          + FormDateTime+
+          ''',''Ключ ТАК ДЕРЖАТЬ'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.ZS-Byte_Signal.ZS)<0 then
+        begin
+          My_Query:=My_Query
+          +'(2,'''
+          +FormDateTime+
+          ''',''Кнопка ЗАПРАВКА'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.RS-Byte_Signal.RS)<0 then
+        begin
+          My_Query:= My_Query
+          +'(2,'''
+          +FormDateTime+
+          ''',''Ключ РАЗГОН'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.NO-Byte_Signal.NO)<0 then
+        begin
+          My_Query:= My_Query
+          +'(3,'''+
+           FormDateTime+
+           ''',''Кнопка НОРМАЛЬНЫЙ ОСТАНОВ'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.FO-Byte_Signal.FO)<0 then
+        begin
+          My_Query:= My_Query
+          +'(4,'''+
+           FormDateTime+
+           ''',''Кнопка ФОРСИРОВАННЫЙ ОСТАНОВ'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.RegTD-Byte_Signal.RegTD)<0 then
+        begin
+          My_Query:= My_Query
+          +'(1,'''+
+           FormDateTime+
+           ''',''Режим ТАК ДЕРЖАТЬ'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.RegRazg-Byte_Signal.RegRazg)<0 then
+        begin
+          My_Query:= My_Query
+          +'(2,'''+
+           FormDateTime+
+           ''',''Режим РАЗГОНА'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.RegNO-Byte_Signal.RegNO)<0 then
+        begin
+          My_Query:=My_Query
+          +'(3,'''+
+           FormDateTime+
+           ''',''Режим НОРМАЛЬНОГО ОСТАНОВА'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.RegFO-Byte_Signal.RegFO)<0 then
+        begin
+          My_Query:=My_Query
+          +'(4,'''+
+           FormDateTime+
+           ''',''Режим ФОРСИРОВАННОГО ОСТАНОВА'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.Vip-Byte_Signal.Vip)<0 then
+        begin
+        My_Query:=My_Query
+        +'(5,'''+
+         FormDateTime+
+         ''',''Режим ВЫПУСКА'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.Trazm-Byte_Signal.Trazm)<0 then
+        begin
+        My_Query:=My_Query
+        +'(6,'''+
+         FormDateTime+
+         ''',''Натяжение на разматывателе'','+V+'),';
+
+        end;
+
+        //Изменение от 1 в 0
+        if (Byte_Signal_minus.Trazm-Byte_Signal.Trazm)>0 then
+        begin
+        My_Query:=My_Query
+        +'(7,'''+
+         FormDateTime+
+         ''',''Отсутствие натяжения на разматывателе'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.T10-Byte_Signal.T10)<0 then
+        begin
+        My_Query:=My_Query
+        +'(6,'''+
+         FormDateTime+
+         ''',''Натяжение в 1 промежутке'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.T10-Byte_Signal.T10)>0 then
+        begin
+        My_Query:=My_Query
+        +'(7,'''+
+         FormDateTime+
+         ''',''Отсутствие натяжения в 1 промежутке'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.T20-Byte_Signal.T20)<0 then
+        begin
+        My_Query:=My_Query
+        +'(6,'''+
+         FormDateTime+
+         ''',''Натяжение во 2 промежутке'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.T20-Byte_Signal.T20)>0 then
+        begin
+        My_Query:=My_Query
+        +'(7,'''+
+         FormDateTime+
+         ''',''Отсутствие натяжения во 2 промежутке'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.T30-Byte_Signal.T30)<0 then
+        begin
+        My_Query:=My_Query
+        +'(6,'''+
+         FormDateTime+
+         ''',''Натяжение в 3 промежутке'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.T30-Byte_Signal.T30)>0 then
+        begin
+        My_Query:=My_Query
+        +'(7,'''+
+         FormDateTime+
+         ''',''Отсутствие натяжения в 3 промежутке'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.T40-Byte_Signal.T40)<0 then
+        begin
+        My_Query:=My_Query
+        +'(6,'''+
+         FormDateTime+
+         ''',''Натяжение в 4 промежутке'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.T40-Byte_Signal.T40)>0 then
+        begin
+        My_Query:=My_Query
+        +'(7,'''+
+         FormDateTime+
+         ''',''Отсутствие натяжения в 4 промежутке'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.Tmot-Byte_Signal.Tmot)<0 then
+        begin
+        My_Query:=My_Query
+        +'(6,'''+
+         FormDateTime+
+         ''',''Натяжение на моталке'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.Tmot-Byte_Signal.Tmot)>0 then
+        begin
+        My_Query:=My_Query
+        +'(7,'''+
+         FormDateTime+
+         ''',''Отсутствие натяжения на моталке'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.MaxSpeedPeregr-Byte_Signal.MaxSpeedPeregr)<0 then
+        begin
+        My_Query:=My_Query
+        +'(6,'''+
+         FormDateTime+
+         ''',''Максимальный перегруз'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.MaxSpeedPeregr-Byte_Signal.MaxSpeedPeregr)>0 then
+        begin
+        My_Query:=My_Query
+        +'(7,'''+
+         FormDateTime+
+         ''',''Отсутствие максимального перегруза'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.UstavkaSpeed-Byte_Signal.UstavkaSpeed)<0 then
+        begin
+        My_Query:=My_Query
+        +'(1,'''+
+         FormDateTime+
+         ''',''Уставка рабочей скорости'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.MaxSpeed-Byte_Signal.MaxSpeed)<0 then
+        begin
+        My_Query:=My_Query
+        +'(2,'''+
+         FormDateTime+
+         ''',''Перегруз по скорости'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.Rnz12-Byte_Signal.Rnz12)>0 then
+        begin
+        My_Query:=My_Query
+        +'(6,'''+
+         FormDateTime+
+         ''',''РНЗ 12 включено'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.Rnz12-Byte_Signal.Rnz12)<0 then
+        begin
+        My_Query:=My_Query
+        +'(7,'''+
+         FormDateTime+
+         ''',''РНЗ 12 выключено'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.Rnz23-Byte_Signal.Rnz23)<0 then
+        begin
+        My_Query:=My_Query
+        +'(6,'''+
+         FormDateTime+
+         ''',''РНЗ 23 включено'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.Rnz23-Byte_Signal.Rnz23)>0 then
+        begin
+        My_Query:=My_Query
+        +'(7,'''+
+         FormDateTime+
+         ''',''РНЗ 23 выключено'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.Rnz34-Byte_Signal.Rnz34)<0 then
+        begin
+        My_Query:=My_Query
+        +'(6,'''+
+         FormDateTime+
+         ''',''РНЗ 34 включено'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.Rnz34-Byte_Signal.Rnz34)>0 then
+        begin
+        My_Query:=My_Query
+        +'(7,'''+
+         FormDateTime+
+         ''',''РНЗ 34 выключено'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.Rnz45-Byte_Signal.Rnz45)<0 then
+        begin
+        My_Query:=My_Query
+        +'(6,'''+
+         FormDateTime+
+         ''',''РН 45 включено'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.Rnz45-Byte_Signal.Rnz45)>0 then
+        begin
+        My_Query:=My_Query
+        +'(7,'''+
+         FormDateTime+
+         ''',''РН 45 выключено'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.GrtVkl-Byte_Signal.GrtVkl)<0 then
+        begin
+        My_Query:=My_Query
+        +'(6,'''+
+         FormDateTime+
+         ''',''ГРТ включено'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.GrtVkl-Byte_Signal.GrtVkl)>0 then
+        begin
+        My_Query:=My_Query
+        +'(7,'''+
+         FormDateTime+
+         ''',''ГРТ выключено'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.TrtVkl-Byte_Signal.TrtVkl)<0 then
+        begin
+        My_Query:=My_Query
+        +'(6,'''+
+         FormDateTime+
+         ''',''ТРТ включено'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.TrtVkl-Byte_Signal.TrtVkl)>0 then
+        begin
+        My_Query:=My_Query
+        +'(7,'''+
+         FormDateTime+
+         ''',''ТРТ выключено'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.NalPol-Byte_Signal.NalPol)<0 then
+        begin
+        My_Query:=My_Query
+        +'(5,'''+
+         FormDateTime+
+         ''',''Наличие полосы в толщиномере за 5 клетью'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.NalPol-Byte_Signal.NalPol)>0 then
+        begin
+        My_Query:=My_Query
+        +'(7,'''+
+         FormDateTime+
+         ''',''Отсутствие полосы в толщиномере за 5 клетью'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.Knp-Byte_Signal.Knp)<0 then
+        begin
+        My_Query:=My_Query
+        +'(1,'''+
+         FormDateTime+
+         ''',''Ноль задания скорости'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.Knp-Byte_Signal.Knp)>0 then
+        begin
+        My_Query:=My_Query
+        +'(2,'''+
+         FormDateTime+
+         ''',''Поехали'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.GotStan-Byte_Signal.GotStan)<0 then
+        begin
+        My_Query:=My_Query
+        +'(1,'''+
+         FormDateTime+
+         ''',''Сборка схемы стана'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.GotStan-Byte_Signal.GotStan)>0 then
+        begin
+        My_Query:=My_Query
+        +'(4,'''+
+         FormDateTime+
+         ''',''Развал схемы стана'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.MaxV1-Byte_Signal.MaxV1)<0 then
+        begin
+        My_Query:=My_Query
+        +'(4,'''+
+         FormDateTime+
+         ''',''Максимальная скорость клети 1'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.MaxV1-Byte_Signal.MaxV1)>0 then
+        begin
+        My_Query:=My_Query
+        +'(5,'''+
+         FormDateTime+
+         ''',''Конец максимальной скорости клети 1'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.MaxV2-Byte_Signal.MaxV2)<0 then
+        begin
+        My_Query:=My_Query
+        +'(4,'''+
+         FormDateTime+
+         ''',''Максимальная скорость клети 2'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.MaxV2-Byte_Signal.MaxV2)>0 then
+        begin
+        My_Query:=My_Query
+        +'(5,'''+
+         FormDateTime+
+         ''',''Конец максимальной скорости клети 2'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.MaxV3-Byte_Signal.MaxV3)<0 then
+        begin
+        My_Query:=My_Query
+        +'(4,'''+
+         FormDateTime+
+         ''',''Максимальная скорость клети 3'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.MaxV3-Byte_Signal.MaxV3)>0 then
+        begin
+        My_Query:=My_Query
+        +'(5,'''+
+         FormDateTime+
+         ''',''Конец максимальной скорости клети 3'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.MaxV4-Byte_Signal.MaxV4)<0 then
+        begin
+        My_Query:=My_Query
+        +'(4,'''+
+         FormDateTime+
+         ''',''Максимальная скорость клети 4'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.MaxV4-Byte_Signal.MaxV4)>0 then
+        begin
+        My_Query:=My_Query
+        +'(5,'''+
+         FormDateTime+
+         ''',''Конец максимальной скорости клети 4'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.MaxV5-Byte_Signal.MaxV5)<0 then
+        begin
+        My_Query:=My_Query
+        +'(4,'''+
+         FormDateTime+
+         ''',''Максимальная скорость клети 5'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.MaxV5-Byte_Signal.MaxV5)>0 then
+        begin
+        My_Query:=My_Query
+        +'(5,'''+
+         FormDateTime+
+         ''',''Конец максимальной скорости клети 5'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.RKDVVkl-Byte_Signal.RKDVVkl)<0 then
+        begin
+        My_Query:=My_Query
+        +'(6,'''+
+         FormDateTime+
+         ''',''РКДВ включен'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.RKDVVkl-Byte_Signal.RKDVVkl)>0 then
+        begin
+        My_Query:=My_Query
+        +'(7,'''+
+         FormDateTime+
+         ''',''РКДВ выключен'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.RpvVkl-Byte_Signal.RpvVkl)<0 then
+        begin
+        My_Query:=My_Query
+        +'(6,'''+
+         FormDateTime+
+         ''',''РПВ включен'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.RpvVkl-Byte_Signal.RpvVkl)>0 then
+        begin
+        My_Query:=My_Query
+        +'(7,'''+
+         FormDateTime+
+         ''',''РПВ выключен'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.Rnv12-Byte_Signal.Rnv12)<0 then
+        begin
+        My_Query:=My_Query
+        +'(1,'''+
+         FormDateTime+
+         ''',''РНВ12 включен'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.Rnv12-Byte_Signal.Rnv12)>0 then
+        begin
+        My_Query:=My_Query
+        +'(4,'''+
+         FormDateTime+
+         ''',''РНВ12 выключен'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.Rnv23-Byte_Signal.Rnv23)<0 then
+        begin
+        My_Query:=My_Query
+        +'(1,'''+
+         FormDateTime+
+         ''',''РНВ23 включен'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.Rnv23-Byte_Signal.Rnv23)>0 then
+        begin
+        My_Query:=My_Query
+        +'(4,'''+
+         FormDateTime+
+         ''',''РНВ23 выключен'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.Rnv34-Byte_Signal.Rnv34)<0 then
+        begin
+        My_Query:=My_Query
+        +'(1,'''+
+         FormDateTime+
+         ''',''РНВ34 включен'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.Rnv34-Byte_Signal.Rnv34)>0 then
+        begin
+        My_Query:=My_Query
+        +'(4,'''+
+         FormDateTime+
+         ''',''РНВ34 выключен'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.Rnz45-Byte_Signal.Rnz45)<0 then
+        begin
+        My_Query:=My_Query
+        +'(1,'''+
+         FormDateTime+
+         ''',''РН45 включен'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.Rnz45-Byte_Signal.Rnz45)>0 then
+        begin
+        My_Query:=My_Query
+        +'(4,'''+
+         FormDateTime+
+         ''',''РН45 выключен'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.Rtv-Byte_Signal.Rtv)<0 then
+        begin
+        My_Query:=My_Query
+        +'(1,'''+
+         FormDateTime+
+         ''',''РТВ включен'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.Rtv-Byte_Signal.Rtv)>0 then
+        begin
+        My_Query:=My_Query
+        +'(7,'''+
+         FormDateTime+
+         ''',''РТВ выключен'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.Got_64kg-Byte_Signal.Got_64kg)<0 then
+        begin
+        My_Query:=My_Query
+        +'(1,'''+
+         FormDateTime+
+         ''',''Гидравлика 64 кг готова'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.Got_64kg-Byte_Signal.Got_64kg)>0 then
+        begin
+        My_Query:=My_Query
+        +'(4,'''+
+         FormDateTime+
+         ''',''Гидравлика 64 кг не готова'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.Got_100kg-Byte_Signal.Got_100kg)<0 then
+        begin
+        My_Query:=My_Query
+        +'(1,'''+
+         FormDateTime+
+         ''',''Гидравлика 100 кг готова'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.Got_100kg-Byte_Signal.Got_100kg)>0 then
+        begin
+        My_Query:=My_Query
+        +'(4,'''+
+         FormDateTime+
+         ''',''Гидравлика 100 кг не готова'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.g12-Byte_Signal.g12)<0 then
+        begin
+        My_Query:=My_Query
+        +'(1,'''+
+         FormDateTime+
+         ''',''ПЖТ Ж-12 готова'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.g12-Byte_Signal.g12)>0 then
+        begin
+        My_Query:=My_Query
+        +'(4,'''+
+         FormDateTime+
+         ''',''ПЖТ Ж-12 не готова'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.GotEmuls-Byte_Signal.GotEmuls)<0 then
+        begin
+        My_Query:=My_Query
+        +'(5,'''+
+         FormDateTime+
+         ''',''Эмульсионная система готова'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.GotEmuls-Byte_Signal.GotEmuls)>0 then
+        begin
+        My_Query:=My_Query
+        +'(7,'''+
+         FormDateTime+
+         ''',''Эмульсионная система не готова'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.NatshUsl-Byte_Signal.NatshUsl)<0 then
+        begin
+        My_Query:=My_Query
+        +'(5,'''+
+         FormDateTime+
+         ''',''Начальные условия'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.g13-Byte_Signal.g13)<0 then
+        begin
+        My_Query:=My_Query
+        +'(1,'''+
+         FormDateTime+
+         ''',''ПЖТ Ж-13 готова'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.g13-Byte_Signal.g13)>0 then
+        begin
+        My_Query:=My_Query
+        +'(4,'''+
+         FormDateTime+
+         ''',''ПЖТ Ж-13 не готова'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.g14-Byte_Signal.g14)<0 then
+        begin
+        My_Query:=My_Query
+        +'(1,'''+
+         FormDateTime+
+         ''',''ПЖТ Ж-14 готова'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.g14-Byte_Signal.g14)>0 then
+        begin
+        My_Query:=My_Query
+        +'(4,'''+
+         FormDateTime+
+         ''',''ПЖТ Ж-14 не готова'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.g15-Byte_Signal.g15)>0 then
+        begin
+        My_Query:=My_Query
+        +'(1,'''+
+         FormDateTime+
+         ''',''Смазка Ж-15 готова'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.g15-Byte_Signal.g15)<0 then
+        begin
+        My_Query:=My_Query
+        +'(4,'''+
+         FormDateTime+
+         ''',''Смазка Ж-15 не готова'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.LKmot-Byte_Signal.LKmot)<0 then
+        begin
+        My_Query:=My_Query
+        +'(2,'''+
+         FormDateTime+
+         ''',''ЛК моталки включены'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.LKmot-Byte_Signal.LKmot)>0 then
+        begin
+        My_Query:=My_Query
+        +'(6,'''+
+         FormDateTime+
+         ''',''ЛК моталки выключены'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.g16-Byte_Signal.g16)<0 then
+        begin
+        My_Query:=My_Query
+        +'(1,'''+
+         FormDateTime+
+         ''',''Смазка Ж-16 готова'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.g16-Byte_Signal.g16)>0 then
+        begin
+        My_Query:=My_Query
+        +'(4,'''+
+         FormDateTime+
+         ''',''Смазка Ж-16 не готова'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.g17-Byte_Signal.g17)<0 then
+        begin
+        My_Query:=My_Query
+        +'(1,'''+
+         FormDateTime+
+         ''',''Смазка Ж-17 готова'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.g17-Byte_Signal.g17)>0 then
+        begin
+        My_Query:=My_Query
+        +'(4,'''+
+         FormDateTime+
+         ''',''Смазка Ж-17 не готова'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.g18-Byte_Signal.g18)<0 then
+        begin
+        My_Query:=My_Query
+        +'(1,'''+
+         FormDateTime+
+         ''',''Смазка Ж-18 готова'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.g18-Byte_Signal.g18)>0 then
+        begin
+        My_Query:=My_Query
+        +'(4,'''+
+         FormDateTime+
+         ''',''Смазка Ж-18 не готова'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.g19-Byte_Signal.g19)>0 then
+        begin
+        My_Query:=My_Query
+        +'(1,'''+
+         FormDateTime+
+         ''',''Смазка Ж-19 не готова'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.g19-Byte_Signal.g19)<0 then
+        begin
+        My_Query:=My_Query
+        +'(4,'''+
+         FormDateTime+
+         ''',''Смазка Ж-19 готова'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.g20-Byte_Signal.g20)<0 then
+        begin
+        My_Query:=My_Query
+        +'(1,'''+
+         FormDateTime+
+         ''',''Смазка Ж-20 готова'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.g20-Byte_Signal.g20)>0 then
+        begin
+        My_Query:=My_Query
+        +'(4,'''+
+         FormDateTime+
+         ''',''Смазка Ж-20 не готова'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.Peregr1-Byte_Signal.Peregr1)<0 then
+        begin
+        My_Query:=My_Query
+        +'(4,'''+
+         FormDateTime+
+         ''',''Перегруз клети 1'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.Peregr1-Byte_Signal.Peregr1)>0 then
+        begin
+        My_Query:=My_Query
+        +'(5,'''+
+         FormDateTime+
+         ''',''Конец перегруза клети 1'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.Peregr2-Byte_Signal.Peregr2)<0 then
+        begin
+        My_Query:=My_Query
+        +'(4,'''+
+         FormDateTime+
+         ''',''Перегруз клети 2'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.Peregr2-Byte_Signal.Peregr2)>0 then
+        begin
+        My_Query:=My_Query
+        +'(5,'''+
+         FormDateTime+
+         ''',''Конец перегруза клети 2'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.Peregr3-Byte_Signal.Peregr3)<0 then
+        begin
+        My_Query:=My_Query
+        +'(4,'''+
+         FormDateTime+
+         ''',''Перегруз клети 3'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.Peregr3-Byte_Signal.Peregr3)>0 then
+        begin
+        My_Query:=My_Query
+        +'(5,'''+
+         FormDateTime+
+         ''',''Конец перегруза клети 3'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.Peregr4-Byte_Signal.Peregr4)<0 then
+        begin
+        My_Query:=My_Query
+        +'(4,'''+
+         FormDateTime+
+         ''',''Перегруз клети 4'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.Peregr4-Byte_Signal.Peregr4)>0 then
+        begin
+        My_Query:=My_Query
+        +'(5,'''+
+         FormDateTime+
+         ''',''Конец перегруза клети 4'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.Peregr5-Byte_Signal.Peregr5)<0 then
+        begin
+        My_Query:=My_Query
+        +'(4,'''+
+         FormDateTime+
+         ''',''Перегруз клети 5'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.Peregr5-Byte_Signal.Peregr5)>0 then
+        begin
+        My_Query:=My_Query
+        +'(5,'''+
+         FormDateTime+
+         ''',''Конец перегруза клети 5'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.temp_POU-Byte_Signal.temp_POU)>0 then
+        begin
+        My_Query:=My_Query
+        +'(1,'''+
+         FormDateTime+
+         ''',''Температура в ПОУ нормальная'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.temp_POU-Byte_Signal.temp_POU)<0 then
+        begin
+        My_Query:=My_Query
+        +'(4,'''+
+         FormDateTime+
+         ''',''Температура в ПОУ высокая'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.davl_redukt-Byte_Signal.davl_redukt)<0 then
+        begin
+        My_Query:=My_Query
+        +'(1,'''+
+         FormDateTime+
+         ''',''Давление редукторов низкое'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.davl_redukt-Byte_Signal.davl_redukt)>0 then
+        begin
+        My_Query:=My_Query
+        +'(4,'''+
+         FormDateTime+
+         ''',''Давление редукторов нормальное'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.davl_PGT-Byte_Signal.davl_PGT)<0 then
+        begin
+        My_Query:=My_Query
+        +'(1,'''+
+         FormDateTime+
+         ''',''Давление ПЖТ низкое'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.davl_PGT-Byte_Signal.davl_PGT)>0 then
+        begin
+        My_Query:=My_Query
+        +'(4,'''+
+         FormDateTime+
+         ''',''Давление ПЖТ нормальное'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.LKrazm-Byte_Signal.LKrazm)<0 then
+        begin
+        My_Query:=My_Query
+        +'(2,'''+
+         FormDateTime+
+         ''',''ЛК разматывателя включены'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.LKrazm-Byte_Signal.LKrazm)>0 then
+        begin
+        My_Query:=My_Query
+        +'(6,'''+
+         FormDateTime+
+         ''',''ЛК разматывателя выключены'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.temp_privod-Byte_Signal.temp_privod)<0 then
+        begin
+        My_Query:=My_Query
+        +'(1,'''+
+         FormDateTime+
+         ''',''Вентиляция готова'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.temp_privod-Byte_Signal.temp_privod)>0 then
+        begin
+        My_Query:=My_Query
+        +'(4,'''+
+         FormDateTime+
+         ''',''Вентиляция не готова'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.got_sinhr-Byte_Signal.got_sinhr)<0 then
+        begin
+        My_Query:=My_Query
+        +'(1,'''+
+         FormDateTime+
+         ''',''Синхронные двигатели готовы'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.got_sinhr-Byte_Signal.got_sinhr)>0 then
+        begin
+        My_Query:=My_Query
+        +'(4,'''+
+         FormDateTime+
+         ''',''Синхронные двигатели не готовы'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.OgragdMot-Byte_Signal.OgragdMot)<0 then
+        begin
+        My_Query:=My_Query
+        +'(1,'''+
+         FormDateTime+
+         ''',''Ограждение моталки закрыто'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.OgragdMot-Byte_Signal.OgragdMot)>0 then
+        begin
+        My_Query:=My_Query
+        +'(4,'''+
+         FormDateTime+
+         ''',''Ограждение моталки открыто НО'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.ZaxlestOtMot-Byte_Signal.ZaxlestOtMot)<0 then
+        begin
+        My_Query:=My_Query
+        +'(1,'''+
+         FormDateTime+
+         ''',''Захлестыватель у моталки НО'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.ZaxlestOtMot-Byte_Signal.ZaxlestOtMot)>0 then
+        begin
+        My_Query:=My_Query
+        +'(4,'''+
+         FormDateTime+
+         ''',''Захлестыватель отведен'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.NOTempGP-Byte_Signal.NOTempGP)<0 then
+        begin
+        My_Query:=My_Query
+        +'(1,'''+
+         FormDateTime+
+         ''',''Высокая температура ПЖТ ГП'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.NOTempGP-Byte_Signal.NOTempGP)>0 then
+        begin
+        My_Query:=My_Query
+        +'(4,'''+
+         FormDateTime+
+         ''',''Нормальная температура ПЖТ ГП'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.NOSinxr-Byte_Signal.NOSinxr)<0 then
+        begin
+        My_Query:=My_Query
+        +'(1,'''+
+         FormDateTime+
+         ''',''Высокая температура ПЖТ СД'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.NOSinxr-Byte_Signal.NOSinxr)>0 then
+        begin
+        My_Query:=My_Query
+        +'(4,'''+
+         FormDateTime+
+         ''',''Нормальная температура ПЖТ СД'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.NOPanPultStar-Byte_Signal.NOPanPultStar)<0 then
+        begin
+        My_Query:=My_Query
+        +'(4,'''+
+         FormDateTime+
+         ''',''Кнопка НО на ПУ старшего нажата'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.NOPURazm-Byte_Signal.NOPURazm)>0 then
+        begin
+        My_Query:=My_Query
+        +'(4,'''+
+         FormDateTime+
+         ''',''Кнопка НО на ПУР нажата'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.NOPU1-Byte_Signal.NOPU1)>0 then
+        begin
+        My_Query:=My_Query
+        +'(4,'''+
+         FormDateTime+
+         ''',''Кнопка НО на ПУ1 нажата'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.NOPU2-Byte_Signal.NOPU2)>0 then
+        begin
+        My_Query:=My_Query
+        +'(4,'''+
+         FormDateTime+
+         ''',''Кнопка НО на ПУ2 нажата'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.NOPU3-Byte_Signal.NOPU3)>0 then
+        begin
+        My_Query:=My_Query
+        +'(4,'''+
+         FormDateTime+
+         ''',''Кнопка НО на ПУ3 нажата'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.NOPU4-Byte_Signal.NOPU4)>0 then
+        begin
+        My_Query:=My_Query
+        +'(4,'''+
+         FormDateTime+
+         ''',''Кнопка НО на ПУ4 нажата'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.NOPU5-Byte_Signal.NOPU5)>0 then
+        begin
+        My_Query:=My_Query
+        +'(4,'''+
+         FormDateTime+
+         ''',''Кнопка НО на ПУ5 нажата'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.FOPanPultStar-Byte_Signal.FOPanPultStar)<0 then
+        begin
+        My_Query:=My_Query
+        +'(4,'''+
+         FormDateTime+
+         ''',''Кнопка ФО на ПУ старшего нажата'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.FOPUR-Byte_Signal.FOPUR)>0 then
+        begin
+        My_Query:=My_Query
+        +'(4,'''+
+         FormDateTime+
+         ''',''Кнопка ФО на ПУР нажата'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.FOPU1-Byte_Signal.FOPU1)>0 then
+        begin
+        My_Query:=My_Query
+        +'(4,'''+
+         FormDateTime+
+         ''',''Кнопка ФО на ПУ1 нажата'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.FOPU2-Byte_Signal.FOPU2)>0 then
+        begin
+        My_Query:=My_Query
+        +'(4,'''+
+         FormDateTime+
+         ''',''Кнопка ФО на ПУ2 нажата'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.FOPU3-Byte_Signal.FOPU3)>0 then
+        begin
+        My_Query:=My_Query
+        +'(4,'''+
+         FormDateTime+
+         ''',''Кнопка ФО на ПУ3 нажата'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.FOPU4-Byte_Signal.FOPU4)>0 then
+        begin
+        My_Query:=My_Query
+        +'(4,'''+
+         FormDateTime+
+         ''',''Кнопка ФО на ПУ4 нажата'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.FOPU5-Byte_Signal.FOPU5)>0 then
+        begin
+        My_Query:=My_Query
+        +'(4,'''+
+         FormDateTime+
+         ''',''Кнопка ФО на ПУ5 нажата'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.AOPUR-Byte_Signal.AOPUR)>0 then
+        begin
+        My_Query:=My_Query
+        +'(4,'''+
+         FormDateTime+
+         ''',''Кнопка АО на ПУР нажата'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.AOSUSknopka-Byte_Signal.AOSUSknopka)>0 then
+        begin
+        My_Query:=My_Query
+        +'(4,'''+
+         FormDateTime+
+         ''',''Кнопка АО на СУС нажата'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.AO5klet-Byte_Signal.AO5klet)>0 then
+        begin
+        My_Query:=My_Query
+        +'(4,'''+
+         FormDateTime+
+         ''',''Кнопка АО на ПУ5 нажата'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.TrazmProval-Byte_Signal.TrazmProval)<0 then
+        begin
+        My_Query:=My_Query
+        +'(4,'''+
+         FormDateTime+
+         ''',''Провал натяжения на разматывателе ФО'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.TrazmProval-Byte_Signal.TrazmProval)>0 then
+        begin
+        My_Query:=My_Query
+        +'(1,'''+
+         FormDateTime+
+         ''',''Восстановление натяжения на разматывателе ТД'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.T12proval-Byte_Signal.T12proval)<0 then
+        begin
+        My_Query:=My_Query
+        +'(4,'''+
+         FormDateTime+
+         ''',''Провал натяжения в 1 промежутке ФО'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.T12proval-Byte_Signal.T12proval)>0 then
+        begin
+        My_Query:=My_Query
+        +'(1,'''+
+         FormDateTime+
+         ''',''Восстановление натяжения в 1 промежутке ТД'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.T23proval-Byte_Signal.T23proval)<0 then
+        begin
+        My_Query:=My_Query
+        +'(4,'''+
+         FormDateTime+
+         ''',''Провал натяжения во 2 промежутке ФО'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.T23proval-Byte_Signal.T23proval)>0 then
+        begin
+        My_Query:=My_Query
+        +'(1,'''+
+         FormDateTime+
+         ''',''Восстановление натяжения во 2 промежутке ТД'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.T34proval-Byte_Signal.T34proval)<0 then
+        begin
+        My_Query:=My_Query
+        +'(4,'''+
+         FormDateTime+
+         ''',''Провал натяжения в 3 промежутке ФО'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.T34proval-Byte_Signal.T34proval)>0 then
+        begin
+        My_Query:=My_Query
+        +'(1,'''+
+         FormDateTime+
+         ''',''Восстановление натяжения в 3 промежутке ТД'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.T45proval-Byte_Signal.T45proval)<0 then
+        begin
+        My_Query:=My_Query
+        +'(4,'''+
+         FormDateTime+
+         ''',''Провал натяжения в 4 промежутке ФО'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.T45proval-Byte_Signal.T45proval)>0 then
+        begin
+        My_Query:=My_Query
+        +'(1,'''+
+         FormDateTime+
+         ''',''Восстановление натяжения в 4 промежутке ТД'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.LK1-Byte_Signal.LK1)<0 then
+        begin
+        My_Query:=My_Query
+        +'(2,'''+
+         FormDateTime+
+         ''',''ЛК клети 1 включены'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.LK1-Byte_Signal.LK1)>0 then
+        begin
+        My_Query:=My_Query
+        +'(6,'''+
+         FormDateTime+
+        ''',''ЛК клети 1 выключены'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.LK2-Byte_Signal.LK2)<0 then
+        begin
+        My_Query:=My_Query
+        +'(2,'''+
+         FormDateTime+
+         ''',''ЛК клети 2 включены'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.LK2-Byte_Signal.LK2)>0 then
+        begin
+        My_Query:=My_Query
+        +'(6,'''+
+         FormDateTime+
+         ''',''ЛК клети 2 выключены'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.LK3-Byte_Signal.LK3)<0 then
+        begin
+        My_Query:=My_Query
+        +'(2,'''+
+         FormDateTime+
+         ''',''ЛК клети 3 включены'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.LK3-Byte_Signal.LK3)>0 then
+        begin
+        My_Query:=My_Query
+        +'(6,'''+
+         FormDateTime+
+         ''',''ЛК клети 3 выключены'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.LK4-Byte_Signal.LK4)<0 then
+        begin
+        My_Query:=My_Query
+        +'(2,'''+
+         FormDateTime+
+         ''',''ЛК клети 4 включены'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.LK4-Byte_Signal.LK4)>0 then
+        begin
+        My_Query:=My_Query
+        +'(6,'''+
+         FormDateTime+
+         ''',''ЛК клети 4 выключены'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.LK5-Byte_Signal.LK5)<0 then
+        begin
+        My_Query:=My_Query
+        +'(2,'''+
+         FormDateTime+
+         ''',''ЛК клети 5 включены'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.LK5-Byte_Signal.LK5)>0 then
+        begin
+        My_Query:=My_Query
+        +'(6,'''+
+         FormDateTime+
+         ''',''ЛК клети 5 выключены'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.KnAOsus-Byte_Signal.KnAOsus)<0 then
+        begin
+        My_Query:=My_Query
+        +'(4,'''+
+         FormDateTime+
+         ''',''Кнопка АО на СУС нажата'','+V+'),';
+
+        end;
+        //////////////////////////////////////////////////////Vent
+        if (Byte_Signal_minus.Vent_101G-Byte_Signal.Vent_101G)<0 then
+        begin
+        My_Query:=My_Query
+        +'(4,'''+
+         FormDateTime+
+         ''',''Вентилятор обдува 101Г выключен НО'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.Vent_102G-Byte_Signal.Vent_102G)<0 then
+        begin
+        My_Query:=My_Query
+        +'(4,'''+
+         FormDateTime+
+         ''',''Вентилятор обдува 102Г выключен НО'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.Vent_103G-Byte_Signal.Vent_103G)<0 then
+        begin
+        My_Query:=My_Query
+        +'(4,'''+
+         FormDateTime+
+         ''',''Вентилятор обдува 103Г выключен НО'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.Vent_105G-Byte_Signal.Vent_105G)<0 then
+        begin
+        My_Query:=My_Query
+        +'(4,'''+
+         FormDateTime+
+         ''',''Вентилятор обдува 105Г выключен НО'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.Vent_106G-Byte_Signal.Vent_106G)<0 then
+        begin
+        My_Query:=My_Query
+        +'(4,'''+
+         FormDateTime+
+         ''',''Вентилятор обдува 106Г выключен НО'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.Vent_112G-Byte_Signal.Vent_112G)<0 then
+        begin
+        My_Query:=My_Query
+        +'(4,'''+
+         FormDateTime+
+         ''',''Вентилятор обдува 112Г выключен НО'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.Vent_111G-Byte_Signal.Vent_111G)<0 then
+        begin
+        My_Query:=My_Query
+        +'(4,'''+
+         FormDateTime+
+         ''',''Вентилятор обдува 111Г выключен НО'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.Vent_110G-Byte_Signal.Vent_110G)<0 then
+        begin
+        My_Query:=My_Query
+        +'(4,'''+
+         FormDateTime+
+         ''',''Вентилятор обдува 110Г выключен НО'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.Vent_108G-Byte_Signal.Vent_108G)<0 then
+        begin
+        My_Query:=My_Query
+        +'(4,'''+
+         FormDateTime+
+         ''',''Вентилятор обдува 108Г выключен НО'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.Vent_107G-Byte_Signal.Vent_107G)<0 then
+        begin
+        My_Query:=My_Query
+        +'(4,'''+
+         FormDateTime+
+         ''',''Вентилятор обдува 107Г выключен НО'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.Vent_podpor_PA1-Byte_Signal.Vent_podpor_PA1)<0 then
+        begin
+        My_Query:=My_Query
+        +'(4,'''+
+         FormDateTime+
+         ''',''Вентилятор подпора ПА-1 выключен'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.Vent_podpor_PA2-Byte_Signal.Vent_podpor_PA2)<0 then
+        begin
+        My_Query:=My_Query
+        +'(4,'''+
+         FormDateTime+
+         ''',''Вентилятор подпора ПА-2 выключен'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.Vent_1kl-Byte_Signal.Vent_1kl)<0 then
+        begin
+        My_Query:=My_Query
+        +'(4,'''+
+         FormDateTime+
+         ''',''Вентилятор обдува ГП 1 клети выключен НО'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.Vent_2kl-Byte_Signal.Vent_2kl)<0 then
+        begin
+        My_Query:=My_Query
+        +'(4,'''+
+         FormDateTime+
+         ''',''Вентилятор обдува ГП 2 клети выключен НО'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.Vent_3kl-Byte_Signal.Vent_3kl)<0 then
+        begin
+        My_Query:=My_Query
+        +'(4,'''+
+         FormDateTime+
+         ''',''Вентилятор обдува ГП 3 клети выключен НО'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.Vent_4kl-Byte_Signal.Vent_4kl)<0 then
+        begin
+        My_Query:=My_Query
+        +'(4,'''+
+         FormDateTime+
+         ''',''Вентилятор обдува ГП 4 клети выключен НО'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.Vent_5kl-Byte_Signal.Vent_5kl)<0 then
+        begin
+        My_Query:=My_Query
+        +'(4,'''+
+         FormDateTime+
+         ''',''Вентилятор обдува ГП 5 клети выключен НО'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.Vent_podpor_GP1-Byte_Signal.Vent_podpor_GP1)<0 then
+        begin
+        My_Query:=My_Query
+        +'(4,'''+
+         FormDateTime+
+         ''',''Вентилятор подпора ГП-1 выключен'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.Vent_podpor_GP2-Byte_Signal.Vent_podpor_GP2)<0 then
+        begin
+        My_Query:=My_Query
+        +'(4,'''+
+         FormDateTime+
+         ''',''Вентилятор подпора ГП-2 выключен'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.Vent_NV-Byte_Signal.Vent_NV)<0 then
+        begin
+        My_Query:=My_Query
+        +'(4,'''+
+         FormDateTime+
+         ''',''Вентилятор обдува нажимных винтов выключен НО'','+V+'),';
+
+        end;
+
+        if (Byte_Signal_minus.Dv2pr09sec3vv-Byte_Signal.Dv2pr09sec3vv)>0 then
+        begin
+        My_Query:=My_Query
+        +'(4,'''+
+         FormDateTime+
+         ''',''ХХХ ПЕРЕГРУЗ ГП ХХХ'','+V+'),';
+
+        end;
+
+       //----------------------------------------------------------------------
+       //Забиваем кодовую станицу ср1251
+       //res:=mysql_query(my_con_m,'SET NAMES cp1251');
+       //if res<>0 then
+       //begin
+       //   Showmessage('Кодовая станица не изменена');
+       //end;
+       //----------------------------------------------------------------------
+
+
+
+        //if My_Query<>'insert into '+BaseName+' values' then
+        //begin
+        // Delete(My_Query,Length(My_Query),1);
+        // My_Query:=My_Query+';';
+        // res:=mysql_real_query(my_con_m,PChar(My_Query),StrLen(PChar(My_Query)));
+        //end;
+
+            //--------------------------------------------------------------------
+            //Eсли результат запроса вернул ошибку то:
+            //   - и Ошибка=1146 (Нет такой таблицы) нет такой таблицы то создаем таблицу
+            //   - в противном случае выводим код ошибки на экран и записываем его в файл
+
+         //   if res<>0 then
+         //   begin
+         //          if mysql_errno(my_con_m)=1146 then
+         //          begin
+         //              My_Query:='create table '+BaseName+' like stan_mess_temp';
+         //              mysql_real_query(my_con_m,PChar(My_Query), StrLen(PChar(My_Query)));
+         //          end
+         //          else
+         //          begin
+         //             str_error:=FormDateTime+'-Данные в таблицу mess не записаны, error='+IntToStr(mysql_errno(my_con_m))+' Описание='+mysql_error(my_con_m);
+         //             writeLn(f,str_error);
+         //             showmessage(str_error);
+         //
+         //          end;
+         //
+         //   end;
+
+         // BaseDel:='stan_mess_'+FormatDateTime('yyyy_mm_dd',(DaySignal));
+//   2015-11-02 06:45 Отключил удаление таблицы сообщений     My_Query:='drop table if exists '+BaseDel;
+//        mysql_real_query(my_con_m,PChar(My_Query), StrLen(PChar(My_Query)));
+        Byte_Signal_minus:=Byte_Signal;
+    end;
+end;

@@ -29,7 +29,7 @@ using LoggerInSystem;
             {"v4", new ContData(6,100,true)},
             {"v5", new ContData(8,100,true)},
             {"h1", new ContData(10,1000,true)},
-            {"h5", new ContData(12,1000,true)},
+            {"h", new ContData(12,1000,true)},
 
             {"b", new ContData(14,1,false)},
 
@@ -160,23 +160,26 @@ using LoggerInSystem;
         {
            
             stan = new PLCto();
+            stan.NamePLC = "Stan1700";
             stan.SlotconnPC = 3;
             stan.RackconnPC = 0;
             stan.IPconnPLC= new byte[] { 192, 168, 0, 11 }; //Передаем адресс контроллера
             stan.StartAdressTag = 3000; //старт адресов с 3000
             stan.Amount = 315; //Размер буфера для принятия данных в байтах
+            stan.connect = 0;
 
             stan.blPLStoDB101ms = blstan101ms;  //Битовый сигнал разрешающий обработки и запись в БД с циклом 101ms
             stan.Data101ms = stanData100ms;     // Словарь значений Тег <-> поле БД
+            stan.dMot = 0.615;
             stan.blPLSPasportRulona=true;
 
 
             stan.blPLStoDBMessage = blstan200ms;
             stan.blPLStoDB1s = blstan1s;
 
-            
 
 
+            Console.WriteLine("................Стан старт!");
             stan.Start();
         }
 

@@ -42,6 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ClassDresStan.cs" />
     <Compile Include="ClassStan.cs" />
     <Compile Include="PLCto.cs" />
     <Compile Include="Program.cs" />

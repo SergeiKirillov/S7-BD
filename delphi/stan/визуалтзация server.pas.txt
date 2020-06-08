@@ -1,0 +1,895 @@
+unit View_Form;
+
+interface
+uses
+  Windows, SysUtils, Classes, Graphics,
+  Controls, Forms, ComCtrls, StdCtrls,
+  Db, DBTables, ExtCtrls, DBCtrls, Gauges,
+  Spin, ScktComp;
+
+type
+  TForm_View = class(TForm)
+    Panel_Regim: TPanel;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label4: TLabel;
+    Label5: TLabel;
+    Label7: TLabel;
+    Label_Shema: TLabel;
+    Label_Regim: TLabel;
+    Label64: TLabel;
+    Label_Emuls: TLabel;
+    Label_Speed_Lim: TLabel;
+    Label_Polosa: TLabel;
+    Panel_Nat: TPanel;
+    Label57: TLabel;
+    Label18: TLabel;
+    Label43: TLabel;
+    Label44: TLabel;
+    Label45: TLabel;
+    Label46: TLabel;
+    Label99: TLabel;
+    Label98: TLabel;
+    Label97: TLabel;
+    Label96: TLabel;
+    Label112: TLabel;
+    Label110: TLabel;
+    Label101: TLabel;
+    Label50: TLabel;
+    Label59: TLabel;
+    Label_T_razm: TLabel;
+    Label_T_mot: TLabel;
+    Label47: TLabel;
+    Label52: TLabel;
+    Label56: TLabel;
+    Gauge_dH1_minus: TGauge;
+    Gauge_dH1_plus: TGauge;
+    Label31: TLabel;
+    Label34: TLabel;
+    Label36: TLabel;
+    Label38: TLabel;
+    Gauge_dH5_plus: TGauge;
+    Gauge_dH5_minus: TGauge;
+    Label115: TLabel;
+    Gauge_T1_sr: TGauge;
+    Gauge_T2_sr: TGauge;
+    Gauge_T3_sr: TGauge;
+    Gauge_T4_sr: TGauge;
+    Gauge_T1_lev: TGauge;
+    Gauge_T1_prav: TGauge;
+    Gauge_T2_lev: TGauge;
+    Gauge_T2_prav: TGauge;
+    Gauge_T3_lev: TGauge;
+    Gauge_T3_prav: TGauge;
+    Gauge_T4_lev: TGauge;
+    Gauge_T4_prav: TGauge;
+    Gauge_Speed1: TGauge;
+    Label116: TLabel;
+    Label117: TLabel;
+    Gauge_Speed1_vv: TGauge;
+    Gauge_Speed1_nv: TGauge;
+    Gauge_Speed2: TGauge;
+    Gauge_Speed2_vv: TGauge;
+    Gauge_Speed2_nv: TGauge;
+    Gauge_Speed3: TGauge;
+    Gauge_Speed3_vv: TGauge;
+    Gauge_Speed3_nv: TGauge;
+    Gauge_Speed4: TGauge;
+    Gauge_Speed4_vv: TGauge;
+    Gauge_Speed4_nv: TGauge;
+    Gauge_Speed5: TGauge;
+    Gauge_Speed5_vv: TGauge;
+    Gauge_Speed5_nv: TGauge;
+    Label103: TLabel;
+    Gauge_Izad_mot: TGauge;
+    Gauge_V_mot: TGauge;
+    Label107: TLabel;
+    Gauge_Ed_razm: TGauge;
+    Gauge_Iv_razm: TGauge;
+    Label132: TLabel;
+    Label133: TLabel;
+    Label134: TLabel;
+    Label135: TLabel;
+    Label136: TLabel;
+    Label137: TLabel;
+    Label138: TLabel;
+    Label144: TLabel;
+    Label145: TLabel;
+    Label146: TLabel;
+    Label147: TLabel;
+    Label148: TLabel;
+    Label162: TLabel;
+    Label210: TLabel;
+    Label213: TLabel;
+    Label214: TLabel;
+    Panel_Param: TPanel;
+    Label9: TLabel;
+    Label10: TLabel;
+    Label11: TLabel;
+    Label14: TLabel;
+    Label15: TLabel;
+    Label16: TLabel;
+    Label17: TLabel;
+    Label62: TLabel;
+    Label63: TLabel;
+    Label21: TLabel;
+    Label20: TLabel;
+    Label39: TLabel;
+    Label22: TLabel;
+    Label40: TLabel;
+    Label23: TLabel;
+    Label41: TLabel;
+    Label24: TLabel;
+    Label42: TLabel;
+    Label68: TLabel;
+    Label73: TLabel;
+    Label75: TLabel;
+    Label76: TLabel;
+    Label77: TLabel;
+    Label79: TLabel;
+    Label80: TLabel;
+    Label82: TLabel;
+    Label83: TLabel;
+    Label85: TLabel;
+    Label86: TLabel;
+    Label88: TLabel;
+    Label89: TLabel;
+    Label91: TLabel;
+    Label8: TLabel;
+    Label212: TLabel;
+    Gauge_I_mot: TGauge;
+    H1z: TLabel;
+    H5z: TLabel;
+    B: TLabel;
+    Dvip: TLabel;
+    Rrazm: TLabel;
+    Dmot: TLabel;
+    Svip: TLabel;
+    D1: TLabel;
+    D2: TLabel;
+    D3: TLabel;
+    D4: TLabel;
+    D5: TLabel;
+    E2: TLabel;
+    E3: TLabel;
+    E4: TLabel;
+    E5: TLabel;
+    V1L: TLabel;
+    V2L: TLabel;
+    V3L: TLabel;
+    V4L: TLabel;
+    V5L: TLabel;
+    V1p: TLabel;
+    V2p: TLabel;
+    V3p: TLabel;
+    V4p: TLabel;
+    V5p: TLabel;
+    Urnz45: TLabel;
+    DH1: TLabel;
+    DH5: TLabel;
+    T1: TLabel;
+    T2: TLabel;
+    T3: TLabel;
+    T4: TLabel;
+    T1L: TLabel;
+    T2L: TLabel;
+    T3L: TLabel;
+    T4L: TLabel;
+    T1p: TLabel;
+    T2p: TLabel;
+    T3p: TLabel;
+    T4p: TLabel;
+    T1z: TLabel;
+    T2z: TLabel;
+    T3z: TLabel;
+    T4z: TLabel;
+    EdsR: TLabel;
+    Ir: TLabel;
+    V1: TLabel;
+    V2: TLabel;
+    V3: TLabel;
+    V4: TLabel;
+    V5: TLabel;
+    Label25: TLabel;
+    Imotz: TLabel;
+    OS1: TLabel;
+    OS2v: TLabel;
+    OS3v: TLabel;
+    OS4v: TLabel;
+    OS5v: TLabel;
+    Imot: TLabel;
+    OS2n: TLabel;
+    OS3n: TLabel;
+    OS4n: TLabel;
+    OS5n: TLabel;
+    Vmot: TLabel;
+    U1: TLabel;
+    U2v: TLabel;
+    U2n: TLabel;
+    U3v: TLabel;
+    U3n: TLabel;
+    I1: TLabel;
+    I2v: TLabel;
+    I2n: TLabel;
+    I3v: TLabel;
+    I3n: TLabel;
+    U4v: TLabel;
+    I4v: TLabel;
+    U4n: TLabel;
+    I4n: TLabel;
+    U5v: TLabel;
+    I5v: TLabel;
+    U5n: TLabel;
+    I5n: TLabel;
+    Um: TLabel;
+    Im: TLabel;
+    procedure FormCreate(Sender: TObject);
+ private
+    { Private declarations }
+  public
+    { Public declarations }
+     Table_Base:array[0..226] of real;
+  end;
+
+ var
+  Form_View: TForm_View;
+  h_s400:integer;
+  th_s400:cardinal;
+implementation
+
+{$R *.DFM}
+
+procedure DrawDB;stdcall;
+var
+ Handle2:Integer;
+ rc_wr_pipe:bool;
+ Byte_Col,Bytes_Read:DWORD;
+ buffer:array [0..110] of SmallInt;
+ buffer_sw:SmallInt;
+begin
+while true do begin
+sleep(5);
+Byte_Col:=SizeOf(buffer);
+rc_wr_pipe:=false;
+while true do begin
+ sleep(2);
+ if rc_wr_pipe=false then
+ Handle2:=CreateFile('\\.\PIPE\plc\pipe_s400',GENERIC_READ,
+                    FILE_SHARE_READ,nil,OPEN_EXISTING,
+                    FILE_ATTRIBUTE_READONLY,0);
+if Handle2>0 then
+rc_wr_pipe:=ReadFile(Handle2,buffer,Byte_Col,Bytes_Read,nil);
+if rc_wr_pipe=false then
+CloseHandle(Handle2);
+if rc_wr_pipe=true then begin
+Form_View.Table_Base[0]:=buffer[0]/100;
+Form_View.Table_Base[1]:=buffer[1]/100;
+Form_View.Table_Base[2]:=buffer[2]/100;
+Form_View.Table_Base[3]:=buffer[3]/100;
+Form_View.Table_Base[4]:=buffer[4]/100;
+Form_View.Table_Base[5]:=buffer[5]/1000;
+Form_View.Table_Base[6]:=buffer[6]/1000;
+Form_View.Table_Base[7]:=buffer[7];
+Form_View.Table_Base[8]:=buffer[8]/1000;
+Form_View.Table_Base[9]:=buffer[9]/1000;
+Form_View.Table_Base[10]:=buffer[10]/1000;
+Form_View.Table_Base[11]:=buffer[11]/1000;
+Form_View.Table_Base[12]:=buffer[12];
+Form_View.Table_Base[13]:=buffer[13];
+Form_View.Table_Base[14]:=buffer[14];
+Form_View.Table_Base[15]:=buffer[15];
+Form_View.Table_Base[16]:=buffer[16];
+Form_View.Table_Base[17]:=buffer[17]/100;
+Form_View.Table_Base[18]:=buffer[18]/100;
+Form_View.Table_Base[19]:=buffer[19]/100;
+Form_View.Table_Base[20]:=buffer[20]/1000;
+Form_View.Table_Base[21]:=buffer[21]/100;
+Form_View.Table_Base[22]:=buffer[22]/100;
+Form_View.Table_Base[23]:=buffer[23]/100;
+Form_View.Table_Base[24]:=buffer[24]/100;
+Form_View.Table_Base[25]:=buffer[25]/100;
+Form_View.Table_Base[26]:=buffer[26]/100;
+Form_View.Table_Base[27]:=buffer[27]/100;
+Form_View.Table_Base[28]:=buffer[28]/100;
+Form_View.Table_Base[29]:=buffer[29]/100;
+Form_View.Table_Base[30]:=buffer[30]/100;
+Form_View.Table_Base[31]:=buffer[31]/100;
+Form_View.Table_Base[32]:=buffer[32]/100;
+
+buffer_sw:=Swap(buffer[33]);
+
+Form_View.Table_Base[33]:=Ord(buffer_sw and 1 = 1);
+Form_View.Table_Base[34]:=Ord(buffer_sw and 2 = 2);
+Form_View.Table_Base[35]:=Ord(buffer_sw and 4 = 4);
+Form_View.Table_Base[36]:=Ord(buffer_sw and 8 = 8);
+Form_View.Table_Base[37]:=Ord(buffer_sw and 16 = 16);
+Form_View.Table_Base[38]:=Ord(buffer_sw and 32 = 32);
+Form_View.Table_Base[39]:=Ord(buffer_sw and 64 = 64);
+Form_View.Table_Base[40]:=Ord(buffer_sw and 128 = 128);
+Form_View.Table_Base[41]:=Ord(buffer_sw and 256 = 256);
+Form_View.Table_Base[42]:=Ord(buffer_sw and 512 = 512);
+Form_View.Table_Base[43]:=Ord(buffer_sw and 1024 = 1024);
+Form_View.Table_Base[44]:=Ord(buffer_sw and 2048 = 2048);
+Form_View.Table_Base[45]:=Ord(buffer_sw and 4096 = 4096);
+Form_View.Table_Base[46]:=Ord(buffer_sw and 8192 = 8192);
+Form_View.Table_Base[47]:=Ord(buffer_sw and 16384 = 16384);
+Form_View.Table_Base[48]:=Ord(buffer_sw and 32768 = 32768);
+
+buffer_sw:=Swap(buffer[34]);
+
+Form_View.Table_Base[49]:=Ord(buffer_sw and 1 = 1);
+Form_View.Table_Base[50]:=Ord(buffer_sw and 2 = 2);
+Form_View.Table_Base[51]:=Ord(buffer_sw and 4 = 4);
+Form_View.Table_Base[52]:=Ord(buffer_sw and 8 = 8);
+Form_View.Table_Base[53]:=Ord(buffer_sw and 16 = 16);
+Form_View.Table_Base[54]:=Ord(buffer_sw and 32 = 32);
+Form_View.Table_Base[55]:=Ord(buffer_sw and 64 = 64);
+Form_View.Table_Base[56]:=Ord(buffer_sw and 128 = 128);
+Form_View.Table_Base[57]:=Ord(buffer_sw and 256 = 256);
+Form_View.Table_Base[58]:=Ord(buffer_sw and 512 = 512);
+Form_View.Table_Base[59]:=Ord(buffer_sw and 1024 = 1024);
+Form_View.Table_Base[60]:=Ord(buffer_sw and 2048 = 2048);
+Form_View.Table_Base[61]:=Ord(buffer_sw and 4096 = 4096);
+Form_View.Table_Base[62]:=Ord(buffer_sw and 8192 = 8192);
+Form_View.Table_Base[63]:=Ord(buffer_sw and 16384 = 16384);
+Form_View.Table_Base[64]:=Ord(buffer_sw and 32768 = 32768);
+
+buffer_sw:=Swap(buffer[35]);
+
+Form_View.Table_Base[65]:=Ord(buffer_sw and 1 = 1);
+Form_View.Table_Base[66]:=Ord(buffer_sw and 2 = 2);
+Form_View.Table_Base[67]:=Ord(buffer_sw and 4 = 4);
+Form_View.Table_Base[68]:=Ord(buffer_sw and 8 = 8);
+Form_View.Table_Base[69]:=Ord(buffer_sw and 16 = 16);
+Form_View.Table_Base[70]:=Ord(buffer_sw and 32 = 32);
+Form_View.Table_Base[71]:=Ord(buffer_sw and 64 = 64);
+Form_View.Table_Base[72]:=Ord(buffer_sw and 128 = 128);
+Form_View.Table_Base[73]:=Ord(buffer_sw and 256 = 256);
+Form_View.Table_Base[74]:=Ord(buffer_sw and 512 = 512);
+Form_View.Table_Base[75]:=Ord(buffer_sw and 1024 = 1024);
+Form_View.Table_Base[76]:=Ord(buffer_sw and 2048 = 2048);
+Form_View.Table_Base[77]:=Ord(buffer_sw and 4096 = 4096);
+Form_View.Table_Base[78]:=Ord(buffer_sw and 8192 = 8192);
+Form_View.Table_Base[79]:=Ord(buffer_sw and 16384 = 16384);
+Form_View.Table_Base[80]:=Ord(buffer_sw and 32768 = 32768);
+
+
+Form_View.Table_Base[82]:=buffer[36]/100;
+Form_View.Table_Base[83]:=buffer[37]/100;
+Form_View.Table_Base[84]:=buffer[38]/100;
+Form_View.Table_Base[85]:=buffer[39]/100;
+Form_View.Table_Base[86]:=buffer[40]/100;
+Form_View.Table_Base[87]:=buffer[41]/100;
+Form_View.Table_Base[88]:=buffer[42]/100;
+Form_View.Table_Base[89]:=buffer[43]/100;
+Form_View.Table_Base[90]:=buffer[44]/100;
+Form_View.Table_Base[91]:=buffer[45]/100;
+Form_View.Table_Base[92]:=buffer[46]/100;
+Form_View.Table_Base[93]:=buffer[47]/100;
+Form_View.Table_Base[94]:=buffer[48]/100;
+Form_View.Table_Base[95]:=buffer[49]/100;
+Form_View.Table_Base[96]:=buffer[50]/100;
+
+buffer_sw:=Swap(buffer[51]);
+
+Form_View.Table_Base[97]:=Ord(buffer_sw and 1 = 1);
+Form_View.Table_Base[98]:=Ord(buffer_sw and 2 = 2);
+Form_View.Table_Base[99]:=Ord(buffer_sw and 4 = 4);
+Form_View.Table_Base[100]:=Ord(buffer_sw and 8 = 8);
+Form_View.Table_Base[101]:=Ord(buffer_sw and 16 = 16);
+Form_View.Table_Base[102]:=Ord(buffer_sw and 32 = 32);
+Form_View.Table_Base[103]:=Ord(buffer_sw and 64 = 64);
+Form_View.Table_Base[104]:=Ord(buffer_sw and 128 = 128);
+Form_View.Table_Base[105]:=Ord(buffer_sw and 256 = 256);
+Form_View.Table_Base[106]:=Ord(buffer_sw and 512 = 512);
+Form_View.Table_Base[107]:=Ord(buffer_sw and 1024 = 1024);
+Form_View.Table_Base[108]:=Ord(buffer_sw and 2048 = 2048);
+Form_View.Table_Base[109]:=Ord(buffer_sw and 4096 = 4096);
+Form_View.Table_Base[110]:=Ord(buffer_sw and 8192 = 8192);
+Form_View.Table_Base[111]:=Ord(buffer_sw and 16384 = 16384);
+Form_View.Table_Base[112]:=Ord(buffer_sw and 32768 = 32768);
+
+buffer_sw:=Swap(buffer[52]);
+
+Form_View.Table_Base[113]:=Ord(buffer_sw and 1 = 1);
+Form_View.Table_Base[114]:=Ord(buffer_sw and 2 = 2);
+Form_View.Table_Base[115]:=Ord(buffer_sw and 4 = 4);
+Form_View.Table_Base[116]:=Ord(buffer_sw and 8 = 8);
+Form_View.Table_Base[117]:=Ord(buffer_sw and 16 = 16);
+Form_View.Table_Base[118]:=Ord(buffer_sw and 32 = 32);
+Form_View.Table_Base[119]:=Ord(buffer_sw and 64 = 64);
+Form_View.Table_Base[120]:=Ord(buffer_sw and 128 = 128);
+Form_View.Table_Base[121]:=Ord(buffer_sw and 256 = 256);
+Form_View.Table_Base[122]:=Ord(buffer_sw and 512 = 512);
+Form_View.Table_Base[123]:=Ord(buffer_sw and 1024 = 1024);
+Form_View.Table_Base[124]:=Ord(buffer_sw and 2048 = 2048);
+Form_View.Table_Base[125]:=Ord(buffer_sw and 4096 = 4096);
+Form_View.Table_Base[126]:=Ord(buffer_sw and 8192 = 8192);
+Form_View.Table_Base[127]:=Ord(buffer_sw and 16384 = 16384);
+Form_View.Table_Base[128]:=Ord(buffer_sw and 32768 = 32768);
+
+buffer_sw:=Swap(buffer[53]);
+
+Form_View.Table_Base[129]:=Ord(buffer_sw and 1 = 1);
+Form_View.Table_Base[130]:=Ord(buffer_sw and 2 = 2);
+Form_View.Table_Base[131]:=Ord(buffer_sw and 4 = 4);
+Form_View.Table_Base[132]:=Ord(buffer_sw and 8 = 8);
+Form_View.Table_Base[133]:=Ord(buffer_sw and 16 = 16);
+Form_View.Table_Base[134]:=Ord(buffer_sw and 32 = 32);
+Form_View.Table_Base[135]:=Ord(buffer_sw and 64 = 64);
+Form_View.Table_Base[136]:=Ord(buffer_sw and 128 = 128);
+Form_View.Table_Base[137]:=Ord(buffer_sw and 256 = 256);
+Form_View.Table_Base[138]:=Ord(buffer_sw and 512 = 512);
+Form_View.Table_Base[139]:=Ord(buffer_sw and 1024 = 1024);
+Form_View.Table_Base[140]:=Ord(buffer_sw and 2048 = 2048);
+Form_View.Table_Base[141]:=Ord(buffer_sw and 4096 = 4096);
+Form_View.Table_Base[142]:=Ord(buffer_sw and 8192 = 8192);
+Form_View.Table_Base[143]:=Ord(buffer_sw and 16384 = 16384);
+Form_View.Table_Base[144]:=Ord(buffer_sw and 32768 = 32768);
+
+buffer_sw:=Swap(buffer[54]);
+
+Form_View.Table_Base[145]:=Ord(buffer_sw and 1 = 1);
+Form_View.Table_Base[146]:=Ord(buffer_sw and 2 = 2);
+Form_View.Table_Base[147]:=Ord(buffer_sw and 4 = 4);
+Form_View.Table_Base[148]:=Ord(buffer_sw and 8 = 8);
+Form_View.Table_Base[149]:=Ord(buffer_sw and 16 = 16);
+Form_View.Table_Base[150]:=Ord(buffer_sw and 32 = 32);
+Form_View.Table_Base[151]:=Ord(buffer_sw and 64 = 64);
+Form_View.Table_Base[152]:=Ord(buffer_sw and 128 = 128);
+Form_View.Table_Base[153]:=Ord(buffer_sw and 256 = 256);
+Form_View.Table_Base[154]:=Ord(buffer_sw and 512 = 512);
+Form_View.Table_Base[155]:=Ord(buffer_sw and 1024 = 1024);
+Form_View.Table_Base[156]:=Ord(buffer_sw and 2048 = 2048);
+Form_View.Table_Base[157]:=Ord(buffer_sw and 4096 = 4096);
+Form_View.Table_Base[158]:=Ord(buffer_sw and 8192 = 8192);
+Form_View.Table_Base[159]:=Ord(buffer_sw and 16384 = 16384);
+Form_View.Table_Base[160]:=Ord(buffer_sw and 32768 = 32768);
+
+buffer_sw:=Swap(buffer[55]);
+
+Form_View.Table_Base[161]:=Ord(buffer_sw and 1 = 1);
+Form_View.Table_Base[162]:=Ord(buffer_sw and 2 = 2);
+Form_View.Table_Base[163]:=Ord(buffer_sw and 4 = 4);
+Form_View.Table_Base[164]:=Ord(buffer_sw and 8 = 8);
+Form_View.Table_Base[165]:=Ord(buffer_sw and 16 = 16);
+Form_View.Table_Base[166]:=Ord(buffer_sw and 32 = 32);
+Form_View.Table_Base[167]:=Ord(buffer_sw and 64 = 64);
+Form_View.Table_Base[168]:=Ord(buffer_sw and 128 = 128);
+Form_View.Table_Base[169]:=Ord(buffer_sw and 256 = 256);
+Form_View.Table_Base[170]:=Ord(buffer_sw and 512 = 512);
+Form_View.Table_Base[171]:=Ord(buffer_sw and 1024 = 1024);
+Form_View.Table_Base[172]:=Ord(buffer_sw and 2048 = 2048);
+Form_View.Table_Base[173]:=Ord(buffer_sw and 4096 = 4096);
+Form_View.Table_Base[174]:=Ord(buffer_sw and 8192 = 8192);
+Form_View.Table_Base[175]:=Ord(buffer_sw and 16384 = 16384);
+Form_View.Table_Base[176]:=Ord(buffer_sw and 32768 = 32768);
+
+Form_View.Table_Base[177]:=buffer[56]/100;
+Form_View.Table_Base[178]:=buffer[57]/10;
+Form_View.Table_Base[179]:=buffer[58]/100;
+Form_View.Table_Base[180]:=buffer[59]/10;
+Form_View.Table_Base[181]:=buffer[60]/10;
+Form_View.Table_Base[182]:=buffer[61]/10;
+Form_View.Table_Base[183]:=buffer[62]/10;
+Form_View.Table_Base[184]:=buffer[63]/10;
+Form_View.Table_Base[185]:=buffer[64]/10;
+Form_View.Table_Base[186]:=buffer[65]/10;
+Form_View.Table_Base[187]:=buffer[66]/10;
+Form_View.Table_Base[188]:=buffer[67]/10;
+Form_View.Table_Base[189]:=buffer[68]/10;
+Form_View.Table_Base[190]:=buffer[69]/10;
+Form_View.Table_Base[191]:=buffer[70];
+Form_View.Table_Base[192]:=buffer[71];
+Form_View.Table_Base[193]:=buffer[72]/10;
+Form_View.Table_Base[194]:=buffer[73]/10;
+Form_View.Table_Base[195]:=buffer[74]/10;
+Form_View.Table_Base[196]:=buffer[75]/10;
+Form_View.Table_Base[197]:=buffer[76]/10;
+Form_View.Table_Base[198]:=buffer[77]/10;
+Form_View.Table_Base[199]:=buffer[78]/10;
+Form_View.Table_Base[200]:=buffer[79]/10;
+Form_View.Table_Base[201]:=buffer[80]/10;
+Form_View.Table_Base[202]:=buffer[81]/10;
+
+Form_View.Table_Base[203]:=buffer[82];
+Form_View.Table_Base[204]:=buffer[83];
+Form_View.Table_Base[205]:=buffer[84];
+Form_View.Table_Base[206]:=buffer[85];
+Form_View.Table_Base[207]:=buffer[86];
+Form_View.Table_Base[208]:=buffer[87];
+Form_View.Table_Base[209]:=buffer[88];
+Form_View.Table_Base[210]:=buffer[89];
+Form_View.Table_Base[211]:=buffer[90];
+
+
+//Form_View.Table_Base[211]:=Swap(buffer[96]);
+Form_View.Table_Base[212]:=Swap(buffer[97])/10;
+Form_View.Table_Base[213]:=Swap(buffer[98])/10;
+Form_View.Table_Base[214]:=Swap(buffer[99])*10;
+Form_View.Table_Base[215]:=Swap(buffer[100]);
+
+Form_View.Table_Base[216]:=Swap(buffer[101])/100;
+Form_View.Table_Base[217]:=Swap(buffer[102])/100;
+Form_View.Table_Base[218]:=Swap(buffer[103])/100;
+Form_View.Table_Base[219]:=Swap(buffer[104])/100;
+Form_View.Table_Base[220]:=Swap(buffer[105])/100;
+Form_View.Table_Base[221]:=Swap(buffer[106])/100;
+Form_View.Table_Base[222]:=Swap(buffer[107])/100;
+Form_View.Table_Base[223]:=Swap(buffer[108])/100;
+Form_View.Table_Base[224]:=Swap(buffer[109])/100;
+Form_View.Table_Base[225]:=Swap(buffer[110])/100;
+
+if (Form_View.Table_Base[37]=0) and
+    (Form_View.Table_Base[48]=0) and
+     (Form_View.Table_Base[46]=0) and
+      (Form_View.Table_Base[47]=0) and
+       (Form_View.Table_Base[66]=1) then
+      begin
+Form_View.Label_Speed_Lim.Caption:='';
+Form_View.Label_Speed_Lim.Font.Color:=clPurple;
+      end;
+if (Form_View.Table_Base[67]=0) then
+begin
+Form_View.Label_Shema.Caption:='Разобрана';
+Form_View.Label_Shema.Font.Color:=clRed;
+end;
+
+if (Form_View.Table_Base[67]=1) then
+begin
+Form_View.Label_Shema.Caption:='Собрана';
+Form_View.Label_Shema.Font.Color:=clGreen;
+end;
+
+if (Form_View.Table_Base[103]=0) then
+begin
+Form_View.Label_Emuls.Caption:='Не готова';
+Form_View.Label_Emuls.Font.Color:=clRed;
+end;
+
+if (Form_View.Table_Base[103]=1) then
+begin
+Form_View.Label_Emuls.Caption:='Готова';
+Form_View.Label_Emuls.Font.Color:=clGreen;
+end;
+
+if (Form_View.Table_Base[33]=1) then
+begin
+Form_View.Label_Regim.Caption:='Так держать';
+Form_View.Label_Regim.Font.Color:=clGreen;
+end;
+
+if (Form_View.Table_Base[34]=1) then
+begin
+Form_View.Label_Regim.Caption:='Разгон';
+Form_View.Label_Regim.Font.Color:=clPurple;
+end;
+
+if (Form_View.Table_Base[35]=1) then
+begin
+Form_View.Label_Regim.Caption:='Нормальный останов';
+Form_View.Label_Regim.Font.Color:=clBlue;
+end;
+
+if (Form_View.Table_Base[36]=1) then
+begin
+Form_View.Label_Regim.Caption:='Форсированный останов';
+Form_View.Label_Regim.Font.Color:=clRed;
+end;
+
+if (Form_View.Table_Base[37]=1) then
+begin
+Form_View.Label_Speed_Lim.Caption:='Выпуск полосы';
+Form_View.Label_Speed_Lim.Font.Color:=clOlive;
+end;
+
+if (Form_View.Table_Base[46]=1) then
+begin
+Form_View.Label_Speed_Lim.Caption:='Неумная скорость';
+Form_View.Label_Speed_Lim.Font.Color:=clRed;
+end;
+
+if (Form_View.Table_Base[47]=1) then
+begin
+Form_View.Label_Speed_Lim.Caption:='Уставка скорости';
+Form_View.Label_Speed_Lim.Font.Color:=clGreen;
+end;
+
+if (Form_View.Table_Base[48]=1) then
+begin
+Form_View.Label_Speed_Lim.Caption:='Разумная скорость';
+Form_View.Label_Speed_Lim.Font.Color:=clPurple;
+end;
+
+if (Form_View.Table_Base[66]=0) then
+begin
+Form_View.Label_Speed_Lim.Caption:='Ноль скорости';
+Form_View.Label_Speed_Lim.Font.Color:=clBlack;
+end;
+
+if (Form_View.Table_Base[65]=1) then
+begin
+Form_View.Label_Polosa.Caption:='Есть';
+Form_View.Label_Polosa.Font.Color:=clGreen;
+end;
+
+if (Form_View.Table_Base[65]=0) then
+begin
+Form_View.Label_Polosa.Caption:='Нет';
+Form_View.Label_Polosa.Font.Color:=clRed;
+end;
+
+Form_View.H1z.Caption:=FloatToStr(Form_View.Table_Base[5]);
+Form_View.H5z.Caption:=FloatToStr(Form_View.Table_Base[6]);
+Form_View.B.Caption:=FloatToStr(Form_View.Table_Base[7]);
+Form_View.Dvip.Caption:=FloatToStr(Form_View.Table_Base[8]);
+Form_View.Rrazm.Caption:=FloatToStr(Form_View.Table_Base[9]);
+Form_View.Dmot.Caption:=FloatToStr(Form_View.Table_Base[10]);
+Form_View.Svip.Caption:=FloatToStr(Form_View.Table_Base[11]);
+Form_View.D1.Caption:=FloatToStr(Form_View.Table_Base[12]);
+Form_View.D2.Caption:=FloatToStr(Form_View.Table_Base[13]);
+Form_View.D3.Caption:=FloatToStr(Form_View.Table_Base[14]);
+Form_View.D4.Caption:=FloatToStr(Form_View.Table_Base[15]);
+Form_View.D5.Caption:=FloatToStr(Form_View.Table_Base[16]);
+Form_View.E2.Caption:=FloatToStr(Form_View.Table_Base[17]);
+Form_View.E3.Caption:=FloatToStr(Form_View.Table_Base[18]);
+Form_View.E4.Caption:=FloatToStr(Form_View.Table_Base[19]);
+Form_View.E5.Caption:=FloatToStr(Form_View.Table_Base[20]);
+Form_View.V1L.Caption:=FloatToStr(Form_View.Table_Base[21]);
+Form_View.V2L.Caption:=FloatToStr(Form_View.Table_Base[23]);
+Form_View.V3L.Caption:=FloatToStr(Form_View.Table_Base[25]);
+Form_View.V4L.Caption:=FloatToStr(Form_View.Table_Base[27]);
+Form_View.V5L.Caption:=FloatToStr(Form_View.Table_Base[29]);
+Form_View.V1p.Caption:=FloatToStr(Form_View.Table_Base[22]);
+Form_View.V2p.Caption:=FloatToStr(Form_View.Table_Base[24]);
+Form_View.V3p.Caption:=FloatToStr(Form_View.Table_Base[26]);
+Form_View.V4p.Caption:=FloatToStr(Form_View.Table_Base[28]);
+Form_View.V5p.Caption:=FloatToStr(Form_View.Table_Base[30]);
+Form_View.DH1.Caption:=FloatToStr(Form_View.Table_Base[31]);
+Form_View.DH5.Caption:=FloatToStr(Form_View.Table_Base[32]);
+Form_View.Urnz45.Caption:=FloatToStr(Form_View.Table_Base[20]);
+Form_View.T1.Caption:=FloatToStr(Form_View.Table_Base[82]);
+Form_View.T2.Caption:=FloatToStr(Form_View.Table_Base[83]);
+Form_View.T3.Caption:=FloatToStr(Form_View.Table_Base[84]);
+Form_View.T4.Caption:=FloatToStr(Form_View.Table_Base[85]);
+Form_View.T1L.Caption:=FloatToStr(Form_View.Table_Base[86]);
+Form_View.T1p.Caption:=FloatToStr(Form_View.Table_Base[90]);
+Form_View.T2L.Caption:=FloatToStr(Form_View.Table_Base[87]);
+Form_View.T2p.Caption:=FloatToStr(Form_View.Table_Base[91]);
+Form_View.T3L.Caption:=FloatToStr(Form_View.Table_Base[88]);
+Form_View.T3p.Caption:=FloatToStr(Form_View.Table_Base[92]);
+Form_View.T4L.Caption:=FloatToStr(Form_View.Table_Base[89]);
+Form_View.T4p.Caption:=FloatToStr(Form_View.Table_Base[93]);
+Form_View.T1z.Caption:=FloatToStr(Form_View.Table_Base[94]);
+Form_View.T2z.Caption:=FloatToStr(Form_View.Table_Base[95]);
+Form_View.T3z.Caption:=FloatToStr(Form_View.Table_Base[96]);
+Form_View.T4z.Caption:=FloatToStr(Form_View.Table_Base[177]);
+Form_View.EdsR.Caption:=FloatToStr(Form_View.Table_Base[178]);
+Form_View.Ir.Caption:=FloatToStr(Form_View.Table_Base[180]);
+Form_View.V1.Caption:=FloatToStr(Form_View.Table_Base[0]);
+Form_View.V2.Caption:=FloatToStr(Form_View.Table_Base[1]);
+Form_View.V3.Caption:=FloatToStr(Form_View.Table_Base[2]);
+Form_View.V4.Caption:=FloatToStr(Form_View.Table_Base[3]);
+Form_View.V5.Caption:=FloatToStr(Form_View.Table_Base[4]);
+Form_View.Imotz.Caption:=FloatToStr(Form_View.Table_Base[192]);
+Form_View.OS1.Caption:=FloatToStr(Form_View.Table_Base[181]);
+Form_View.OS2v.Caption:=FloatToStr(Form_View.Table_Base[182]);
+Form_View.OS2n.Caption:=FloatToStr(Form_View.Table_Base[183]);
+Form_View.OS3v.Caption:=FloatToStr(Form_View.Table_Base[184]);
+Form_View.OS3n.Caption:=FloatToStr(Form_View.Table_Base[185]);
+Form_View.OS4v.Caption:=FloatToStr(Form_View.Table_Base[186]);
+Form_View.OS4n.Caption:=FloatToStr(Form_View.Table_Base[187]);
+Form_View.OS5v.Caption:=FloatToStr(Form_View.Table_Base[188]);
+Form_View.OS5n.Caption:=FloatToStr(Form_View.Table_Base[189]);
+Form_View.Imot.Caption:=FloatToStr(Form_View.Table_Base[191]);
+Form_View.Vmot.Caption:=FloatToStr(Form_View.Table_Base[190]);
+Form_View.U1.Caption:=FloatToStr(Form_View.Table_Base[193]);
+Form_View.U2v.Caption:=FloatToStr(Form_View.Table_Base[194]);
+Form_View.U2n.Caption:=FloatToStr(Form_View.Table_Base[195]);
+Form_View.U3v.Caption:=FloatToStr(Form_View.Table_Base[196]);
+Form_View.U3n.Caption:=FloatToStr(Form_View.Table_Base[197]);
+Form_View.U4v.Caption:=FloatToStr(Form_View.Table_Base[198]);
+Form_View.U4n.Caption:=FloatToStr(Form_View.Table_Base[199]);
+Form_View.U5v.Caption:=FloatToStr(Form_View.Table_Base[200]);
+Form_View.U5n.Caption:=FloatToStr(Form_View.Table_Base[201]);
+Form_View.Um.Caption:=FloatToStr(Form_View.Table_Base[202]);
+Form_View.I1.Caption:=FloatToStr(Form_View.Table_Base[203]);
+Form_View.I2v.Caption:=FloatToStr(Form_View.Table_Base[204]);
+Form_View.I2n.Caption:=FloatToStr(Form_View.Table_Base[205]);
+Form_View.I3v.Caption:=FloatToStr(Form_View.Table_Base[206]);
+Form_View.I3n.Caption:=FloatToStr(Form_View.Table_Base[207]);
+Form_View.I4v.Caption:=FloatToStr(Form_View.Table_Base[208]);
+Form_View.I4n.Caption:=FloatToStr(Form_View.Table_Base[209]);
+Form_View.I5v.Caption:=FloatToStr(Form_View.Table_Base[210]);
+Form_View.I5n.Caption:=FloatToStr(Form_View.Table_Base[211]);
+Form_View.Im.Caption:=FloatToStr(Form_View.Table_Base[191]);
+
+if (Form_View.Table_Base[37]=0) then
+Form_View.Rrazm.Font.Color:=clTeal;
+if (Form_View.Table_Base[37]=1) then
+Form_View.Rrazm.Font.Color:=clRed;
+
+if (Form_View.Table_Base[58]=0) then
+begin
+Form_View.Dmot.Font.Color:=clRed;
+end;
+
+if (Form_View.Table_Base[58]=1) then
+begin
+Form_View.Dmot.Font.Color:=clGreen;
+end;
+
+if (Form_View.Table_Base[59]=1) then
+Form_View.Label_T_razm.Font.Color:=clGreen;
+
+if (Form_View.Table_Base[59]=0) then
+Form_View.Label_T_razm.Font.Color:=clRed;
+
+if (Form_View.Table_Base[58]=1) then
+Form_View.Label_T_mot.Font.Color:=clGreen;
+
+if (Form_View.Table_Base[58]=0) then
+Form_View.Label_T_mot.Font.Color:=clRed;
+
+if (Form_View.Table_Base[78]=1) then
+Form_View.Urnz45.Font.Color:=clTeal;
+if (Form_View.Table_Base[78]=0) then
+Form_View.Urnz45.Font.Color:=clRed;
+
+Form_View.Gauge_T1_sr.Progress:=
+Round(100*Form_View.Table_Base[82]);
+if (Form_View.Table_Base[38]=1) then
+Form_View.T1.Font.Color:=clBlue;
+if (Form_View.Table_Base[38]=0) then
+Form_View.T1.Font.Color:=clRed;
+
+Form_View.Gauge_T2_sr.Progress:=
+Round(100*Form_View.Table_Base[83]);
+if (Form_View.Table_Base[39]=1) then
+Form_View.T2.Font.Color:=clBlue;
+if (Form_View.Table_Base[39]=0) then
+Form_View.T2.Font.Color:=clRed;
+
+Form_View.Gauge_T3_sr.Progress:=
+Round(100*Form_View.Table_Base[84]);
+if (Form_View.Table_Base[40]=1) then
+Form_View.T3.Font.Color:=clBlue;
+if (Form_View.Table_Base[40]=0) then
+Form_View.T3.Font.Color:=clRed;
+
+Form_View.Gauge_T4_sr.Progress:=
+Round(100*Form_View.Table_Base[85]);
+if (Form_View.Table_Base[57]=1) then
+Form_View.T4.Font.Color:=clBlue;
+if (Form_View.Table_Base[57]=0) then
+Form_View.T4.Font.Color:=clRed;
+
+Form_View.Gauge_T1_lev.Progress:=
+Round(100*Form_View.Table_Base[86]);
+Form_View.Gauge_T1_prav.Progress:=
+Round(100*Form_View.Table_Base[90]);
+Form_View.Gauge_T2_lev.Progress:=
+Round(100*Form_View.Table_Base[87]);
+Form_View.Gauge_T2_prav.Progress:=
+Round(100*Form_View.Table_Base[91]);
+Form_View.Gauge_T3_lev.Progress:=
+Round(100*Form_View.Table_Base[88]);
+Form_View.Gauge_T3_prav.Progress:=
+Round(100*Form_View.Table_Base[92]);
+Form_View.Gauge_T4_lev.Progress:=
+Round(100*Form_View.Table_Base[89]);
+Form_View.Gauge_T4_prav.Progress:=
+Round(100*Form_View.Table_Base[93]);
+
+if (Form_View.Table_Base[68]=0) then
+Form_View.V1.Font.Color:=clTeal;
+if (Form_View.Table_Base[68]=1) then
+Form_View.V1.Font.Color:=clRed;
+Form_View.Gauge_Speed1.Progress:=
+Round(Form_View.Table_Base[0]*100);
+
+if (Form_View.Table_Base[69]=0) then
+Form_View.V2.Font.Color:=clTeal;
+if (Form_View.Table_Base[69]=1) then
+Form_View.V2.Font.Color:=clRed;
+Form_View.Gauge_Speed2.Progress:=
+Round(Form_View.Table_Base[1]*100);
+
+if (Form_View.Table_Base[70]=0) then
+Form_View.V3.Font.Color:=clTeal;
+if (Form_View.Table_Base[70]=1) then
+Form_View.V3.Font.Color:=clRed;
+Form_View.Gauge_Speed3.Progress:=
+Round(Form_View.Table_Base[2]*100);
+
+if (Form_View.Table_Base[71]=0) then
+Form_View.V4.Font.Color:=clTeal;
+if (Form_View.Table_Base[71]=1) then
+Form_View.V4.Font.Color:=clRed;
+Form_View.Gauge_Speed4.Progress:=
+Round(Form_View.Table_Base[3]*100);
+
+if (Form_View.Table_Base[72]=0) then
+Form_View.V5.Font.Color:=clTeal;
+if (Form_View.Table_Base[72]=1) then
+Form_View.V5.Font.Color:=clRed;
+Form_View.Gauge_Speed5.Progress:=
+Round(Form_View.Table_Base[4]*100);
+
+Form_View.Gauge_Speed1_vv.Progress:=
+Round(Form_View.Table_Base[181]);
+Form_View.Gauge_Speed2_vv.Progress:=
+Round(Form_View.Table_Base[182]);
+Form_View.Gauge_Speed2_nv.Progress:=
+Round(Form_View.Table_Base[183]);
+Form_View.Gauge_Speed3_vv.Progress:=
+Round(Form_View.Table_Base[184]);
+Form_View.Gauge_Speed3_nv.Progress:=
+Round(Form_View.Table_Base[185]);
+Form_View.Gauge_Ed_razm.Progress:=
+Round(Form_View.Table_Base[178]);
+Form_View.Gauge_Iv_razm.Progress:=
+Round(Form_View.Table_Base[179]);
+
+Form_View.Gauge_V_mot.Progress:=
+Round(Form_View.Table_Base[190]);
+Form_View.Gauge_Izad_mot.Progress:=
+Round(Form_View.Table_Base[192]);
+Form_View.Gauge_I_mot.Progress:=
+Round(Form_View.Table_Base[191]);
+Form_View.Gauge_Speed4_vv.Progress:=
+Round(Form_View.Table_Base[186]);
+Form_View.Gauge_Speed4_nv.Progress:=
+Round(Form_View.Table_Base[187]);
+Form_View.Gauge_Speed5_vv.Progress:=
+Round(Form_View.Table_Base[188]);
+Form_View.Gauge_Speed5_nv.Progress:=
+Round(Form_View.Table_Base[189]);
+
+if  (Form_View.Table_Base[31])<=0 then
+Form_View.Gauge_dH1_minus.Progress:=100+
+Round(Form_View.Table_Base[31]*10);
+if  (Form_View.Table_Base[31])>=0 then
+Form_View.Gauge_dH1_minus.Progress:=100;
+
+if  (Form_View.Table_Base[31])>=0 then
+Form_View.Gauge_dH1_plus.Progress:=
+Round(Form_View.Table_Base[31]*10);
+if  (Form_View.Table_Base[31])<=0 then
+Form_View.Gauge_dH1_plus.Progress:=0;
+
+if (Form_View.Table_Base[79]=1) then
+Form_View.dH1.Font.Color:=clTeal;
+if (Form_View.Table_Base[79]=0) then
+Form_View.dH1.Font.Color:=clRed;
+
+if  (Form_View.Table_Base[32])<=0 then
+Form_View.Gauge_dH5_minus.Progress:=100+
+Round(Form_View.Table_Base[32]*10);
+if  (Form_View.Table_Base[32])>=0 then
+Form_View.Gauge_dH5_minus.Progress:=100;
+
+if  (Form_View.Table_Base[32])>=0 then
+Form_View.Gauge_dH5_plus.Progress:=
+Round(Form_View.Table_Base[32]*10);
+if  (Form_View.Table_Base[32])<=0 then
+Form_View.Gauge_dH5_plus.Progress:=0;
+
+if (Form_View.Table_Base[56]=1) then
+Form_View.dH5.Font.Color:=clTeal;
+if (Form_View.Table_Base[56]=0) then
+Form_View.dH5.Font.Color:=clRed;
+end;
+end;
+end;
+end;
+
+procedure TForm_View.FormCreate(Sender: TObject);
+begin
+  Panel_Nat.ControlStyle:=Panel_Nat.ControlStyle+[ csOpaque ];
+  Panel_Param.ControlStyle:=Panel_Param.ControlStyle+[ csOpaque ];
+  Panel_Regim.ControlStyle:=Panel_Regim.ControlStyle+[ csOpaque ];
+  h_s400:=beginthread(nil, 4096, @DrawDB, nil, 0, th_s400);
+end;
+
+end.

@@ -1,26 +1,13 @@
-﻿using HWDiag;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading;
-//using System.Threading.Tasks;
-//using System.Windows.Media;
-using System.Diagnostics;
-using LoggerInSystem;
+using System.Threading.Tasks;
 
-
-  
-    class ClassStan
+namespace consoleRS2toBD
+{
+    class clStan1700
     {
-        bool blstan101ms; //данные по прокатке рулона, формируются таблица после прокатанного рулона. 
-        bool blstan1s;    //данные по работе стана, формируются и через 1мин (~62 сообщения) скидываются в БД.
-        bool blstan200ms; //сообщения формируются в течении 60 секунд и после этого записываются в БД.
-
-        bool blNetSend; //Передача данных по сети для создания визуализации на удаленном компьютере
-
-        PLCto stan;
-
         Dictionary<string, ContData> stanData100ms = new Dictionary<string, ContData>
         {
             {"v1", new ContData(0,100,true)},
@@ -43,7 +30,7 @@ using LoggerInSystem;
             {"d3", new ContData(28,1,false)},
             {"d4", new ContData(30,1,false)},
             {"d5", new ContData(32,1,false)},
-                       
+
             {"e2", new ContData(34,100,true)},
             {"e3", new ContData(36,100,true)},
             {"e4", new ContData(38,100,true)},
@@ -142,68 +129,53 @@ using LoggerInSystem;
             {"mezdoza4", new ContData(220,1,false)},
         };
 
-                    
-    
 
-
-
-        public ClassStan(bool stan101ms, bool stan1s, bool stan200ms, bool NetSend)
+        static public void goStart()
         {
-            this.blstan101ms = stan101ms;
-            this.blstan1s = stan1s;
-            this.blstan200ms = stan200ms;
-
-            this.blNetSend = NetSend;
-        }
-
-        public void Start()
-        {
-           
-            stan = new PLCto();
-            stan.NamePLC = "Stan1700";
+            clPLCtoBD stan = new clPLCtoBD();
+            stan.CursorPositionLeft = 0;
+            stan.CursorPositionTop = 1;
+            stan.NamePLC = "Стан1700";
             stan.SlotconnPC = 3;
             stan.RackconnPC = 0;
-            stan.IPconnPLC= new byte[] { 192, 168, 0, 11 }; //Передаем адресс контроллера
+            stan.IPconnPLC = new byte[] { 192, 168, 0, 11 }; //Передаем адресс контроллера
             stan.StartAdressTag = 3000; //старт адресов с 3000
             stan.Amount = 315; //Размер буфера для принятия данных в байтах
             stan.connect = 0;
 
-            stan.blPLStoDB101ms = blstan101ms;  //Битовый сигнал разрешающий обработки и запись в БД с циклом 101ms
-            stan.Data101ms = stanData100ms;     // Словарь значений Тег <-> поле БД
-            stan.dMot = 0.615;
-            stan.blPLSPasportRulona=true;
 
-
-            stan.blPLStoDBMessage = blstan200ms;
-            stan.blPLStoDB1s = blstan1s;
-
-            stan.ConnectCurX = 0;
-            stan.ConnectCurY = 1;
-
-            stan.mc100CurX = 0;
-            stan.mc100CurY = 2;
-
-            stan.mc101CurX = 0;
-            stan.mc101CurY = 3;
-
-            stan.MessageCurX = 0;
-            stan.MessageCurY = 4;
-
-            stan.mc1000CurX = 0;
-            stan.mc1000CurY = 5;
-
-
-
-            //Console.WriteLine("................Стан старт!");
             stan.Start();
-        }
+
+
+           
+            
+
+            //stan.blPLStoDB101ms = blstan101ms;  //Битовый сигнал разрешающий обработки и запись в БД с циклом 101ms
+            //stan.Data101ms = stanData100ms;     // Словарь значений Тег <-> поле БД
+            //stan.dMot = 0.615;
+            //stan.blPLSPasportRulona = true;
+
+
+            //stan.blPLStoDBMessage = blstan200ms;
+            //stan.blPLStoDB1s = blstan1s;
+
+            //stan.ConnectCurX = 0;
+            //stan.ConnectCurY = 1;
+
+            //stan.mc100CurX = 0;
+            //stan.mc100CurY = 2;
+
+            //stan.mc101CurX = 0;
+            //stan.mc101CurY = 3;
+
+            //stan.MessageCurX = 0;
+            //stan.MessageCurY = 4;
+
+            //stan.mc1000CurX = 0;
+            //stan.mc1000CurY = 5;
 
 
 
-        public void Stop()
-        {
-            stan.Stop();
         }
     }
-
-
+}

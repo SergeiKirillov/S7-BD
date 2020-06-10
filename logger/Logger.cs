@@ -49,9 +49,9 @@ namespace LoggerInSystem
 
         static Dictionary<Direction, classEvents> dicEvent = new Dictionary<Direction, classEvents>()
         {
-            [Direction.ERROR] = new classEvents(eventToConsole:true, eventToFile:true, eventToSystem:true, eventToDebug:true, ELET:EventLogEntryType.Error),
-            [Direction.WARNING] = new classEvents(eventToConsole: true, eventToFile: true, eventToSystem: true, eventToDebug: true, ELET: EventLogEntryType.Warning),
-            [Direction.Ok] = new classEvents(eventToConsole: true, eventToFile: false, eventToSystem: true, eventToDebug: false, ELET: EventLogEntryType.SuccessAudit),
+            [Direction.ERROR] = new classEvents(eventToConsole:true, eventToFile:true, eventToSystem:false, eventToDebug:true, ELET:EventLogEntryType.Error),
+            [Direction.WARNING] = new classEvents(eventToConsole: true, eventToFile: true, eventToSystem: false, eventToDebug: true, ELET: EventLogEntryType.Warning),
+            [Direction.Ok] = new classEvents(eventToConsole: true, eventToFile: false, eventToSystem: false, eventToDebug: false, ELET: EventLogEntryType.SuccessAudit),
             [Direction.OkStan1s] = new classEvents(eventToConsole: true, eventToFile: false, eventToSystem: false, eventToDebug: false, ELET: EventLogEntryType.Information),
             [Direction.OkStanMessage] = new classEvents(eventToConsole: true, eventToFile: false, eventToSystem: false, eventToDebug: false, ELET: EventLogEntryType.Information),
             [Direction.OkStanMessageNull] = new classEvents(eventToConsole: true, eventToFile: false, eventToSystem: false, eventToDebug: false, ELET: EventLogEntryType.Information),
@@ -63,7 +63,7 @@ namespace LoggerInSystem
 
         #region public метод который распределяет что куда писать в зависимости от переданного классаСообщения
 
-        public static void Write(string _className, Direction _clasMessage, string _MessageText, int _CurX, int _CurY)
+        public static void Write(string _className, Direction _clasMessage, string _MessageText, int _CurX, int _CurY, bool dtVizible)
         {
             classEvents value;
             if (dicEvent.TryGetValue(_clasMessage, out value))
@@ -86,7 +86,7 @@ namespace LoggerInSystem
                 //  в диагностическое окно VS - WriteOutputVSLog(_MessageText);
 
 
-                if (value.EventToConsole) WriteConsoleLog(_clasMessage, _MessageText, _CurX, _CurY);
+                if (value.EventToConsole) WriteConsoleLog(_clasMessage, _className +": "+_MessageText, _CurX, _CurY, dtVizible);
                 if (value.EventToFile) WriteFileLog(_MessageText);
                 if (value.EventToSystem) WriteEventLogApplication(_className, _MessageText, value.elet);
                 if (value.EventToDebug) WriteOutputVSLog(_MessageText);
@@ -99,7 +99,7 @@ namespace LoggerInSystem
         #endregion
                 
         #region вывод на консоль
-        private static void WriteConsoleLog(Direction clMes, string message, int curx, int cury)
+        private static void WriteConsoleLog(Direction clMes, string message, int curx, int cury, bool DateTimeNowVizible)
         {
             switch (clMes)
             {
@@ -138,7 +138,7 @@ namespace LoggerInSystem
             }
 
             Console.SetCursorPosition(curx, cury);
-            Console.WriteLine(DateTime.Now +" - "+message);
+            Console.Write(DateTime.Now.ToString("HH:mm:ss.fff" ) +" - "+message);
             Console.ResetColor();
             
         }

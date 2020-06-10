@@ -92,9 +92,23 @@ class ClassDresStan
         dsstan.blPLStoDBMessage = blds200ms;
         dsstan.blPLStoDB1s = blds1s;
 
+        dsstan.ConnectCurX = 0;
+        dsstan.ConnectCurY = 7;
+
+        dsstan.mc100CurX = 0;
+        dsstan.mc100CurY = 8;
+
+        dsstan.mc101CurX = 0;
+        dsstan.mc101CurY = 9;
+
+        dsstan.MessageCurX = 0;
+        dsstan.MessageCurY = 10;
+
+        dsstan.mc1000CurX = 0;
+        dsstan.mc1000CurY = 11;
 
 
-        Console.WriteLine("................Дрессировка старт!");
+        //Console.WriteLine("................Дрессировка старт!");
         dsstan.Start();
     }
 

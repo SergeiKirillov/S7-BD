@@ -121,7 +121,35 @@ class PLCto
 
         }
 
-        #endregion
+    private int ConCurX;
+    public int ConnectCurX
+    {
+        get { return ConCurX; }
+        set { ConCurX = value; }
+
+    }
+    private int ConCurY;
+    public int ConnectCurY
+    {
+        get { return ConCurY; }
+        set { ConCurY = value; }
+
+    }
+    private int MS100CurX;
+    public int mc100CurX
+    {
+        get { return MS100CurX; }
+        set { MS100CurX = value; }
+
+    }
+    private int MS100CurY;
+    public int mc100CurY
+    {
+        get { return MS100CurY; }
+        set { MS100CurY = value; }
+
+    }
+    #endregion
 
     #region Свойства определяющие как обрабатывать данные получаемые с контроллера
     //таблица значений имени тега и его стартовогоБита 
@@ -149,16 +177,44 @@ class PLCto
         get { return diametr_motalki; }
         set { diametr_motalki = value; }
     }
+    private int MS101CurX;
+    public int mc101CurX
+    {
+        get { return MS101CurX; }
+        set { MS101CurX = value; }
+
+    }
+    private int MS101CurY;
+    public int mc101CurY
+    {
+        get { return MS101CurY; }
+        set { MS101CurY = value; }
+
+    }
     #endregion
 
     #region plctodbmessage - Cвойство включения сбора информации - сообщения
-        private bool plctodbmessage; 
+    private bool plctodbmessage; 
         public bool blPLStoDBMessage
         {
             get {return plctodbmessage; }
             set {plctodbmessage=value; }
         }
-        #endregion
+    private int MesCurX;
+    public int MessageCurX
+    {
+        get { return MesCurX; }
+        set { MesCurX = value; }
+
+    }
+    private int MesCurY;
+    public int MessageCurY
+    {
+        get { return MesCurY; }
+        set { MesCurY = value; }
+
+    }
+    #endregion
 
     #region plctodb1s - Свойство включения сбора информации - 1сек
     private bool plctodb1s;
@@ -173,18 +229,32 @@ class PLCto
             get { return PasportRulona; }
             set { PasportRulona=value; }
         }
+    private int MS1000CurX;
+    public int mc1000CurX
+    {
+        get { return MS1000CurX; }
+        set { MS1000CurX = value; }
+
+    }
+    private int MS1000CurY;
+    public int mc1000CurY
+    {
+        get { return MS1000CurY; }
+        set { MS1000CurY = value; }
+
+    }
     #endregion
 
-   
 
 
 
 
 
-public PLCto()
-{
+
+    public PLCto()
+    {
         
-}
+    }
 
 
 
@@ -209,30 +279,32 @@ public PLCto()
 
             if (res != 0)
             {
-                LogSystem.Write(name+" start", Direction.ERROR, "Error connection!. Error - " + stan.Error(res));
+                LogSystem.Write(name+" start", Direction.ERROR, "Error connection!. Error - " + stan.Error(res),ConnectCurX,ConnectCurY,true);
 
             }
             else
             {
-                LogSystem.Write(name+" start", Direction.Ok, "Connect OK!");
+                //LogSystem.Write(name+" start", Direction.Ok, "Connect OK!", ConnectCurY, ConnectCurY, true);
 
                 int resSAC = stan.SetActiveConnection(Connect);
                 if (resSAC == 0)
                 {
-                    LogSystem.Write(name + " start", Direction.Ok, "Соединение активно.");
-                    
+                    LogSystem.Write(name + " start", Direction.Ok, "Соединение активно.", ConnectCurY, ConnectCurY,true);
+
+                    CreateTable(); //В случае успешного подключения к контроллеру формируем таблицу для формирования данных и последующего сохранения в БД
+
                     TTimer100ms = new Timer(new TimerCallback(TicTimer100ms), null, 0, 100);
 
                     if (plctodbmessage)  TTimerMessage = new Timer(new TimerCallback(TicTimerMessage), null, 0, 200);
                     if (plctodb101ms) TTimerSQL = new Timer(new TimerCallback(TicTimerSQL), null, 0, 101);
                     if (plctodb1s) TTimer1s = new Timer(new TimerCallback(TicTimer1s), null, 0, 1000);
 
-                    CreateTable(); //В случае успешного подключения к контроллеру формируем таблицу для формирования данных и последующего сохранения в БД
+                    
 
                 }
                 else
                 {
-                    LogSystem.Write(name+" start", Direction.WARNING, "Соединение не активировано. " + stan.Error(resSAC));
+                    LogSystem.Write(name+" start", Direction.WARNING, "Соединение не активировано. " + stan.Error(resSAC), ConnectCurY, ConnectCurY, true);
 
                 }
 
@@ -243,7 +315,7 @@ public PLCto()
         catch (Exception ex)
         {
             /*все исключения кидаем в пустоту*/
-            LogSystem.Write(name+ " start-"+ex.Source, Direction.ERROR, "Start Error-"+ex.Message);
+            LogSystem.Write(name+ " start-"+ex.Source, Direction.ERROR, "Start Error-"+ex.Message, ConnectCurY, ConnectCurY, true);
         }
     }
     private void CreateTable()
@@ -295,12 +367,12 @@ public PLCto()
             }
             else
             {
-                LogSystem.Write(name+" 100ms", Direction.ERROR, "Error.Read fied PLC. " + stan.Error(resultReadField));
+                LogSystem.Write(name+" 100ms", Direction.ERROR, "Error.Read fied PLC. " + stan.Error(resultReadField), mc100CurX, mc100CurY,true);
             }
         }
         catch (Exception ex)
         {
-            LogSystem.Write(name+ " 100ms", Direction.ERROR, "ИСТОЧНИК: " + ex.Source.ToString() + ".  ОШИБКА: " + ex.Message.ToString());
+            LogSystem.Write(name+ " 100ms", Direction.ERROR, "ИСТОЧНИК: " + ex.Source.ToString() + ".  ОШИБКА: " + ex.Message.ToString(), mc100CurX, mc100CurY, true);
         }
 
     }
@@ -343,11 +415,10 @@ void BufferToBuffer()
         {
 
             //Console.WriteLine("Поток ="+Thread.CurrentThread.ManagedThreadId.ToString());
-
             //Console.WriteLine(string.Format("\t\t {0} ({1}) {2}", "SQL 101mc", DateTime.Now - dtSQL, Thread.CurrentThread.ManagedThreadId));
             dtSQL = DateTime.Now;
-
             
+
             //Из критичной секции получаем значения из PLC
             Thread tSQL = new Thread(BufferSQLToBufferPLC);
             tSQL.Start();
@@ -413,12 +484,13 @@ void BufferToBuffer()
                 if (blRulonSaveData101ms)
                 {
                     dt101ms.Rows.Add(dr101ms); //Добавляем троку в таблицу
-                    
+                    LogSystem.Write(name + " SQL", Direction.Ok, "+", mc101CurX, mc101CurY, true);
                     //Console.WriteLine(" Кол-во строк в таблице=" +  dt101ms.Rows.Count);
                     //Console.Write(".");
                 }
                 else
                 {
+                    LogSystem.Write(name + " SQL", Direction.Ok, "-", mc101CurX, mc101CurY, true);
                     //Console.Write("_");
                 }
 
@@ -449,12 +521,12 @@ void BufferToBuffer()
                         {
                             Time_Start = DateTime.Now;
                             blRulonSaveData101ms = false; //включаем сбор данных по прокатке рулона
-                            //Console.Write(D_tek_mot);
+                            Console.Write(D_tek_mot);
                         }
                         else
                         {
                             blRulonSaveData101ms = true;
-                            //Console.Write(D_tek_mot);
+                            Console.Write(D_tek_mot);
                         }
                     }
 
@@ -490,7 +562,7 @@ void BufferToBuffer()
                         //Time_Stop = DateTime.Now;
                         Console.BackgroundColor = ConsoleColor.Blue;
                         Console.ForegroundColor = ConsoleColor.White;
-                    Console.WriteLine("");
+                        //Console.WriteLine("");
                         Console.WriteLine("Время начала записи SQL=" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff"));
 
                         Ves_Work = (((((D_pred_mot * D_pred_mot) - 0.36F) * 3.141593F) / 4) * (B_Work / 1000)) * 7.85F;
@@ -526,7 +598,7 @@ void BufferToBuffer()
 
                     //CreateTable();
                     //Console.WriteLine("Кол-во строк в таблице после очистки - " + dt101ms.Rows.Count.ToString());
-                    Console.WriteLine("");
+                    //Console.WriteLine("");
 
 
                     }
@@ -548,7 +620,7 @@ void BufferToBuffer()
         catch (Exception ex)
         {
             
-            LogSystem.Write(name + " stan(101ms)-" + ex.Source, Direction.ERROR, "Stan(101ms) Error-" + ex.Message);
+            LogSystem.Write(name + " stan(101ms)-" + ex.Source, Direction.ERROR, "Stan(101ms) Error-" + ex.Message, mc101CurX, mc101CurY, true);
 
         }
         
@@ -568,7 +640,7 @@ void BufferToBuffer()
         catch (Exception ex)
         {
 
-            LogSystem.Write(name + " stan(1s)-" + ex.Source, Direction.ERROR, "Stan(1s) Error-" + ex.Message);
+            LogSystem.Write(name + " stan(1s)-" + ex.Source, Direction.ERROR, "Stan(1s) Error-" + ex.Message, mc1000CurX, mc1000CurY, true);
         }
 
     }
@@ -584,7 +656,7 @@ void BufferToBuffer()
         catch (Exception ex)
         {
 
-            LogSystem.Write(name + " stan(Message)-" + ex.Source, Direction.ERROR, "Stan(Vtssage) Error-" + ex.Message);
+            LogSystem.Write(name + " stan(Message)-" + ex.Source, Direction.ERROR, "Stan(Vtssage) Error-" + ex.Message, MesCurX, MesCurY, true);
         }
     }
 
@@ -609,14 +681,14 @@ void BufferToBuffer()
             }
             else
             {
-                LogSystem.Write(name + " stanStop", Direction.ERROR, "Connect open. Warning - " + stan.Error(result));
+                LogSystem.Write(name + " Stop", Direction.ERROR, "Connect open. Warning - " + stan.Error(result), ConCurX, ConCurY, true);
             }
 
             //TODO добавить закрытие сетевого соединения
         }
         catch (Exception ex)
         {
-            LogSystem.Write(name + " stanStop", Direction.WARNING, "Ошибка при остановке. " + ex.Message);
+            LogSystem.Write(name + " Stop", Direction.WARNING, "Ошибка при остановке. " + ex.Message, ConCurX, ConCurY, true);
         }
 
     }

@@ -37,7 +37,7 @@ namespace consoleRS2toBD
         byte[] buffer1s;        //Технологические данные
         byte[] bufferNet;       //Передача по сети (визуализация)
 
-        readonly object locker = new object();
+        readonly object locker1 = new object();
         readonly object locker2 = new object();
 
         float speed4kl, H_work, hw, Bw, D_tek_mot, B_Work, D_pred_mot = 0, Ves_Work, Dlina_Work;
@@ -46,6 +46,8 @@ namespace consoleRS2toBD
 
         bool blRulonProkatSaveInData101ms;
         DateTime TimeStart;
+        DateTime TimeStop;
+
         #endregion
 
         #region Свойства внешние
@@ -139,7 +141,7 @@ namespace consoleRS2toBD
         void BufferToBuffer()
         {
             //критичная секция которая записывает значение в bufferPLC
-            lock (locker)
+            lock (locker1)
             {
 
                 //Array.Clear(bufferPLC, 0, bufferPLC.Length);
@@ -152,7 +154,7 @@ namespace consoleRS2toBD
         void BufferSQLToBufferPLC()
         {
             //критичная секция которая записывает значение в bufferPLC
-            lock (locker)
+            lock (locker2)
             {
                 //Array.Clear(bufferSQL, 0, bufferSQL.Length);
                 bufferSQL = bufferPLC;
@@ -181,7 +183,7 @@ namespace consoleRS2toBD
             while (true)
             {
                 Thread.Sleep(5000); //??????????????????????????????????????????????????????????????????????????????????????
-                
+                //Console.WriteLine(DateTime.Now.ToString()+" - "+namePLC);
             }
         }
 
@@ -332,7 +334,7 @@ namespace consoleRS2toBD
                                 {
                                     case "dmot":
                                         D_tek_mot = a;
-                                        Console.WriteLine(item.Key + " = " + D_tek_mot);
+                                        //Console.WriteLine(item.Key + " = " + D_tek_mot);
                                         break;
                                     case "h":
                                         hw = a;
@@ -387,7 +389,7 @@ namespace consoleRS2toBD
                             //Console.WriteLine(" Кол-во строк в таблице=" +  dt101ms.Rows.Count);
                             //Console.Write(".");
                             
-                            Console.WriteLine(namePLC +" "+ DateTime.Now.ToShortTimeString() + "  + " + D_tek_mot);
+                            //Console.WriteLine(namePLC +" "+ DateTime.Now.ToShortTimeString() + "  + " + D_tek_mot);
 
                         }
                         else
@@ -396,7 +398,7 @@ namespace consoleRS2toBD
                             //LogSystem.Write(namePLC + " SQL", Direction.Ok, "-", curLeft, 4, true);
                             //Console.Write("_");
                             
-                            Console.WriteLine(namePLC +" " + DateTime.Now.ToShortTimeString() + "  - " + D_tek_mot);
+                            //Console.WriteLine(namePLC +" " + DateTime.Now.ToShortTimeString() + "  - " + D_tek_mot);
 
                         }
 
@@ -417,14 +419,89 @@ namespace consoleRS2toBD
                             }
                         }
 
+                        if (namePLC== "Стан1700")
+                        {
+                            if ((TimeStart != new DateTime()) && (H_work == 0) && (D_tek_mot > 0.7) && (speed4kl > 2))
+                            {
+                                H_work = hw;
+                                B_Work = Bw;
+                            }
+
+                            if ((TimeStart != new DateTime()) && (H_work != 0) && (D_tek_mot < 0.610) && (D_tek_mot < D_pred_mot))
+                            {
+                                #region  Формируем шифр таблицы (yyyyMMddсмена)
+
+                                string numberTable;
+
+                                if (Convert.ToInt32(DateTime.Now.ToString("HH")) >= 7 && Convert.ToInt32(DateTime.Now.ToString("HH")) < 19)
+                                {
+                                    numberTable = DateTime.Now.ToString("yyyyMMdd") + "2";
+                                }
+                                else if (Convert.ToInt32(DateTime.Now.ToString("HH")) < 7)
+                                {
+                                    numberTable = DateTime.Now.ToString("yyyyMMdd") + "1";
+                                }
+                                else if (Convert.ToInt32(DateTime.Now.ToString("HH")) >= 19)
+                                {
+                                    numberTable = DateTime.Now.AddDays(1).ToString("yyyyMMdd") + "1";
+                                }
+                                #endregion
+
+                                //Time_Stop = DateTime.Now;
+                                Console.BackgroundColor = ConsoleColor.Blue;
+                                Console.ForegroundColor = ConsoleColor.White;
+                                //Console.WriteLine("");
+                                Console.WriteLine("Время начала записи SQL=" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff"));
+
+                                Ves_Work = (((((D_pred_mot * D_pred_mot) - 0.36F) * 3.141593F) / 4) * (B_Work / 1000)) * 7.85F;
+                                TimeStop = DateTime.Now;
+
+                                Dlina_Work = ((Ves_Work / 7.85F) / (B_Work / 1000)) / (H_work / 1000);
+
+                                //Ellipse101ms.Fill = onOK;
+
+                                #region Формируем данные для передачи в Базу Данных
+
+                                //yyyy - MM - dd HH: mm: ss.fff
+                                string strTimeStart = TimeStart.ToString("yyyy-MM-dd HH:mm:ss.fff");
+                                string strTimeStop = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff");
+
+                                TimeSpan tp = TimeStop.Subtract(TimeStart);
+                                double dbltp = tp.TotalMilliseconds;
+                                Console.BackgroundColor = ConsoleColor.Blue;
+                                Console.ForegroundColor = ConsoleColor.White;
+                                Console.WriteLine("Время сбора информации (ms):" + dbltp.ToString());
+                                Console.WriteLine("Кол-во строк полученных в системе:" + dt101ms.Rows.Count.ToString());
+                                Console.WriteLine("Среднее время цикла обновления данных:" + (dbltp / (dt101ms.Rows.Count)).ToString());
+                                Console.ResetColor();
+
+
+                                string strNumberRulon = DateTime.Now.ToString("yyyyMMdd") + TimeStart.ToString("HHmm") + DateTime.Now.ToString("HHmm");
+                                #endregion
+
+
+                                //TODO после записи удаляем таблицу и заново создаем
+                                dt101ms.Clear();
+                                //Console.WriteLine("Очистка таблицы");
+
+                                //CreateTable();
+                                //Console.WriteLine("Кол-во строк в таблице после очистки - " + dt101ms.Rows.Count.ToString());
+                                //Console.WriteLine("");
+
+
+                            }
+
+                        }
+                        else if (namePLC== "ДрессировочныйСтан1700")
+                        {
+
+                        }
+                       
+                        
+
+
                     }
-
-
-
-
-
-
-                    D_pred_mot = D_tek_mot;
+                  D_pred_mot = D_tek_mot;
                 }
             }
             catch (Exception ex)

@@ -154,29 +154,7 @@ namespace consoleRS2toBD
            
             
 
-            //stan.blPLStoDB101ms = blstan101ms;  //Битовый сигнал разрешающий обработки и запись в БД с циклом 101ms
-            //stan.Data101ms = stanData100ms;     // Словарь значений Тег <-> поле БД
-            //stan.dMot = 0.615;
-            //stan.blPLSPasportRulona = true;
-
-
-            //stan.blPLStoDBMessage = blstan200ms;
-            //stan.blPLStoDB1s = blstan1s;
-
-            //stan.ConnectCurX = 0;
-            //stan.ConnectCurY = 1;
-
-            //stan.mc100CurX = 0;
-            //stan.mc100CurY = 2;
-
-            //stan.mc101CurX = 0;
-            //stan.mc101CurY = 3;
-
-            //stan.MessageCurX = 0;
-            //stan.MessageCurY = 4;
-
-            //stan.mc1000CurX = 0;
-            //stan.mc1000CurY = 5;
+            
 
 
 

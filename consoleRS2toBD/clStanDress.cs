@@ -19,7 +19,7 @@ namespace consoleRS2toBD
             {"TRazm", new ContData(12,10,true)},
             {"TMot", new ContData(14,10,true)},
             {"RRazm", new ContData(16,1,true)},
-            {"dmot", new ContData(18,1,false)},          //RMot
+            {"dmot", new ContData(18,1000,false)},          //RMot 0.3
             {"NVlev", new ContData(20,100,true)},
             {"NVpr", new ContData(22,100,true)},
             {"IvozM", new ContData(48,100,true)},

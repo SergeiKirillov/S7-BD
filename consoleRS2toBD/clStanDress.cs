@@ -2,7 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+
+using HWDiag;
+using LoggerInSystem;
 
 namespace consoleRS2toBD
 {
@@ -45,28 +49,174 @@ namespace consoleRS2toBD
 
         };
 
+        byte[] buffer;          //данные c контроллера 100ms
+        byte[] bufferPLC;       //Промежуточное хранение даных
+        byte[] bufferSQL;       //Данные 101мс
+        byte[] bufferMessage;   //Данные сообщений
+        byte[] bufferMessageOld;//Данные сообщений
+        byte[] buffer1s;        //Технологические данные
+        byte[] bufferNet;       //Передача по сети (визуализация)
+
+        int amount = 150; //Размер буфера для принятия данных в байтах
+
+        byte[] IPconnPLC = new byte[] { 192, 168, 0, 21 }; //Передаем адресс контроллера
+        int connect = 1;
+
+        double dMot = 0.301;
+
+        string NamePLC = "ДрессировочныйСтан1700";
+        int SlotconnPC = 2;
+        int RackconnPC = 0;
+
+        int StartAdressTag = 2000; //старт адресов с 3000
+
+        readonly object locker = new object();
+        readonly object locker2 = new object();
+
         public void goStart()
         {
-            //clPLCtoBD ds = new clPLCtoBD();
-            //ds.CursorPositionLeft = 100;
-            //ds.CursorPositionTop = 0;
-            //ds.NamePLC = "ДрессировочныйСтан1700";
-            
-            //ds.SlotconnPC = 2;
-            //ds.RackconnPC = 0;
-            //ds.IPconnPLC = new byte[] { 192, 168, 0, 21 }; //Передаем адресс контроллера
-            //ds.StartAdressTag = 2000; //старт адресов с 3000
-            //ds.Amount = 150; //Размер буфера для принятия данных в байтах
-            //ds.connect = 1;
+           
+            Thread queryPLC = new Thread(PLC);
+            queryPLC.Start();
 
-            //ds.Data101ms = stanData100ms;     // Словарь значений Тег <-> поле БД
-            //ds.dMot = 0.301;
+            Thread querySQL = new Thread(SQL101ms);
+            querySQL.Start();
+
+            Thread queryMes = new Thread(Message200ms);
+            queryMes.Start();
+
+            Thread query1s = new Thread(SQL1s);
+            query1s.Start();
+
+            while (true)
+            {
+                Thread.Sleep(5000); //??????????????????????????????????????????????????????????????????????????????????????
+
+            }
 
 
-
-            //ds.Start();
 
         }
+
+        private void SQL1s()
+        {
+           
+        }
+
+        private void Message200ms()
+        {
+         
+        }
+
+        private void SQL101ms()
+        {
+         
+        }
+
+        #region Соединение и прием данных с контроллера
+        private void PLC()
+        {
+            try
+            {
+                int i = 100;     //начальная позиция по Top
+                int y = 2;     //Конечная позиция по Top
+
+                Prodave rs2 = new Prodave();
+
+                buffer = new byte[amount];
+                bufferPLC = new byte[amount];
+                bufferSQL = new byte[amount];
+
+                int resultReadField = 5;
+
+
+                while (true)
+                {
+                    Thread.Sleep(100);
+
+                    if (resultReadField != 0)
+                    {
+                        int res = rs2.LoadConnection(connect, 2, IPconnPLC, SlotconnPC, RackconnPC);
+
+                        if (res != 0)
+                        {
+                            //Console.WriteLine("error" + rs2.Error(res));
+                            LogSystem.Write(NamePLC + " start", Direction.ERROR, "Error connection!. Error - " + rs2.Error(res), 100, 0, true);
+
+                        }
+                        else
+                        {
+                            int resSAC = rs2.SetActiveConnection(connect);
+                        }
+
+                    }
+
+                    int Byte_Col_r = 0;
+
+                    resultReadField = rs2.field_read('M', 0, StartAdressTag, amount, out buffer, out Byte_Col_r);
+
+                    if (resultReadField == 0)
+                    {
+                        LogSystem.Write(NamePLC + " start", Direction.Ok, "Соединение активно.", 100, 1, true);
+
+                        //Буфер PLC
+                        Thread PLS100ms = new Thread(BufferToBuffer);
+                        PLS100ms.Start();
+
+                        //Буфер SQL 100mc
+                        Thread PLS101ms = new Thread(BufferSQLToBufferPLC);
+                        PLS101ms.Start();
+
+                        //Буфер сообщений
+
+                        //Буфер 1с
+
+                    }
+                    else
+                    {
+                        rs2.UnloadConnection(connect);
+                        LogSystem.Write(NamePLC + " 100ms", Direction.ERROR, "Error.Read fied PLC. " + rs2.Error(resultReadField), 100, 0, true);
+                    }
+
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                /*все исключения кидаем в пустоту*/
+                LogSystem.Write(NamePLC + " start-" + ex.Source, Direction.ERROR, "Start Error-" + ex.Message, 100, 0, true);
+
+            }
+        }
+
+
+        void BufferToBuffer()
+        {
+            //критичная секция которая записывает значение в bufferPLC
+            lock (locker)
+            {
+
+                //Array.Clear(bufferPLC, 0, bufferPLC.Length);
+                bufferPLC = buffer;
+            }
+
+        }
+
+
+        void BufferSQLToBufferPLC()
+        {
+            //критичная секция которая записывает значение в bufferPLC
+            lock (locker)
+            {
+                //Array.Clear(bufferSQL, 0, bufferSQL.Length);
+                bufferSQL = bufferPLC;
+            }
+
+        }
+        
+        #endregion
+
 
     }
 }

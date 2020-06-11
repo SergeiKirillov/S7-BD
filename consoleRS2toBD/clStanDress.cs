@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -62,7 +63,7 @@ namespace consoleRS2toBD
         byte[] IPconnPLC = new byte[] { 192, 168, 0, 21 }; //Передаем адресс контроллера
         int connect = 1;
 
-        double dMot = 0.301;
+        double dMot = 301;
 
         string NamePLC = "ДрессировочныйСтан1700";
         int SlotconnPC = 2;
@@ -70,8 +71,15 @@ namespace consoleRS2toBD
 
         int StartAdressTag = 2000; //старт адресов с 3000
 
-        readonly object locker = new object();
+        readonly object locker1 = new object();
         readonly object locker2 = new object();
+
+        float speed4kl, H_work, hw, Bw, D_tek_mot, B_Work, D_pred_mot = 0, Ves_Work, Dlina_Work;
+
+        DataTable dt101ms;
+
+        bool blRulonProkatSaveInData101ms;
+        DateTime TimeStart;
 
         public void goStart()
         {
@@ -108,10 +116,7 @@ namespace consoleRS2toBD
          
         }
 
-        private void SQL101ms()
-        {
-         
-        }
+        
 
         #region Соединение и прием данных с контроллера
         private void PLC()
@@ -157,7 +162,7 @@ namespace consoleRS2toBD
 
                     if (resultReadField == 0)
                     {
-                        LogSystem.Write(NamePLC + " start", Direction.Ok, "Соединение активно.", 100, 1, true);
+                        //LogSystem.Write(NamePLC + " start", Direction.Ok, "Соединение активно.", 100, 1, true);
 
                         //Буфер PLC
                         Thread PLS100ms = new Thread(BufferToBuffer);
@@ -194,7 +199,7 @@ namespace consoleRS2toBD
         void BufferToBuffer()
         {
             //критичная секция которая записывает значение в bufferPLC
-            lock (locker)
+            lock (locker1)
             {
 
                 //Array.Clear(bufferPLC, 0, bufferPLC.Length);
@@ -207,16 +212,172 @@ namespace consoleRS2toBD
         void BufferSQLToBufferPLC()
         {
             //критичная секция которая записывает значение в bufferPLC
-            lock (locker)
+            lock (locker2)
             {
                 //Array.Clear(bufferSQL, 0, bufferSQL.Length);
                 bufferSQL = bufferPLC;
             }
 
         }
-        
+
         #endregion
 
+        #region Запись данных(101ms) с контроллера в Базу Данных
 
+        private void CreateTable()
+        {
+            #region Формируем таблицу для формирования данных и последующего сохранения в БД
+            dt101ms = new DataTable();
+            dt101ms.Reset();
+            dt101ms.Columns.Add("dtStan", typeof(DateTime));//Для хранения даты и времени
+            foreach (var item in stanData100ms)
+            {
+                dt101ms.Columns.Add(item.Key, item.Value.floatdata ? typeof(float) : typeof(int));
+            }
+            #endregion
+        }
+
+        private void SQL101ms()
+        {
+            try
+            {
+                CreateTable();
+
+
+                while (true)
+                {
+                    Thread.Sleep(101);
+
+                    if (bufferSQL == null)
+                    {
+                        Console.WriteLine("0");
+                    }
+                    else
+                    {
+                        //Формируем строку для таблицы и ее записываем при условии что начата прокатка рулона
+
+                        DataRow dr101ms = dt101ms.NewRow();
+                        dr101ms["dtStan"] = DateTime.Now;
+
+
+
+                        foreach (var item in stanData100ms)
+                        {
+                            if (item.Value.floatdata) //Если данные имеют тип float
+                            {
+
+                                float a = (float)(BitConverter.ToInt16(bufferSQL, item.Value.startbit)) / item.Value.coefficient;
+                                //Console.WriteLine(a);
+                                dr101ms[item.Key] = a;
+                                string namepol = item.Key;
+
+                                switch (item.Key)
+                                {
+                                    case "dmot":
+                                        D_tek_mot = a;
+                                        //Console.WriteLine(item.Key + " = " + D_tek_mot);
+                                        break;
+                                    case "h":
+                                        hw = a;
+                                        break;
+                                    case "v4":
+                                        speed4kl = a;
+                                        break;
+                                    case "b":
+                                        Bw = a;
+                                        break;
+
+                                    default:
+                                        break;
+                                }
+
+                            }
+                            else
+                            {
+                                //Console.WriteLine(item.Key + " = " + item.Value.startbit + " - " + item.Value.coefficient);
+                                int a = (BitConverter.ToInt16(bufferSQL, item.Value.startbit)) / item.Value.coefficient;
+                                dr101ms[item.Key] = a;
+
+                                string namepol = item.Key;
+
+                                switch (item.Key)
+                                {
+                                    case "dmot":
+                                        D_tek_mot = a;
+                                        //Console.WriteLine(item.Key + " = " + item.Value.startbit + " - " + item.Value.coefficient);
+                                        break;
+                                    case "h":
+                                        hw = a;
+                                        break;
+                                    case "v4":
+                                        speed4kl = a;
+                                        break;
+                                    case "b":
+                                        Bw = a;
+                                        break;
+
+                                    default:
+                                        break;
+                                }
+                            }
+                        }
+
+                        if (blRulonProkatSaveInData101ms)
+                        {
+                            dt101ms.Rows.Add(dr101ms); //Добавляем троку в таблицу
+                                                       //LogSystem.Write(namePLC + " SQL", Direction.Ok, "+", curLeft, (curTop+4), true);
+                                                       //LogSystem.Write(namePLC + " SQL", Direction.Ok, "+", curLeft, 4, true);
+                                                       //Console.WriteLine(" Кол-во строк в таблице=" +  dt101ms.Rows.Count);
+                                                       //Console.Write(".");
+
+                            Console.WriteLine(NamePLC + " " + DateTime.Now.ToString("HH:mm:ss.fff") + "  + " + D_tek_mot);
+
+                        }
+                        else
+                        {
+                            //LogSystem.Write(namePLC + " SQL", Direction.Ok, "-", curLeft, (curTop+4), true);
+                            //LogSystem.Write(namePLC + " SQL", Direction.Ok, "-", curLeft, 4, true);
+                            //Console.Write("_");
+
+                            Console.WriteLine(NamePLC + " " + DateTime.Now.ToString("HH:mm:ss.fff") + "  - " + D_tek_mot);
+
+                        }
+
+
+                        if (D_tek_mot > D_pred_mot)
+                        {
+                            //if (D_tek_mot<0.615)
+                            if (D_tek_mot < dMot)
+                            {
+                                TimeStart = DateTime.Now;
+                                blRulonProkatSaveInData101ms = false; //включаем сбор данных по прокатке рулона
+                                //Console.Write(D_tek_mot);
+                            }
+                            else
+                            {
+                                blRulonProkatSaveInData101ms = true;
+                                //Console.Write(D_tek_mot);
+                            }
+                        }
+
+                    }
+
+
+
+
+
+
+                    D_pred_mot = D_tek_mot;
+                }
+            }
+            catch (Exception ex)
+            {
+
+                LogSystem.Write(NamePLC + " SQL(101ms)-" + ex.Source, Direction.ERROR, "Start Error-" + ex.Message, 0, 3, true);
+            }
+
+
+        }
+        #endregion
     }
 }

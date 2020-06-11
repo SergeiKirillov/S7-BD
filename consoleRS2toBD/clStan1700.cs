@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -133,46 +134,52 @@ namespace consoleRS2toBD
             {"mezdoza4", new ContData(220,1,false)},
         };
 
-        byte[] buffer;          //данные c контроллера 100ms
-        byte[] bufferPLC;       //Промежуточное хранение даных
-        byte[] bufferSQL;       //Данные 101мс
-        byte[] bufferMessage;   //Данные сообщений
-        byte[] bufferMessageOld;//Данные сообщений
-        byte[] buffer1s;        //Технологические данные
-        byte[] bufferNet;       //Передача по сети (визуализация)
+        byte[] stanbuffer;          //данные c контроллера 100ms
+        byte[] stanbufferPLC;       //Промежуточное хранение даных
+        byte[] stanbufferSQL;       //Данные 101мс
+        byte[] stanbufferMessage;   //Данные сообщений
+        byte[] stanbufferMessageOld;//Данные сообщений
+        byte[] stanbuffer1s;        //Технологические данные
+        byte[] stanbufferNet;       //Передача по сети (визуализация)
 
-        int amount = 315; //Размер буфера для принятия данных в байтах
+        int stanamount = 315; //Размер буфера для принятия данных в байтах
 
-        byte[] IPconnPLC = new byte[] { 192, 168, 0, 11 }; //Передаем адресс контроллера
-        int connect = 0;
+        byte[] stanIPconnPLC = new byte[] { 192, 168, 0, 11 }; //Передаем адресс контроллера
+        int stanconnect = 0;
 
-        double dMot = 0.615;
+        double standMot = 0.615;
 
-        string NamePLC = "Стан1700";
-        int SlotconnPC = 3;
-        int RackconnPC = 0;
+        string stanNamePLC = "Стан1700";
+        int stanSlotconnPC = 3;
+        int stanRackconnPC = 0;
 
-        int StartAdressTag = 3000; //старт адресов с 3000
+        int stanStartAdressTag = 3000; //старт адресов с 3000
 
-        readonly object locker = new object();
-        readonly object locker2 = new object();
+        readonly object stanlocker1 = new object();
+        readonly object stanlocker2 = new object();
 
+        float stanspeed4kl, stanH_work, stanhw, stanBw, stanD_tek_mot, stanB_Work, stanD_pred_mot = 0, stanVes_Work, stanDlina_Work;
+
+        DataTable dtstan101ms;
+
+        bool blstanRulonProkatSaveInData101ms;
+        DateTime stanTimeStart;
 
         public void goStart()
         {
             
             //stan.Data101ms = stanData100ms;
             
-            Thread queryPLC = new Thread(PLC);
+            Thread queryPLC = new Thread(stanPLC);
             queryPLC.Start();
 
-            Thread querySQL = new Thread(SQL101ms);
+            Thread querySQL = new Thread(stanSQL101ms);
             querySQL.Start();
 
-            Thread queryMes = new Thread(Message200ms);
+            Thread queryMes = new Thread(stanMessage200ms);
             queryMes.Start();
 
-            Thread query1s = new Thread(SQL1s);
+            Thread query1s = new Thread(stanSQL1s);
             query1s.Start();
 
             while (true)
@@ -181,24 +188,20 @@ namespace consoleRS2toBD
             }
         }
 
-        private void SQL1s()
+        private void stanSQL1s()
         {
             
         }
 
-        private void Message200ms()
+        private void stanMessage200ms()
         {
             
         }
 
-        private void SQL101ms()
-        {
-            
-        }
-
+       
         
         #region Соединение и прием данных с контроллера
-        private void PLC()
+        private void stanPLC()
         {
             try
             {
@@ -207,9 +210,9 @@ namespace consoleRS2toBD
 
                 Prodave rs2 = new Prodave();
 
-                buffer = new byte[amount];
-                bufferPLC = new byte[amount];
-                bufferSQL = new byte[amount];
+                stanbuffer = new byte[stanamount];
+                stanbufferPLC = new byte[stanamount];
+                stanbufferSQL = new byte[stanamount];
 
                 int resultReadField = 5;
 
@@ -220,28 +223,28 @@ namespace consoleRS2toBD
 
                     if (resultReadField != 0)
                     {
-                        int res = rs2.LoadConnection(connect, 2, IPconnPLC, SlotconnPC, RackconnPC);
+                        int res = rs2.LoadConnection(stanconnect, 2, stanIPconnPLC, stanSlotconnPC, stanRackconnPC);
 
                         if (res != 0)
                         {
                             //Console.WriteLine("error" + rs2.Error(res));
-                            LogSystem.Write(NamePLC + " start", Direction.ERROR, "Error connection!. Error - " + rs2.Error(res), 0, 0, true);
+                            LogSystem.Write(stanNamePLC + " start", Direction.ERROR, "Error connection!. Error - " + rs2.Error(res), 0, 0, true);
 
                         }
                         else
                         {
-                            int resSAC = rs2.SetActiveConnection(connect);
+                            int resSAC = rs2.SetActiveConnection(stanconnect);
                         }
 
                     }
 
                     int Byte_Col_r = 0;
 
-                    resultReadField = rs2.field_read('M', 0, StartAdressTag, amount, out buffer, out Byte_Col_r);
+                    resultReadField = rs2.field_read('M', 0, stanStartAdressTag, stanamount, out stanbuffer, out Byte_Col_r);
 
                     if (resultReadField == 0)
                     {
-                        LogSystem.Write(NamePLC + " start", Direction.Ok, "Соединение активно.", 0, 1, true);
+                        //LogSystem.Write(NamePLC + " start", Direction.Ok, "Соединение активно.", 0, 1, true);
 
                         //Буфер PLC
                         Thread PLS100ms = new Thread(BufferToBuffer);
@@ -258,8 +261,8 @@ namespace consoleRS2toBD
                     }
                     else
                     {
-                        rs2.UnloadConnection(connect);
-                        LogSystem.Write(NamePLC + " 100ms", Direction.ERROR, "Error.Read fied PLC. " + rs2.Error(resultReadField), 0, 0, true);
+                        rs2.UnloadConnection(stanconnect);
+                        LogSystem.Write(stanNamePLC + " 100ms", Direction.ERROR, "Error.Read fied PLC. " + rs2.Error(resultReadField), 0, 0, true);
                     }
 
                 }
@@ -269,7 +272,7 @@ namespace consoleRS2toBD
             catch (Exception ex)
             {
                 /*все исключения кидаем в пустоту*/
-                LogSystem.Write(NamePLC + " start-" + ex.Source, Direction.ERROR, "Start Error-" + ex.Message, 0, 0, true);
+                LogSystem.Write(stanNamePLC + " start -" + ex.Source, Direction.ERROR, "Start Error-" + ex.Message, 0, 0, true);
 
             }
         }
@@ -279,11 +282,11 @@ namespace consoleRS2toBD
         void BufferToBuffer()
         {
             //критичная секция которая записывает значение в bufferPLC
-            lock (locker)
+            lock (stanlocker1)
             {
 
                 //Array.Clear(bufferPLC, 0, bufferPLC.Length);
-                bufferPLC = buffer;
+                stanbufferPLC = stanbuffer;
             }
 
         }
@@ -292,15 +295,174 @@ namespace consoleRS2toBD
         void BufferSQLToBufferPLC()
         {
             //критичная секция которая записывает значение в bufferPLC
-            lock (locker)
+            lock (stanlocker2)
             {
                 //Array.Clear(bufferSQL, 0, bufferSQL.Length);
-                bufferSQL = bufferPLC;
+                stanbufferSQL = stanbufferPLC;
             }
 
         }
 
         #endregion
 
+
+        #region Запись данных(101ms) с контроллера в Базу Данных
+
+        private void CreateTable()
+        {
+            #region Формируем таблицу для формирования данных и последующего сохранения в БД
+            dtstan101ms = new DataTable();
+            dtstan101ms.Reset();
+            dtstan101ms.Columns.Add("dtStan", typeof(DateTime));//Для хранения даты и времени
+            foreach (var item in stanData100ms)
+            {
+                dtstan101ms.Columns.Add(item.Key, item.Value.floatdata ? typeof(float) : typeof(int));
+            }
+            #endregion
+        }
+
+        private void stanSQL101ms()
+        {
+            try
+            {
+                CreateTable();
+
+
+                while (true)
+                {
+                    Thread.Sleep(101);
+
+                    if (stanbufferSQL == null)
+                    {
+                        Console.WriteLine("0");
+                    }
+                    else
+                    {
+                        //Формируем строку для таблицы и ее записываем при условии что начата прокатка рулона
+
+                        DataRow dr101ms = dtstan101ms.NewRow();
+                        dr101ms["dtStan"] = DateTime.Now;
+
+
+
+                        foreach (var item in stanData100ms)
+                        {
+                            if (item.Value.floatdata) //Если данные имеют тип float
+                            {
+
+                                float a = (float)(BitConverter.ToInt16(stanbufferSQL, item.Value.startbit)) / item.Value.coefficient;
+                                //Console.WriteLine(a);
+                                dr101ms[item.Key] = a;
+                                string namepol = item.Key;
+
+                                switch (item.Key)
+                                {
+                                    case "dmot":
+                                        stanD_tek_mot = a;
+                                        //Console.WriteLine(item.Key + " = " + D_tek_mot);
+                                        break;
+                                    case "h":
+                                        stanhw = a;
+                                        break;
+                                    case "v4":
+                                        stanspeed4kl = a;
+                                        break;
+                                    case "b":
+                                        stanBw = a;
+                                        break;
+
+                                    default:
+                                        break;
+                                }
+
+                            }
+                            else
+                            {
+                                //Console.WriteLine(item.Key + " = " + item.Value.startbit + " - " + item.Value.coefficient);
+                                int a = (BitConverter.ToInt16(stanbufferSQL, item.Value.startbit)) / item.Value.coefficient;
+                                dr101ms[item.Key] = a;
+
+                                string namepol = item.Key;
+
+                                switch (item.Key)
+                                {
+                                    case "dmot":
+                                        stanD_tek_mot = a;
+                                        //Console.WriteLine(item.Key + " = " + item.Value.startbit + " - " + item.Value.coefficient);
+                                        break;
+                                    case "h":
+                                        stanhw = a;
+                                        break;
+                                    case "v4":
+                                        stanspeed4kl = a;
+                                        break;
+                                    case "b":
+                                        stanBw = a;
+                                        break;
+
+                                    default:
+                                        break;
+                                }
+                            }
+                        }
+
+                        if (blstanRulonProkatSaveInData101ms)
+                        {
+                            dtstan101ms.Rows.Add(dr101ms); //Добавляем троку в таблицу
+                                                       //LogSystem.Write(namePLC + " SQL", Direction.Ok, "+", curLeft, (curTop+4), true);
+                                                       //LogSystem.Write(namePLC + " SQL", Direction.Ok, "+", curLeft, 4, true);
+                                                       //Console.WriteLine(" Кол-во строк в таблице=" +  dt101ms.Rows.Count);
+                                                       //Console.Write(".");
+
+                            Console.WriteLine(stanNamePLC + " " + DateTime.Now.ToString("HH:mm:ss.fff") + "  + " + stanD_tek_mot);
+                            
+
+                        }
+                        else
+                        {
+                            //LogSystem.Write(namePLC + " SQL", Direction.Ok, "-", curLeft, (curTop+4), true);
+                            //LogSystem.Write(namePLC + " SQL", Direction.Ok, "-", curLeft, 4, true);
+                            //Console.Write("_");
+
+                            Console.WriteLine(stanNamePLC + " " + DateTime.Now.ToString("HH:mm:ss.fff") + "  - " + stanD_tek_mot);
+
+                        }
+
+
+                        if (stanD_tek_mot > stanD_pred_mot)
+                        {
+                            //if (D_tek_mot<0.615)
+                            if (stanD_tek_mot < standMot)
+                            {
+                                stanTimeStart = DateTime.Now;
+                                blstanRulonProkatSaveInData101ms = false; //включаем сбор данных по прокатке рулона
+                                //Console.Write(D_tek_mot);
+                            }
+                            else
+                            {
+                                blstanRulonProkatSaveInData101ms = true;
+                                //Console.Write(D_tek_mot);
+                            }
+                        }
+
+                    }
+
+
+
+
+
+
+                    stanD_pred_mot = stanD_tek_mot;
+                }
+            }
+            catch (Exception ex)
+            {
+
+                LogSystem.Write(stanNamePLC + " SQL(101ms)-" + ex.Source, Direction.ERROR, "Start Error-" + ex.Message, 0, 3, true);
+            }
+
+
+        }
+        #endregion
     }
 }

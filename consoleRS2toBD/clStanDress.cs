@@ -19,7 +19,7 @@ namespace consoleRS2toBD
             {"TRazm", new ContData(12,10,true)},
             {"TMot", new ContData(14,10,true)},
             {"RRazm", new ContData(16,1,true)},
-            {"dmot", new ContData(18,1,true)},          //RMot
+            {"dmot", new ContData(18,1,false)},          //RMot
             {"NVlev", new ContData(20,100,true)},
             {"NVpr", new ContData(22,100,true)},
             {"IvozM", new ContData(48,100,true)},
@@ -45,11 +45,11 @@ namespace consoleRS2toBD
 
         };
 
-        static public void goStart()
+        public void goStart()
         {
             clPLCtoBD ds = new clPLCtoBD();
-            ds.CursorPositionLeft = 70;
-            ds.CursorPositionTop = 1;
+            ds.CursorPositionLeft = 100;
+            ds.CursorPositionTop = 0;
             ds.NamePLC = "ДрессировочныйСтан1700";
             
             ds.SlotconnPC = 2;
@@ -59,7 +59,10 @@ namespace consoleRS2toBD
             ds.Amount = 150; //Размер буфера для принятия данных в байтах
             ds.connect = 1;
 
-            
+            ds.Data101ms = stanData100ms;     // Словарь значений Тег <-> поле БД
+            ds.dMot = 0.301;
+
+
 
             ds.Start();
         }

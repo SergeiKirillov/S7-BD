@@ -130,11 +130,12 @@ namespace consoleRS2toBD
         };
 
 
-        static public void goStart()
+        public void goStart()
         {
             clPLCtoBD stan = new clPLCtoBD();
             stan.CursorPositionLeft = 0;
-            stan.CursorPositionTop = 1;
+            stan.CursorPositionTop = 0;
+
             stan.NamePLC = "Стан1700";
             stan.SlotconnPC = 3;
             stan.RackconnPC = 0;
@@ -142,6 +143,9 @@ namespace consoleRS2toBD
             stan.StartAdressTag = 3000; //старт адресов с 3000
             stan.Amount = 315; //Размер буфера для принятия данных в байтах
             stan.connect = 0;
+
+            stan.Data101ms = stanData100ms;
+            stan.dMot = 0.615;
 
 
             stan.Start();

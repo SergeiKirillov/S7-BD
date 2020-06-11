@@ -40,8 +40,12 @@ namespace consoleRS2toBD
         readonly object locker = new object();
         readonly object locker2 = new object();
 
+        float speed4kl, H_work, hw, Bw, D_tek_mot, B_Work, D_pred_mot = 0, Ves_Work, Dlina_Work;
+
         DataTable dt101ms;
 
+        bool blRulonProkatSaveInData101ms;
+        DateTime TimeStart;
         #endregion
 
         #region Свойства внешние
@@ -118,11 +122,20 @@ namespace consoleRS2toBD
             set { startBuffer = value; }
         }
 
+        private double diametr_motalki;
+        public double dMot
+        {
+            get { return diametr_motalki; }
+            set { diametr_motalki = value; }
+        }
+
+       
+
         #endregion
 
         #region Критичные секции
 
-        
+
         void BufferToBuffer()
         {
             //критичная секция которая записывает значение в bufferPLC
@@ -199,8 +212,8 @@ namespace consoleRS2toBD
 
                         if (res != 0)
                         {
-                            Console.WriteLine("error" + rs2.Error(res));
-                            //LogSystem.Write(namePLC + " start", Direction.ERROR, "Error connection!. Error - " + rs2.Error(res), curLeft, i, true);
+                            //Console.WriteLine("error" + rs2.Error(res));
+                            LogSystem.Write(namePLC + " start", Direction.ERROR, "Error connection!. Error - " + rs2.Error(res), curLeft, i, true);
 
                         }
                         else
@@ -208,55 +221,35 @@ namespace consoleRS2toBD
                             int resSAC = rs2.SetActiveConnection(Connect);
                         }
 
-                    }        //if (resSAC == 0)
-                            //{
-                                
-                                
-                                //try
-                                //{
-                                    int Byte_Col_r = 0;
+                    }       
 
-                                    resultReadField = rs2.field_read('M', 0, startBuffer, amount, out buffer, out Byte_Col_r);
+                    int Byte_Col_r = 0;
 
-                                    if (resultReadField == 0)
-                                    {
-                                        LogSystem.Write(namePLC + " start", Direction.Ok, "Соединение активно.", curLeft, i, true);
+                    resultReadField = rs2.field_read('M', 0, startBuffer, amount, out buffer, out Byte_Col_r);
 
-                                        //Буфер PLC
-                                        Thread PLS100ms = new Thread(BufferToBuffer);
-                                        PLS100ms.Start();
+                    if (resultReadField == 0)
+                    {
+                        //LogSystem.Write(namePLC + " start", Direction.Ok, "Соединение активно.", curLeft, (i+1), true);
 
-                                        //Буфер SQL 100mc
-                                        Thread PLS101ms = new Thread(BufferSQLToBufferPLC);
-                                        PLS101ms.Start();
+                        //Буфер PLC
+                        Thread PLS100ms = new Thread(BufferToBuffer);
+                        PLS100ms.Start();
 
-                                        //Буфер сообщений
-                                        //Буфер 1с
+                        //Буфер SQL 100mc
+                        Thread PLS101ms = new Thread(BufferSQLToBufferPLC);
+                        PLS101ms.Start();
 
-                                    }
-                                    else
-                                    {
-                                        rs2.UnloadConnection(Connect);
-                                        LogSystem.Write(namePLC + " 100ms", Direction.ERROR, "Error.Read fied PLC. " + rs2.Error(resultReadField), curLeft, i, true);
-                                    }
-                                //}
-                                //catch (Exception ex)
-                                //{
-                                //    LogSystem.Write(namePLC + " 100ms", Direction.ERROR, "ИСТОЧНИК: " + ex.Source.ToString() + ".  ОШИБКА: " + ex.Message.ToString(), curLeft, i, true);
-                                //}
+                        //Буфер сообщений
 
+                        //Буфер 1с
 
-
-                            //}
-                            //else
-                            //{
-                            //    LogSystem.Write(namePLC + " start", Direction.WARNING, "Соединение не активировано. " + rs2.Error(resSAC), curLeft, i, true);
-
-                            //}
-
-                        
-                  
-                    
+                    }
+                    else
+                    {
+                        rs2.UnloadConnection(Connect);
+                        LogSystem.Write(namePLC + " 100ms", Direction.ERROR, "Error.Read fied PLC. " + rs2.Error(resultReadField), curLeft, i, true);
+                    }
+                             
                 }
 
                     //if (i < y)
@@ -283,6 +276,11 @@ namespace consoleRS2toBD
             }
         }
 
+
+        #endregion
+
+        #region Запись данных(101ms) с контроллера в Базу Данных
+
         private void CreateTable()
         {
             #region Формируем таблицу для формирования данных и последующего сохранения в БД
@@ -295,26 +293,147 @@ namespace consoleRS2toBD
             }
             #endregion
         }
-        #endregion
 
-        #region Запись данных(101ms) с контроллера в Базу Данных
         private void SQL101ms()
         {
-            
-            while (true)
+            try
             {
-                Thread.Sleep(101);
+                CreateTable();
+                
 
-                //DateTime dt100ms;
-                //CreateTable(); //В случае успешного подключения к контроллеру формируем таблицу для формирования данных и последующего сохранения в БД
-                //dt100ms = DateTime.Now;
+                while (true)
+                {
+                    Thread.Sleep(101);
+
+                    if (bufferSQL==null)
+                    {
+                        Console.WriteLine("0");
+                    }
+                    else
+                    {
+                        //Формируем строку для таблицы и ее записываем при условии что начата прокатка рулона
+
+                        DataRow dr101ms = dt101ms.NewRow();
+                        dr101ms["dtStan"] = DateTime.Now;
+
+
+
+                        foreach (var item in dic101ms)
+                        {
+                            if (item.Value.floatdata) //Если данные имеют тип float
+                            {
+                                
+                                float a = (float)(BitConverter.ToInt16(bufferSQL, item.Value.startbit)) / item.Value.coefficient;
+                                //Console.WriteLine(a);
+                                dr101ms[item.Key] = a;
+                                string namepol = item.Key;
+
+                                switch (item.Key)
+                                {
+                                    case "dmot":
+                                        D_tek_mot = a;
+                                        Console.WriteLine(item.Key + " = " + D_tek_mot);
+                                        break;
+                                    case "h":
+                                        hw = a;
+                                        break;
+                                    case "v4":
+                                        speed4kl = a;
+                                        break;
+                                    case "b":
+                                        Bw = a;
+                                        break;
+
+                                    default:
+                                        break;
+                                }
+
+                            }
+                            else
+                            {
+                                //Console.WriteLine(item.Key + " = " + item.Value.startbit + " - " + item.Value.coefficient);
+                                int a = (BitConverter.ToInt16(bufferSQL, item.Value.startbit)) / item.Value.coefficient;
+                                dr101ms[item.Key] = a;
+
+                                string namepol = item.Key;
+
+                                switch (item.Key)
+                                {
+                                    case "dmot":
+                                        D_tek_mot = a;
+                                        //Console.WriteLine(item.Key + " = " + item.Value.startbit + " - " + item.Value.coefficient);
+                                        break;
+                                    case "h":
+                                        hw = a;
+                                        break;
+                                    case "v4":
+                                        speed4kl = a;
+                                        break;
+                                    case "b":
+                                        Bw = a;
+                                        break;
+
+                                    default:
+                                        break;
+                                }
+                            }
+                        }
+
+                        if (blRulonProkatSaveInData101ms)
+                        {
+                            dt101ms.Rows.Add(dr101ms); //Добавляем троку в таблицу
+                            //LogSystem.Write(namePLC + " SQL", Direction.Ok, "+", curLeft, (curTop+4), true);
+                            //LogSystem.Write(namePLC + " SQL", Direction.Ok, "+", curLeft, 4, true);
+                            //Console.WriteLine(" Кол-во строк в таблице=" +  dt101ms.Rows.Count);
+                            //Console.Write(".");
+                            
+                            Console.WriteLine(namePLC +" "+ DateTime.Now.ToShortTimeString() + "  + " + D_tek_mot);
+
+                        }
+                        else
+                        {
+                            //LogSystem.Write(namePLC + " SQL", Direction.Ok, "-", curLeft, (curTop+4), true);
+                            //LogSystem.Write(namePLC + " SQL", Direction.Ok, "-", curLeft, 4, true);
+                            //Console.Write("_");
+                            
+                            Console.WriteLine(namePLC +" " + DateTime.Now.ToShortTimeString() + "  - " + D_tek_mot);
+
+                        }
+
+
+                        if (D_tek_mot > D_pred_mot)
+                        {
+                            //if (D_tek_mot<0.615)
+                            if (D_tek_mot < diametr_motalki)
+                            {
+                                TimeStart = DateTime.Now;
+                                blRulonProkatSaveInData101ms = false; //включаем сбор данных по прокатке рулона
+                                //Console.Write(D_tek_mot);
+                            }
+                            else
+                            {
+                                blRulonProkatSaveInData101ms = true;
+                                //Console.Write(D_tek_mot);
+                            }
+                        }
+
+                    }
 
 
 
 
 
 
+                    D_pred_mot = D_tek_mot;
+                }
             }
+            catch (Exception ex)
+            {
+
+                LogSystem.Write(namePLC + " SQL(101ms)-" + ex.Source, Direction.ERROR, "Start Error-" + ex.Message, curLeft, (curTop+3), true);
+            }
+            
+            
         }
         #endregion
 

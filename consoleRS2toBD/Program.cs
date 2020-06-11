@@ -14,10 +14,12 @@ namespace consoleRS2toBD
             Console.Clear();
             Console.SetWindowSize(200, 40);
 
-            Thread task1 = new Thread(clStan1700.goStart);
+            clStan1700 stan1700 = new clStan1700();
+            Thread task1 = new Thread(stan1700.goStart);
             task1.Start();
 
-            Thread task2 = new Thread(clStanDress.goStart);
+            clStanDress stanDs = new clStanDress();
+            Thread task2 = new Thread(stanDs.goStart);
             task2.Start();
 
         }

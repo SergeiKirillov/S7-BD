@@ -2,7 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+
+using HWDiag;
+using LoggerInSystem;
 
 namespace consoleRS2toBD
 {
@@ -129,57 +133,174 @@ namespace consoleRS2toBD
             {"mezdoza4", new ContData(220,1,false)},
         };
 
+        byte[] buffer;          //данные c контроллера 100ms
+        byte[] bufferPLC;       //Промежуточное хранение даных
+        byte[] bufferSQL;       //Данные 101мс
+        byte[] bufferMessage;   //Данные сообщений
+        byte[] bufferMessageOld;//Данные сообщений
+        byte[] buffer1s;        //Технологические данные
+        byte[] bufferNet;       //Передача по сети (визуализация)
+
+        int amount = 315; //Размер буфера для принятия данных в байтах
+
+        byte[] IPconnPLC = new byte[] { 192, 168, 0, 11 }; //Передаем адресс контроллера
+        int connect = 0;
+
+        double dMot = 0.615;
+
+        string NamePLC = "Стан1700";
+        int SlotconnPC = 3;
+        int RackconnPC = 0;
+
+        int StartAdressTag = 3000; //старт адресов с 3000
+
+        readonly object locker = new object();
+        readonly object locker2 = new object();
+
 
         public void goStart()
         {
-            clPLCtoBD stan = new clPLCtoBD();
-            stan.CursorPositionLeft = 0;
-            stan.CursorPositionTop = 0;
-
-            stan.NamePLC = "Стан1700";
-            stan.SlotconnPC = 3;
-            stan.RackconnPC = 0;
-            stan.IPconnPLC = new byte[] { 192, 168, 0, 11 }; //Передаем адресс контроллера
-            stan.StartAdressTag = 3000; //старт адресов с 3000
-            stan.Amount = 315; //Размер буфера для принятия данных в байтах
-            stan.connect = 0;
-
-            stan.Data101ms = stanData100ms;
-            stan.dMot = 0.615;
-
-
-            stan.Start();
-
-
-           
             
+            //stan.Data101ms = stanData100ms;
+            
+            Thread queryPLC = new Thread(PLC);
+            queryPLC.Start();
 
-            //stan.blPLStoDB101ms = blstan101ms;  //Битовый сигнал разрешающий обработки и запись в БД с циклом 101ms
-            //stan.Data101ms = stanData100ms;     // Словарь значений Тег <-> поле БД
-            //stan.dMot = 0.615;
-            //stan.blPLSPasportRulona = true;
+            Thread querySQL = new Thread(SQL101ms);
+            querySQL.Start();
+
+            Thread queryMes = new Thread(Message200ms);
+            queryMes.Start();
+
+            Thread query1s = new Thread(SQL1s);
+            query1s.Start();
+
+            while (true)
+            {
+                Thread.Sleep(5000); //??????????????????????????????????????????????????????????????????????????????????????
+            }
+        }
+
+        private void SQL1s()
+        {
+            
+        }
+
+        private void Message200ms()
+        {
+            
+        }
+
+        private void SQL101ms()
+        {
+            
+        }
+
+        
+        #region Соединение и прием данных с контроллера
+        private void PLC()
+        {
+            try
+            {
+                int i = 0;     //начальная позиция по Top
+                int y = 2;     //Конечная позиция по Top
+
+                Prodave rs2 = new Prodave();
+
+                buffer = new byte[amount];
+                bufferPLC = new byte[amount];
+                bufferSQL = new byte[amount];
+
+                int resultReadField = 5;
 
 
-            //stan.blPLStoDBMessage = blstan200ms;
-            //stan.blPLStoDB1s = blstan1s;
+                while (true)
+                {
+                    Thread.Sleep(100);
 
-            //stan.ConnectCurX = 0;
-            //stan.ConnectCurY = 1;
+                    if (resultReadField != 0)
+                    {
+                        int res = rs2.LoadConnection(connect, 2, IPconnPLC, SlotconnPC, RackconnPC);
 
-            //stan.mc100CurX = 0;
-            //stan.mc100CurY = 2;
+                        if (res != 0)
+                        {
+                            //Console.WriteLine("error" + rs2.Error(res));
+                            LogSystem.Write(NamePLC + " start", Direction.ERROR, "Error connection!. Error - " + rs2.Error(res), 0, 0, true);
 
-            //stan.mc101CurX = 0;
-            //stan.mc101CurY = 3;
+                        }
+                        else
+                        {
+                            int resSAC = rs2.SetActiveConnection(connect);
+                        }
 
-            //stan.MessageCurX = 0;
-            //stan.MessageCurY = 4;
+                    }
 
-            //stan.mc1000CurX = 0;
-            //stan.mc1000CurY = 5;
+                    int Byte_Col_r = 0;
+
+                    resultReadField = rs2.field_read('M', 0, StartAdressTag, amount, out buffer, out Byte_Col_r);
+
+                    if (resultReadField == 0)
+                    {
+                        LogSystem.Write(NamePLC + " start", Direction.Ok, "Соединение активно.", 0, 1, true);
+
+                        //Буфер PLC
+                        Thread PLS100ms = new Thread(BufferToBuffer);
+                        PLS100ms.Start();
+
+                        //Буфер SQL 100mc
+                        Thread PLS101ms = new Thread(BufferSQLToBufferPLC);
+                        PLS101ms.Start();
+
+                        //Буфер сообщений
+
+                        //Буфер 1с
+
+                    }
+                    else
+                    {
+                        rs2.UnloadConnection(connect);
+                        LogSystem.Write(NamePLC + " 100ms", Direction.ERROR, "Error.Read fied PLC. " + rs2.Error(resultReadField), 0, 0, true);
+                    }
+
+                }
 
 
+            }
+            catch (Exception ex)
+            {
+                /*все исключения кидаем в пустоту*/
+                LogSystem.Write(NamePLC + " start-" + ex.Source, Direction.ERROR, "Start Error-" + ex.Message, 0, 0, true);
+
+            }
+        }
+
+
+
+        void BufferToBuffer()
+        {
+            //критичная секция которая записывает значение в bufferPLC
+            lock (locker)
+            {
+
+                //Array.Clear(bufferPLC, 0, bufferPLC.Length);
+                bufferPLC = buffer;
+            }
 
         }
+
+
+        void BufferSQLToBufferPLC()
+        {
+            //критичная секция которая записывает значение в bufferPLC
+            lock (locker)
+            {
+                //Array.Clear(bufferSQL, 0, bufferSQL.Length);
+                bufferSQL = bufferPLC;
+            }
+
+        }
+
+        #endregion
+
     }
 }

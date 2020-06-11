@@ -47,24 +47,25 @@ namespace consoleRS2toBD
 
         public void goStart()
         {
-            clPLCtoBD ds = new clPLCtoBD();
-            ds.CursorPositionLeft = 100;
-            ds.CursorPositionTop = 0;
-            ds.NamePLC = "ДрессировочныйСтан1700";
+            //clPLCtoBD ds = new clPLCtoBD();
+            //ds.CursorPositionLeft = 100;
+            //ds.CursorPositionTop = 0;
+            //ds.NamePLC = "ДрессировочныйСтан1700";
             
-            ds.SlotconnPC = 2;
-            ds.RackconnPC = 0;
-            ds.IPconnPLC = new byte[] { 192, 168, 0, 21 }; //Передаем адресс контроллера
-            ds.StartAdressTag = 2000; //старт адресов с 3000
-            ds.Amount = 150; //Размер буфера для принятия данных в байтах
-            ds.connect = 1;
+            //ds.SlotconnPC = 2;
+            //ds.RackconnPC = 0;
+            //ds.IPconnPLC = new byte[] { 192, 168, 0, 21 }; //Передаем адресс контроллера
+            //ds.StartAdressTag = 2000; //старт адресов с 3000
+            //ds.Amount = 150; //Размер буфера для принятия данных в байтах
+            //ds.connect = 1;
 
-            ds.Data101ms = stanData100ms;     // Словарь значений Тег <-> поле БД
-            ds.dMot = 0.301;
+            //ds.Data101ms = stanData100ms;     // Словарь значений Тег <-> поле БД
+            //ds.dMot = 0.301;
 
 
 
-            ds.Start();
+            //ds.Start();
+
         }
 
     }

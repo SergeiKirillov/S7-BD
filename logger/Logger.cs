@@ -137,7 +137,7 @@ namespace LoggerInSystem
                     break;
             }
 
-            Console.SetCursorPosition(curx, cury);
+            //Console.SetCursorPosition(curx, cury);
             Console.Write(DateTime.Now.ToString("HH:mm:ss.fff" ) +" - "+message);
             Console.ResetColor();
             

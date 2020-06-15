@@ -1428,8 +1428,8 @@ namespace RS2toBD
 
             //Console.WriteLine("numberTable -> " + numberTable);
 
-            //this.Dispatcher.Invoke((Action)this.ConvertBufferSQLandWriteSQL); //Записываем данные в БД
-            this.Dispatcher.Invoke((Action)this.ConvertBufferSQLandWriteTable); //Формируем таблицу а после окончания прокатки рулона создаем в БД таблицу с номером рулона и записываем данные в неё
+            this.Dispatcher.Invoke((Action)this.ConvertBufferSQLandWriteSQL); //Записываем данные в БД
+            //this.Dispatcher.Invoke((Action)this.ConvertBufferSQLandWriteTable); //Формируем таблицу а после окончания прокатки рулона создаем в БД таблицу с номером рулона и записываем данные в неё
         }
 
         private void ConvertBufferSQLandWriteSQL()
@@ -2656,7 +2656,7 @@ namespace RS2toBD
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-           // SQLconBD();
+            SQLconBD();
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)

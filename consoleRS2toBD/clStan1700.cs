@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -160,10 +161,13 @@ namespace consoleRS2toBD
 
         float stanspeed4kl, stanH_work, stanhw, stanBw, stanD_tek_mot, stanB_Work, stanD_pred_mot = 0, stanVes_Work, stanDlina_Work;
 
-        DataTable dtstan101ms;
+        //DataTable dtstan101ms;
 
         bool blstanRulonProkatSaveInData101ms;
         DateTime stanTimeStart;
+        private string connectionString = "Data Source = 192.168.0.46; Initial Catalog = rs2; User ID = rs2admin; Password = 159951";
+
+
 
         public void goStart()
         {
@@ -185,13 +189,11 @@ namespace consoleRS2toBD
             while (true)
             {
                 Thread.Sleep(5000); //??????????????????????????????????????????????????????????????????????????????????????
+                Console.WriteLine(DateTime.Now.ToString("HH:mm:ss.fff")+ " ("+stanNamePLC + ")  +");
             }
         }
 
-        private void stanSQL1s()
-        {
-            
-        }
+        
 
         private void stanMessage200ms()
         {
@@ -308,151 +310,135 @@ namespace consoleRS2toBD
 
         #region Запись данных(101ms) с контроллера в Базу Данных
 
-        private void CreateTable()
-        {
-            #region Формируем таблицу для формирования данных и последующего сохранения в БД
-            dtstan101ms = new DataTable();
-            dtstan101ms.Reset();
-            dtstan101ms.Columns.Add("dtStan", typeof(DateTime));//Для хранения даты и времени
-            foreach (var item in stanData100ms)
-            {
-                dtstan101ms.Columns.Add(item.Key, item.Value.floatdata ? typeof(float) : typeof(int));
-            }
-            #endregion
-        }
-
         private void stanSQL101ms()
         {
             try
             {
-                CreateTable();
-
-
                 while (true)
                 {
                     Thread.Sleep(101);
 
-                    if (stanbufferSQL == null)
+                    #region Формируем SQL запрос с циклом 101мс и записываем его во временную БД
+
+                    
+                    string comRulon101ms = "INSERT INTO RS2stan100ms" +
+                   "(v1,v2,v3,v4,v5,h1,h5,b,dvip,drazm,dmot,vvip,d1,d2,d3,d4,d5,e2,e3,e4,e5,n1l,n1p,n2l,n2p,n3l,n3p,n4l,n4p,n5l,n5p,reserv1,reserv2,t1,t2,t3,t4,t1l,t2l,t3l,t4l,t1p,t2p,t3p,t4p,t1z,t2z,t3z,t4z,erazm,ivozbrazm,izadrazm,w1,w2v,w2n,w3v,w3n,w4v,w4n,w5v,w5n,wmot,imot,izadmot,u1,u2v,u2n,u3v,u3n,u4v,u4n,u5v,u5n,umot,i1,i2v,i2n,i3v,i3n,i4v,i4n,i5v,i5n,rtv,dt1,dt2,dt3,dt4,grt,trt,mv1,mv2,mv3,dh1,dh5,os1klvb,rezerv,mezdoza4)" +
+                   " VALUES " +
+                   "(" +
+                    (float)(BitConverter.ToInt16(stanbufferSQL, 0)) / 100 + "," +    //v1
+                    (float)(BitConverter.ToInt16(stanbufferSQL, 2)) / 100 + "," +    //v2
+                    (float)(BitConverter.ToInt16(stanbufferSQL, 4)) / 100 + "," +    //v3
+                    (float)(BitConverter.ToInt16(stanbufferSQL, 6)) / 100 + "," +    //v4
+                    (float)(BitConverter.ToInt16(stanbufferSQL, 8)) / 100 + "," +    //v5
+                    (float)(BitConverter.ToInt16(stanbufferSQL, 10)) / 1000 + "," +  //h1    
+                    (float)(BitConverter.ToInt16(stanbufferSQL, 12)) / 1000 + "," +  //h5
+                    BitConverter.ToInt16(stanbufferSQL, 14) + "," +                  //b
+                    (float)(BitConverter.ToInt16(stanbufferSQL, 16)) / 1000 + "," +  //dvip
+                    (float)(BitConverter.ToInt16(stanbufferSQL, 18)) / 1000 + "," +  //drazm
+                    (float)(BitConverter.ToInt16(stanbufferSQL, 20)) / 1000 + "," +  //dmot
+                    (float)(BitConverter.ToInt16(stanbufferSQL, 22)) / 1000 + "," +  //vvip
+                    BitConverter.ToInt16(stanbufferSQL, 24) + "," +                  //d1
+                    BitConverter.ToInt16(stanbufferSQL, 26) + "," +                  //d2
+                    BitConverter.ToInt16(stanbufferSQL, 28) + "," +                  //d3
+                    BitConverter.ToInt16(stanbufferSQL, 30) + "," +                  //d4
+                    BitConverter.ToInt16(stanbufferSQL, 32) + "," +                  //d5
+                    (float)(BitConverter.ToInt16(stanbufferSQL, 34)) / 100 + "," +   //e2
+                    (float)(BitConverter.ToInt16(stanbufferSQL, 36)) / 100 + "," +   //e3
+                    (float)(BitConverter.ToInt16(stanbufferSQL, 38)) / 100 + "," +   //e4
+                    (float)(BitConverter.ToInt16(stanbufferSQL, 40)) / 100 + "," +   //e5
+                    (float)(BitConverter.ToInt16(stanbufferSQL, 42)) / 100 + "," +   //n1l
+                    (float)(BitConverter.ToInt16(stanbufferSQL, 44)) / 100 + "," +   //n1p
+                    (float)(BitConverter.ToInt16(stanbufferSQL, 46)) / 100 + "," +   //n2l
+                    (float)(BitConverter.ToInt16(stanbufferSQL, 48)) / 100 + "," +   //n2p
+                    (float)(BitConverter.ToInt16(stanbufferSQL, 50)) / 100 + "," +   //n3l
+                    (float)(BitConverter.ToInt16(stanbufferSQL, 52)) / 100 + "," +   //n3p
+                    (float)(BitConverter.ToInt16(stanbufferSQL, 54)) / 100 + "," +   //n4l
+                    (float)(BitConverter.ToInt16(stanbufferSQL, 56)) / 100 + "," +   //n4p
+                    (float)(BitConverter.ToInt16(stanbufferSQL, 58)) / 100 + "," +   //n5l
+                    (float)(BitConverter.ToInt16(stanbufferSQL, 60)) / 100 + "," +   //n5p
+                    (float)(BitConverter.ToInt16(stanbufferSQL, 68)) / 100 + "," +   //reserv1
+                    (float)(BitConverter.ToInt16(stanbufferSQL, 70)) / 100 + "," +   //reserv2
+                    (float)(BitConverter.ToInt16(stanbufferSQL, 72)) / 100 + "," +   //t1
+                    (float)(BitConverter.ToInt16(stanbufferSQL, 74)) / 100 + "," +   //t2
+                    (float)(BitConverter.ToInt16(stanbufferSQL, 76)) / 100 + "," +   //t3
+                    (float)(BitConverter.ToInt16(stanbufferSQL, 78)) / 100 + "," +   //t4
+                    (float)(BitConverter.ToInt16(stanbufferSQL, 80)) / 100 + "," +   //t1l
+                    (float)(BitConverter.ToInt16(stanbufferSQL, 82)) / 100 + "," +   //t2l
+                    (float)(BitConverter.ToInt16(stanbufferSQL, 84)) / 100 + "," +   //t3l
+                    (float)(BitConverter.ToInt16(stanbufferSQL, 86)) / 100 + "," +   //t4l
+                    (float)(BitConverter.ToInt16(stanbufferSQL, 88)) / 100 + "," +   //t1p
+                    (float)(BitConverter.ToInt16(stanbufferSQL, 90)) / 100 + "," +   //t2p
+                    (float)(BitConverter.ToInt16(stanbufferSQL, 92)) / 100 + "," +   //t3p
+                    (float)(BitConverter.ToInt16(stanbufferSQL, 94)) / 100 + "," +   //t4p
+                    (float)(BitConverter.ToInt16(stanbufferSQL, 96)) / 100 + "," +   //t1z
+                    (float)(BitConverter.ToInt16(stanbufferSQL, 98)) / 100 + "," +   //t2z
+                    (float)(BitConverter.ToInt16(stanbufferSQL, 100)) / 100 + "," +  //t3z
+                    (float)(BitConverter.ToInt16(stanbufferSQL, 112)) / 100 + "," +  //t4z
+                    (float)(BitConverter.ToInt16(stanbufferSQL, 114)) / 10 + "," +   //erazm
+                    (float)(BitConverter.ToInt16(stanbufferSQL, 116)) / 100 + "," +  //ivozbrazm
+                    (float)(BitConverter.ToInt16(stanbufferSQL, 118)) / 10 + "," +   //izadrazm 
+                    (float)(BitConverter.ToInt16(stanbufferSQL, 120)) / 10 + "," +   //w1
+                    (float)(BitConverter.ToInt16(stanbufferSQL, 122)) / 10 + "," +   //w2v
+                    (float)(BitConverter.ToInt16(stanbufferSQL, 124)) / 10 + "," +   //w2n
+                    (float)(BitConverter.ToInt16(stanbufferSQL, 126)) / 10 + "," +   //w3v
+                    (float)(BitConverter.ToInt16(stanbufferSQL, 128)) / 10 + "," +   //w3n
+                    (float)(BitConverter.ToInt16(stanbufferSQL, 130)) / 10 + "," +   //w4v
+                    (float)(BitConverter.ToInt16(stanbufferSQL, 132)) / 10 + "," +   //w4n
+                    (float)(BitConverter.ToInt16(stanbufferSQL, 134)) / 10 + "," +   //w5v
+                    (float)(BitConverter.ToInt16(stanbufferSQL, 136)) / 10 + "," +   //w5n
+                    (float)(BitConverter.ToInt16(stanbufferSQL, 138)) / 10 + "," +   //wmot
+                    BitConverter.ToInt16(stanbufferSQL, 140) + "," +                 //imot
+                    BitConverter.ToInt16(stanbufferSQL, 142) + "," +                 //izadmot
+                    (float)(BitConverter.ToInt16(stanbufferSQL, 144)) / 10 + "," +   //u1
+                    (float)(BitConverter.ToInt16(stanbufferSQL, 146)) / 10 + "," +   //u2v
+                    (float)(BitConverter.ToInt16(stanbufferSQL, 148)) / 10 + "," +   //u2n
+                    (float)(BitConverter.ToInt16(stanbufferSQL, 150)) / 10 + "," +   //u3v
+                    (float)(BitConverter.ToInt16(stanbufferSQL, 152)) / 10 + "," +   //u3n
+                    (float)(BitConverter.ToInt16(stanbufferSQL, 154)) / 10 + "," +   //u4v
+                    (float)(BitConverter.ToInt16(stanbufferSQL, 156)) / 10 + "," +   //u4n
+                    (float)(BitConverter.ToInt16(stanbufferSQL, 158)) / 10 + "," +   //u5v
+                    (float)(BitConverter.ToInt16(stanbufferSQL, 160)) / 10 + "," +   //u5n
+                    (float)(BitConverter.ToInt16(stanbufferSQL, 162)) / 10 + "," +   //umot
+                    BitConverter.ToInt16(stanbufferSQL, 164) + "," +                 //i1
+                    BitConverter.ToInt16(stanbufferSQL, 166) + "," +                 //i2v
+                    BitConverter.ToInt16(stanbufferSQL, 168) + "," +                 //i2n
+                    BitConverter.ToInt16(stanbufferSQL, 170) + "," +                 //i3v
+                    BitConverter.ToInt16(stanbufferSQL, 172) + "," +                 //i3n
+                    BitConverter.ToInt16(stanbufferSQL, 174) + "," +                 //i4v
+                    BitConverter.ToInt16(stanbufferSQL, 176) + "," +                 //i4n
+                    BitConverter.ToInt16(stanbufferSQL, 178) + "," +                 //i5v
+                    BitConverter.ToInt16(stanbufferSQL, 180) + "," +                 //i5n
+                    (float)(BitConverter.ToInt16(stanbufferSQL, 192)) / 10 + "," +   //rtv
+                    (float)(BitConverter.ToInt16(stanbufferSQL, 194)) / 10 + "," +   //dt1
+                    (float)(BitConverter.ToInt16(stanbufferSQL, 196)) / 10 + "," +   //dt2
+                    (float)(BitConverter.ToInt16(stanbufferSQL, 198)) / 10 + "," +   //dt3
+                    (float)(BitConverter.ToInt16(stanbufferSQL, 200)) / 10 + "," +   //dt4
+                    (float)(BitConverter.ToInt16(stanbufferSQL, 202)) / 10 + "," +   //grt
+                    (float)(BitConverter.ToInt16(stanbufferSQL, 204)) / 10 + "," +   //trt
+                    (float)(BitConverter.ToInt16(stanbufferSQL, 206)) / 10 + "," +   //mv1
+                    (float)(BitConverter.ToInt16(stanbufferSQL, 208)) / 10 + "," +   //mv2
+                    (float)(BitConverter.ToInt16(stanbufferSQL, 210)) / 10 + "," +   //mv3
+                    (float)(BitConverter.ToInt16(stanbufferSQL, 62)) / 10 + "," +    //dh1
+                    (float)(BitConverter.ToInt16(stanbufferSQL, 64)) / 10 + "," +    //dh5
+                    BitConverter.ToInt16(stanbufferSQL, 216) + "," +                 //os1klvb
+                    BitConverter.ToInt16(stanbufferSQL, 218) + "," +                 //rezerv
+                    BitConverter.ToInt16(stanbufferSQL, 220) +                       //mezdoza4
+                    ")";
+
+
+
+                    if (true) //TODO Если установлен bit что прокатка рулона(1s) то тогда пишем во временную таблицу
                     {
-                        Console.WriteLine("0");
-                    }
-                    else
-                    {
-                        //Формируем строку для таблицы и ее записываем при условии что начата прокатка рулона
-
-                        DataRow dr101ms = dtstan101ms.NewRow();
-                        dr101ms["dtStan"] = DateTime.Now;
-
-
-
-                        foreach (var item in stanData100ms)
+                        using (SqlConnection conSQL101ms = new SqlConnection(connectionString))
                         {
-                            if (item.Value.floatdata) //Если данные имеют тип float
-                            {
-
-                                float a = (float)(BitConverter.ToInt16(stanbufferSQL, item.Value.startbit)) / item.Value.coefficient;
-                                //Console.WriteLine(a);
-                                dr101ms[item.Key] = a;
-                                string namepol = item.Key;
-
-                                switch (item.Key)
-                                {
-                                    case "dmot":
-                                        stanD_tek_mot = a;
-                                        //Console.WriteLine(item.Key + " = " + D_tek_mot);
-                                        break;
-                                    case "h":
-                                        stanhw = a;
-                                        break;
-                                    case "v4":
-                                        stanspeed4kl = a;
-                                        break;
-                                    case "b":
-                                        stanBw = a;
-                                        break;
-
-                                    default:
-                                        break;
-                                }
-
-                            }
-                            else
-                            {
-                                //Console.WriteLine(item.Key + " = " + item.Value.startbit + " - " + item.Value.coefficient);
-                                int a = (BitConverter.ToInt16(stanbufferSQL, item.Value.startbit)) / item.Value.coefficient;
-                                dr101ms[item.Key] = a;
-
-                                string namepol = item.Key;
-
-                                switch (item.Key)
-                                {
-                                    case "dmot":
-                                        stanD_tek_mot = a;
-                                        //Console.WriteLine(item.Key + " = " + item.Value.startbit + " - " + item.Value.coefficient);
-                                        break;
-                                    case "h":
-                                        stanhw = a;
-                                        break;
-                                    case "v4":
-                                        stanspeed4kl = a;
-                                        break;
-                                    case "b":
-                                        stanBw = a;
-                                        break;
-
-                                    default:
-                                        break;
-                                }
-                            }
-                        }
-
-                        if (blstanRulonProkatSaveInData101ms)
-                        {
-                            dtstan101ms.Rows.Add(dr101ms); //Добавляем троку в таблицу
-                                                       //LogSystem.Write(namePLC + " SQL", Direction.Ok, "+", curLeft, (curTop+4), true);
-                                                       //LogSystem.Write(namePLC + " SQL", Direction.Ok, "+", curLeft, 4, true);
-                                                       //Console.WriteLine(" Кол-во строк в таблице=" +  dt101ms.Rows.Count);
-                                                       //Console.Write(".");
-
-                            Console.WriteLine(stanNamePLC + " " + DateTime.Now.ToString("HH:mm:ss.fff") + "  + " + stanD_tek_mot);
+                            conSQL101ms.Open();
+                            SqlCommand command = new SqlCommand(comRulon101ms, conSQL101ms);
+                            command.ExecuteNonQuery();
                             
-
                         }
-                        else
-                        {
-                            //LogSystem.Write(namePLC + " SQL", Direction.Ok, "-", curLeft, (curTop+4), true);
-                            //LogSystem.Write(namePLC + " SQL", Direction.Ok, "-", curLeft, 4, true);
-                            //Console.Write("_");
-
-                            Console.WriteLine(stanNamePLC + " " + DateTime.Now.ToString("HH:mm:ss.fff") + "  - " + stanD_tek_mot);
-
-                        }
-
-
-                        if (stanD_tek_mot > stanD_pred_mot)
-                        {
-                            //if (D_tek_mot<0.615)
-                            if (stanD_tek_mot < standMot)
-                            {
-                                stanTimeStart = DateTime.Now;
-                                blstanRulonProkatSaveInData101ms = false; //включаем сбор данных по прокатке рулона
-                                //Console.Write(D_tek_mot);
-                            }
-                            else
-                            {
-                                blstanRulonProkatSaveInData101ms = true;
-                                //Console.Write(D_tek_mot);
-                            }
-                        }
-
                     }
 
-
-
-
-
-
-                    stanD_pred_mot = stanD_tek_mot;
+                    #endregion
                 }
             }
             catch (Exception ex)
@@ -464,5 +450,13 @@ namespace consoleRS2toBD
 
         }
         #endregion
+
+        #region записываем данные 1с
+
+        #endregion
+        private void stanSQL1s()
+        {
+
+        }
     }
 }

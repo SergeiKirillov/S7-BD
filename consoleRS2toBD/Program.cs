@@ -18,9 +18,9 @@ namespace consoleRS2toBD
             Thread task1 = new Thread(stan1700.goStart);
             task1.Start();
 
-            clStanDress stanDs = new clStanDress();
-            Thread task2 = new Thread(stanDs.goStart);
-            task2.Start();
+            //clStanDress stanDs = new clStanDress();
+            //Thread task2 = new Thread(stanDs.goStart);
+            //task2.Start();
 
         }
     }

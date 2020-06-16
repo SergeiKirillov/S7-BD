@@ -829,7 +829,7 @@ namespace consoleRS2toBD
                     }
 
 
-                    string comRulon101ms = "INSERT INTO " + numberTable +
+                    string comRulon1s1 = "INSERT INTO " + numberTable +
                    "(datetime1s,s191HL,s192HL,s193BL,s194BL,s191HR,s192HR,s193BR,s194BR,s281NL,s282NL,s283BL,s284BL,s281NR,s282NR," +
                    "s283BR,s284BR,s301BL,s302BL,s303HL,s304HL,s301BR,s302BR,s303HR,s304HR,s321BL,s322BL,s323HL,s324HL,s321BR,s322BR," +
                    "s323HR,s324HR,s341BL,s342BL,s343HL,s344HL,s341BR,s342BR,s343HR,s344HR,s461L,s462L,s463L,s461R,s462R,s463R,sG11L," +
@@ -928,7 +928,7 @@ namespace consoleRS2toBD
                     using (SqlConnection conSQL1s2 = new SqlConnection(connectionString))
                     {
                         conSQL1s2.Open();
-                        SqlCommand command = new SqlCommand(comRulon101ms, conSQL1s2);
+                        SqlCommand command = new SqlCommand(comRulon1s1, conSQL1s2);
                         command.ExecuteNonQuery();
 
 
@@ -982,6 +982,18 @@ namespace consoleRS2toBD
                         Dlina_Work = ((Ves_Work / 7.85F) / (B_Work / 1000)) / (H5_work / 1000);
                         blRulonStop = true;
 
+
+                        #region Очищаем базу временных рулонов
+                        using (SqlConnection conSQL1s3 = new SqlConnection(connectionString))
+                        {
+                            conSQL1s3.Open();
+                            string comRulon1ms2 = "DELETE FROM TEMPstan101ms";
+                            SqlCommand command = new SqlCommand(comRulon1ms2, conSQL1s3);
+                            command.ExecuteNonQuery();
+
+
+                        }
+                        #endregion
 
                     }
                     #endregion

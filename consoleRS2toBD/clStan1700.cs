@@ -167,6 +167,7 @@ namespace consoleRS2toBD
         bool blstanRulonProkatSaveInData101ms;
         DateTime stanTimeStart;
         private bool blRulonStart = false;
+        private string messageRulon;
         private bool blRulonStop = false;
         private string connectionString = "Data Source = 192.168.0.46; Initial Catalog = rs2stan1700; User ID = rs2admin; Password = 159951";
         private string numberTable;
@@ -176,7 +177,17 @@ namespace consoleRS2toBD
         private float Ves_Work;
         private DateTime stanTimeStop;
         private float Dlina_Work;
-
+        private string messageError100mc;
+        private string messageOK100mc;
+        private string messageError101mc;
+        private string messageOK101mc;
+        private string messageError200mc;
+        private string messageOK200mc;
+        private string messageError1c;
+        private string messageOK1c;
+        private string messageErrorRulon;
+        private string messageOKRulon;
+        private string messageErrorProizvodstvo;
 
         public void goStart()
         {
@@ -199,18 +210,98 @@ namespace consoleRS2toBD
             {
                 Thread.Sleep(5000); //??????????????????????????????????????????????????????????????????????????????????????
 
+                messageOKRulon = messageRulon;
 
-                Console.WriteLine(stanTimeStart.ToString("HH:mm:ss.fff") +" - " + blRulonStart);
-                if (blRulonStop)
+                Console.Clear();
+
+
+                if (messageError100mc != null)
                 {
-                    Console.WriteLine(stanTimeStart.ToString("HH:mm:ss.fff") + " - " + stanTimeStop.ToString("HH:mm:ss.fff"));
-                    Console.WriteLine(B_Work + "*" + H5_work + "="+Ves_Work);
-                    blRulonStop = false;
+                    LogSystem.Write("Стан1700 connection 100mc", Direction.ERROR, messageError100mc, 1, 1, true);
                 }
-                else
+                if (messageOK100mc!=null)
                 {
-                  //  Console.WriteLine(stanTimeStart.ToString("HH:mm:ss.fff") + "  " + blRulonStart + "  + " + stanD_pred_mot);
+                    LogSystem.Write("Стан1700 connection 100mc", Direction.Ok, messageOK100mc, 1, 1, true);
                 }
+
+
+                if (messageError101mc!=null)
+                {
+                    LogSystem.Write("Стан1700 connection 101mc", Direction.ERROR, messageError101mc, 1, 4, true);
+                }
+                if (messageOK101mc!=null)
+                {
+                    LogSystem.Write("Стан1700 connection 101mc", Direction.Ok, messageOK101mc, 1, 5, true);
+                }
+
+                if (messageError200mc!=null)
+                {
+                    LogSystem.Write("Стан1700 connection 200mc", Direction.ERROR, messageError200mc, 1, 7, true);
+                }
+                if (messageOK200mc!=null)
+                {
+                    LogSystem.Write("Стан1700 connection 200mc", Direction.Ok, messageOK200mc, 1, 8, true);
+                }
+
+                if (messageError1c != null)
+                {
+                    LogSystem.Write("Стан1700 connection 1c", Direction.ERROR, messageError1c, 1, 10, true);
+                }
+                if (messageOK1c != null)
+                {
+                    LogSystem.Write("Стан1700 connection 1c", Direction.Ok, messageOK1c, 1, 11, true);
+                }
+                
+                
+
+                if (messageErrorRulon != null)
+                {
+                    LogSystem.Write("Стан1700 переименование таблицы рулонов", Direction.ERROR, messageErrorRulon, 1, 13, true);
+                }
+                if (messageOKRulon != null)
+                {
+                    LogSystem.Write("Стан1700 переименование таблицы рулонов", Direction.Ok, messageOKRulon, 1, 14, true);
+                }
+                
+                
+
+                if (messageErrorProizvodstvo != null)
+                {
+                    LogSystem.Write("Стан1700 запись в таблицу рулонов", Direction.ERROR, messageErrorProizvodstvo, 1, 16, true);
+                }
+                if (messageErrorProizvodstvo != null)
+                {
+                    LogSystem.Write("Стан1700 запись в таблицу рулонов", Direction.Ok, messageErrorProizvodstvo, 1, 17, true);
+                }
+                
+                
+
+                if (messageError200mc != null)
+                {
+                    LogSystem.Write("Стан1700 запись в таблицу перевалок валков", Direction.ERROR, messageError200mc, 1, 19, true);
+                }
+                if (messageOK200mc != null)
+                {
+                    LogSystem.Write("Стан1700 запись в таблицу перевалок валков", Direction.Ok, messageOK200mc, 1, 20, true);
+                }
+                
+                
+
+
+                //if (blRulonStop)
+                //{
+                //    LogSystem.Write("Стан1700 Рулон", Direction.Ok, messageRulon, 1, 13, true);
+                //    blRulonStop = false;
+                    
+                //}
+                //else
+                //{
+                //    //  Console.WriteLine(stanTimeStart.ToString("HH:mm:ss.fff") + "  " + blRulonStart + "  + " + stanD_pred_mot);
+                //    //Console.WriteLine(numberTable);
+                //}
+
+                //string message1s = "Имя таблицы 1сек - " + numberTable;
+                //LogSystem.Write("Стан1700 1s", Direction.Ok, message1s, 1, 11, true);
             }
         }
 
@@ -252,7 +343,8 @@ namespace consoleRS2toBD
                         if (res != 0)
                         {
                             //Console.WriteLine("error" + rs2.Error(res));
-                            LogSystem.Write(stanNamePLC + " start", Direction.ERROR, "Error connection!. Error - " + rs2.Error(res), 0, 0, true);
+                            //LogSystem.Write(stanNamePLC + " start", Direction.ERROR, "Error connection!. Error - " + rs2.Error(res), 1, 1, true);
+                            messageError100mc= rs2.Error(res);
 
                         }
                         else
@@ -268,7 +360,8 @@ namespace consoleRS2toBD
 
                     if (resultReadField == 0)
                     {
-                        //LogSystem.Write(NamePLC + " start", Direction.Ok, "Соединение активно.", 0, 1, true);
+                        //LogSystem.Write(stanNamePLC + " start", Direction.Ok, "Соединение активно.", 1, 2, true);
+                        messageOK100mc = "Соединение активно";
 
                         //Буфер PLC
                         Thread PLS100ms = new Thread(BufferToBuffer);
@@ -288,7 +381,8 @@ namespace consoleRS2toBD
                     else
                     {
                         rs2.UnloadConnection(stanconnect);
-                        LogSystem.Write(stanNamePLC + " 100ms", Direction.ERROR, "Error.Read fied PLC. " + rs2.Error(resultReadField), 0, 0, true);
+                        //LogSystem.Write(stanNamePLC + " 100ms", Direction.ERROR, "Error.Read fied PLC. " + rs2.Error(resultReadField), 1, 1, true);
+                        messageError100mc = "Ошибка чтения тегов c контроллера:"+rs2.Error(resultReadField);
                     }
 
                 }
@@ -298,7 +392,8 @@ namespace consoleRS2toBD
             catch (Exception ex)
             {
                 /*все исключения кидаем в пустоту*/
-                LogSystem.Write(stanNamePLC + " start -" + ex.Source, Direction.ERROR, "Start Error-" + ex.Message, 0, 0, true);
+                LogSystem.Write(stanNamePLC + " start -" + ex.Source, Direction.ERROR, "Start Error-" + ex.Message, 1, 1, true);
+                messageError100mc = "Общая ошибка 100mc -" + ex.Message;
 
             }
         }
@@ -463,6 +558,7 @@ namespace consoleRS2toBD
                         conSQL101ms1.Open();
                         SqlCommand command = new SqlCommand(comRulon101ms1, conSQL101ms1);
                         command.ExecuteNonQuery();
+                        conSQL101ms1.Close();
 
                     }
                     #endregion
@@ -581,11 +677,19 @@ namespace consoleRS2toBD
                         {
                             using (SqlConnection conSQL101ms2 = new SqlConnection(connectionString))
                             {
-                                conSQL101ms2.Open();
-                                SqlCommand command = new SqlCommand(comRulon101ms2, conSQL101ms2);
-                                command.ExecuteNonQuery();
-
-                            }
+                                try
+                                {
+                                    conSQL101ms2.Open();
+                                    SqlCommand command = new SqlCommand(comRulon101ms2, conSQL101ms2);
+                                    command.ExecuteNonQuery();
+                                    messageOK101mc = "101мс во временную базу записана.";
+                                    conSQL101ms2.Close();
+                                }
+                                catch (Exception)
+                                {
+                                    messageError101mc = "101mc НЕ ЗАПИСАНЫ.";
+                                }
+                            }   
                         }
 
 
@@ -597,7 +701,8 @@ namespace consoleRS2toBD
             catch (Exception ex)
             {
 
-                LogSystem.Write(stanNamePLC + " SQL(101ms)-" + ex.Source, Direction.ERROR, "Start Error-" + ex.Message, 0, 3, true);
+                //LogSystem.Write(stanNamePLC + " SQL(101ms)-" + ex.Source, Direction.ERROR, "Start Error-" + ex.Message, 0, 3, true);
+                messageError101mc = "Ошибка 101мс-" + ex.Message;
             }
 
 
@@ -609,13 +714,51 @@ namespace consoleRS2toBD
         {
             byte[] stanbuf1s = new byte[95];
 
+            #region Формируем шифр таблицы numberTable = stan1syyyyMMddсмена
+
+            numberTable = "";
+
+            if (Convert.ToInt32(DateTime.Now.ToString("HH")) >= 7 && Convert.ToInt32(DateTime.Now.ToString("HH")) < 19)
+            {
+                numberTable = "Stan1s" + DateTime.Now.ToString("yyyyMMdd") + "2";
+            }
+            else if (Convert.ToInt32(DateTime.Now.ToString("HH")) < 7)
+            {
+                numberTable = "Stan1s" + DateTime.Now.ToString("yyyyMMdd") + "1";
+            }
+            else if (Convert.ToInt32(DateTime.Now.ToString("HH")) >= 19)
+            {
+                numberTable = "Stan1s" + DateTime.Now.AddDays(1).ToString("yyyyMMdd") + "1";
+            }
+
+            #endregion
+
             try
             {
                 while (true)
                 {
                     Thread.Sleep(1000);
 
-                   
+
+                    #region Формируем шифр таблицы numberTable = stan1syyyyMMddсмена
+
+                    numberTable = "";
+
+                    if (Convert.ToInt32(DateTime.Now.ToString("HH")) >= 7 && Convert.ToInt32(DateTime.Now.ToString("HH")) < 19)
+                    {
+                        numberTable = "Stan1s" + DateTime.Now.ToString("yyyyMMdd") + "2";
+                    }
+                    else if (Convert.ToInt32(DateTime.Now.ToString("HH")) < 7)
+                    {
+                        numberTable = "Stan1s" + DateTime.Now.ToString("yyyyMMdd") + "1";
+                    }
+                    else if (Convert.ToInt32(DateTime.Now.ToString("HH")) >= 19)
+                    {
+                        numberTable = "Stan1s" + DateTime.Now.AddDays(1).ToString("yyyyMMdd") + "1";
+                    }
+
+                    #endregion
+
 
                     stanbuf1s[0] = stanbuffer1s[224];           //191HL
                     stanbuf1s[1] = stanbuffer1s[225];           //192HL
@@ -716,22 +859,7 @@ namespace consoleRS2toBD
 
 
 
-                    #region Формируем шифр таблицы numberTable = stan1syyyyMMddсмена
-
-                    if (Convert.ToInt32(DateTime.Now.ToString("HH")) >= 7 && Convert.ToInt32(DateTime.Now.ToString("HH")) < 19)
-                    {
-                        numberTable = "Stan1s" + DateTime.Now.ToString("yyyyMMdd") + "2";
-                    }
-                    else if (Convert.ToInt32(DateTime.Now.ToString("HH")) < 7)
-                    {
-                        numberTable = "Stan1s" + DateTime.Now.ToString("yyyyMMdd") + "1";
-                    }
-                    else if (Convert.ToInt32(DateTime.Now.ToString("HH")) >= 19)
-                    {
-                        numberTable = "Stan1s" + DateTime.Now.AddDays(1).ToString("yyyyMMdd") + "1";
-                    }
-
-                    #endregion
+                  
 
                     #region Запись данных 1s
 
@@ -831,7 +959,7 @@ namespace consoleRS2toBD
                         conSQL1s1.Open();
                         SqlCommand command = new SqlCommand(comBD, conSQL1s1);
                         command.ExecuteNonQuery();
-
+                        conSQL1s1.Close();
                     }
 
 
@@ -933,9 +1061,20 @@ namespace consoleRS2toBD
 
                     using (SqlConnection conSQL1s2 = new SqlConnection(connectionString))
                     {
-                        conSQL1s2.Open();
-                        SqlCommand command = new SqlCommand(comRulon1s1, conSQL1s2);
-                        command.ExecuteNonQuery();
+                        try
+                        {
+                            conSQL1s2.Open();
+                            SqlCommand command = new SqlCommand(comRulon1s1, conSQL1s2);
+                            command.ExecuteNonQuery();
+                            conSQL1s2.Close();
+                            messageOK1c = "Данные в БД("+ numberTable + ") 1s записаны";
+                        }
+                        catch (Exception)
+                        {
+
+                            messageError1c = "1s НЕ ЗАПИСАНЫ";
+                        }
+                        
 
 
                     }
@@ -943,12 +1082,7 @@ namespace consoleRS2toBD
                     #endregion
 
                     #region Расчет параметров прокатанного рулона после окончания прокатки
-
-
-
                     
-
-
                     stanD_tek_mot = (float)(BitConverter.ToInt16(stanbuffer1s, 20));
                     #region  Время начало прокатки рулона
 
@@ -989,6 +1123,8 @@ namespace consoleRS2toBD
                         blRulonStop = true;
                         blRulonStart = false;
 
+                        messageRulon = stanTimeStart.ToString("HH:mm:ss.fff") + " - " + stanTimeStop.ToString("HH:mm:ss.fff") + "   " + B_Work + "*" + H5_work + "=" + Ves_Work;
+
                         #region //Очищаем базу временных рулонов
                         //using (SqlConnection conSQL1s3 = new SqlConnection(connectionString))
                         //{
@@ -1005,12 +1141,23 @@ namespace consoleRS2toBD
                         #region Мпереименовываем временную базу в базу с именем stan100mc(дата+время начала)(время окончания)
                         using (SqlConnection conSQL1s3 = new SqlConnection(connectionString))
                         {
-                            conSQL1s3.Open();
-                            string begin = stanTimeStart.ToString("ddMMyyyyHHmm");
-                            string end = stanTimeStop.ToString("HHmm");
-                            string comRulon1s2 = "sp_rename 'TEMPstan101ms','stan101mc"+begin+end+"'";
-                            SqlCommand command = new SqlCommand(comRulon1s2, conSQL1s3);
-                            command.ExecuteNonQuery();
+                            try
+                            {
+                                conSQL1s3.Open();
+                                string begin = stanTimeStart.ToString("ddMMyyyyHHmm");
+                                string end = stanTimeStop.ToString("HHmm");
+                                string comRulon1s2 = "sp_rename 'TEMPstan101ms','stan101mc" + begin + end + "'";
+                                SqlCommand command = new SqlCommand(comRulon1s2, conSQL1s3);
+                                command.ExecuteNonQuery();
+                                messageOKRulon = "Временная база -> " + "stan101mc" + begin + end;  
+                                conSQL1s3.Close();
+                            }
+                            catch (Exception)
+                            {
+
+                                messageOKRulon = "Временная база не переименована";
+                            }
+                            
 
 
                         }

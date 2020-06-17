@@ -188,6 +188,7 @@ namespace consoleRS2toBD
         private string messageErrorRulon;
         private string messageOKRulon;
         private string messageErrorProizvodstvo;
+        private string messageOKProizvodstvo;
 
         public void goStart()
         {
@@ -208,13 +209,15 @@ namespace consoleRS2toBD
 
             while (true)
             {
-                Thread.Sleep(5000); //??????????????????????????????????????????????????????????????????????????????????????
+                Thread.Sleep(5000); 
 
                 messageOKRulon = messageRulon;
 
                 Console.Clear();
 
+                #region Вывод на консоль
 
+                
                 if (messageError100mc != null)
                 {
                     LogSystem.Write("Стан1700 connection 100mc", Direction.ERROR, messageError100mc, 1, 1, true);
@@ -271,7 +274,7 @@ namespace consoleRS2toBD
                 }
                 if (messageErrorProizvodstvo != null)
                 {
-                    LogSystem.Write("Стан1700 запись в таблицу рулонов", Direction.Ok, messageErrorProizvodstvo, 1, 17, true);
+                    LogSystem.Write("Стан1700 запись в таблицу рулонов", Direction.Ok, messageOKProizvodstvo, 1, 17, true);
                 }
                 
                 
@@ -284,15 +287,15 @@ namespace consoleRS2toBD
                 {
                     LogSystem.Write("Стан1700 запись в таблицу перевалок валков", Direction.Ok, messageOK200mc, 1, 20, true);
                 }
-                
-                
+
+
 
 
                 //if (blRulonStop)
                 //{
                 //    LogSystem.Write("Стан1700 Рулон", Direction.Ok, messageRulon, 1, 13, true);
                 //    blRulonStop = false;
-                    
+
                 //}
                 //else
                 //{
@@ -302,6 +305,8 @@ namespace consoleRS2toBD
 
                 //string message1s = "Имя таблицы 1сек - " + numberTable;
                 //LogSystem.Write("Стан1700 1s", Direction.Ok, message1s, 1, 11, true);
+
+                #endregion
             }
         }
 
@@ -1125,6 +1130,95 @@ namespace consoleRS2toBD
 
                         messageRulon = stanTimeStart.ToString("HH:mm:ss.fff") + " - " + stanTimeStop.ToString("HH:mm:ss.fff") + "   " + B_Work + "*" + H5_work + "=" + Ves_Work;
 
+
+                        #region База производство
+
+                        #region Создание БД
+
+                        string comWorkStanCreate = "if not exists (select * from sysobjects where name ='work_stan' and xtype='U') create table work_stan" +
+                       "(" +
+                       "numberRulona string, " +
+                       "start datetime , " +
+                       "stop datetime , " +
+                       "h5 float , " +
+                       "b float , " +
+                       "ves float , " +
+                       "dlinna float , " +
+                       "t1 float , " +
+                       "t2 float , " +
+                       "t3 float , " +
+                       "t4 float , " +
+                       "t5 float , " +
+
+                       ")";
+
+                        using (SqlConnection conSQL1sWork1 = new SqlConnection(connectionString))
+                        {
+                            conSQL1sWork1.Open();
+                            SqlCommand command = new SqlCommand(comWorkStanCreate, conSQL1sWork1);
+                            command.ExecuteNonQuery();
+                            conSQL1sWork1.Close();
+                        }
+                        #endregion;
+
+                        #region Заполнение производство
+                        string comWorkStan = "INSERT INTO work_stan( " +
+                            "numberRulona," +
+                            "start," +
+                            "stop," +
+                            "h5," +
+                            "b," +
+                            "ves," +
+                            "dlinna" +
+                            ") " +
+                            "VALUES(" +
+                            "@NumberRulon, " +
+                            "@TimeStart, " +
+                            "@TimeStop, " +
+                            "@H5_work, " +
+                            "@B_Work, " +
+                            "@Ves_Work, " +
+                            "@Dlina_Work)";
+
+                        string beginWork = stanTimeStart.ToString("ddMMyyyyHHmm");
+                        string endWork = stanTimeStop.ToString("HHmm");
+                        string strNumberRulona = "stan101mc" + beginWork + endWork + "";
+
+                        //Добавляем в таблицу прокатанных рулонов данные по рулонам
+                        using (SqlConnection con3 = new SqlConnection(connectionString))
+                        {
+                            try
+                            {
+                                con3.Open();
+                                SqlCommand command = new SqlCommand(comWorkStan, con3);
+
+                                command.Parameters.AddWithValue("@NumberRulon", strNumberRulona);
+
+                                command.Parameters.AddWithValue("@TimeStart", stanTimeStart);
+                                command.Parameters.AddWithValue("@TimeStop", stanTimeStop);
+                                command.Parameters.AddWithValue("@H5_work", H5_work);
+                                command.Parameters.AddWithValue("@B_Work", B_Work);
+                                command.Parameters.AddWithValue("@Ves_Work", Ves_Work);
+                                command.Parameters.AddWithValue("@Dlina_Work", Dlina_Work);
+
+                                int WriteSQL = command.ExecuteNonQuery();
+
+                                messageOKProizvodstvo = strNumberRulona+"("+ stanTimeStart+"-"+ stanTimeStop+") "+ B_Work+"*"+ H5_work + "*"+ Dlina_Work;
+
+                            }
+                            catch (Exception)
+                            {
+                                messageErrorProizvodstvo = "Ошибка в сохранении данных о прокатанном рулоне";
+                               
+                            }
+                            
+                        }
+                        #endregion
+
+                        #endregion
+
+
+
                         #region //Очищаем базу временных рулонов
                         //using (SqlConnection conSQL1s3 = new SqlConnection(connectionString))
                         //{
@@ -1155,7 +1249,7 @@ namespace consoleRS2toBD
                             catch (Exception)
                             {
 
-                                messageOKRulon = "Временная база не переименована";
+                                messageErrorRulon = "Временная база не переименована";
                             }
                             
 

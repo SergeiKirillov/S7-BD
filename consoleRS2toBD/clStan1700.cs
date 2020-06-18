@@ -211,81 +211,82 @@ namespace consoleRS2toBD
             {
                 Thread.Sleep(5000); 
 
-                messageOKRulon = messageRulon;
+                //messageOKRulon = messageRulon;
 
                 Console.Clear();
 
                 #region Вывод на консоль
 
+                LogSystem.Write("Стан1700", Direction.Ok, "Информация о работе методов класса clStan1700 ( Цикл 5сек )", 1, 1, true); 
                 
                 if (messageError100mc != null)
                 {
-                    LogSystem.Write("Стан1700 connection 100mc", Direction.ERROR, messageError100mc, 1, 1, true);
+                    LogSystem.Write("Стан1700 ERROR цикла 100mc", Direction.ERROR, messageError100mc, 1, 5, true);
                 }
                 if (messageOK100mc!=null)
                 {
-                    LogSystem.Write("Стан1700 connection 100mc", Direction.Ok, messageOK100mc, 1, 1, true);
+                    LogSystem.Write("Стан1700 connection (цикл 100mc)", Direction.Ok, messageOK100mc, 1, 6, true);
                 }
 
 
                 if (messageError101mc!=null)
                 {
-                    LogSystem.Write("Стан1700 connection 101mc", Direction.ERROR, messageError101mc, 1, 4, true);
+                    LogSystem.Write("Стан1700 ERROR цикла 101mc", Direction.ERROR, messageError101mc, 1, 8, true);
                 }
                 if (messageOK101mc!=null)
                 {
-                    LogSystem.Write("Стан1700 connection 101mc", Direction.Ok, messageOK101mc, 1, 5, true);
+                    LogSystem.Write("Стан1700 Получение данных и запись во временную таблицу (цикл 101mc)", Direction.Ok, messageOK101mc, 1, 9, true);
                 }
 
                 if (messageError200mc!=null)
                 {
-                    LogSystem.Write("Стан1700 connection 200mc", Direction.ERROR, messageError200mc, 1, 7, true);
+                    LogSystem.Write("Стан1700 ERROR цикла 200mc", Direction.ERROR, messageError200mc, 1, 11, true);
                 }
                 if (messageOK200mc!=null)
                 {
-                    LogSystem.Write("Стан1700 connection 200mc", Direction.Ok, messageOK200mc, 1, 8, true);
+                    LogSystem.Write("Стан1700 Сообщения (цикл 200mc)", Direction.Ok, messageOK200mc, 1, 12, true);
                 }
 
                 if (messageError1c != null)
                 {
-                    LogSystem.Write("Стан1700 connection 1c", Direction.ERROR, messageError1c, 1, 10, true);
+                    LogSystem.Write("Стан1700 ERROR цикла 1c", Direction.ERROR, messageError1c, 1, 14, true);
                 }
                 if (messageOK1c != null)
                 {
-                    LogSystem.Write("Стан1700 connection 1c", Direction.Ok, messageOK1c, 1, 11, true);
+                    LogSystem.Write("Стан1700 Получение расходных данных (Цикл 1c)", Direction.Ok, messageOK1c, 1, 15, true);
                 }
                 
                 
 
                 if (messageErrorRulon != null)
                 {
-                    LogSystem.Write("Стан1700 переименование таблицы рулонов", Direction.ERROR, messageErrorRulon, 1, 13, true);
+                    LogSystem.Write("Стан1700 ERROR при переименовании таблицы рулонов", Direction.ERROR, messageErrorRulon, 1, 17, true);
                 }
                 if (messageOKRulon != null)
                 {
-                    LogSystem.Write("Стан1700 переименование таблицы рулонов", Direction.Ok, messageOKRulon, 1, 14, true);
+                    LogSystem.Write("Стан1700 переименование таблицы рулонов", Direction.Ok, messageOKRulon, 1, 18, true);
                 }
                 
                 
 
                 if (messageErrorProizvodstvo != null)
                 {
-                    LogSystem.Write("Стан1700 запись в таблицу рулонов", Direction.ERROR, messageErrorProizvodstvo, 1, 16, true);
+                    LogSystem.Write("Стан1700 ERROR записи в таблицу Производства", Direction.ERROR, messageErrorProizvodstvo, 1, 20, true);
                 }
-                if (messageErrorProizvodstvo != null)
+                if (messageOKProizvodstvo != null)
                 {
-                    LogSystem.Write("Стан1700 запись в таблицу рулонов", Direction.Ok, messageOKProizvodstvo, 1, 17, true);
+                    LogSystem.Write("Стан1700 запись в таблицу производства", Direction.Ok, messageOKProizvodstvo, 1, 21, true);
                 }
                 
                 
 
                 if (messageError200mc != null)
                 {
-                    LogSystem.Write("Стан1700 запись в таблицу перевалок валков", Direction.ERROR, messageError200mc, 1, 19, true);
+                    LogSystem.Write("Стан1700 ERROR записи в таблицу перевалок валков", Direction.ERROR, messageError200mc, 1, 23, true);
                 }
                 if (messageOK200mc != null)
                 {
-                    LogSystem.Write("Стан1700 запись в таблицу перевалок валков", Direction.Ok, messageOK200mc, 1, 20, true);
+                    LogSystem.Write("Стан1700 запись в таблицу перевалок валков", Direction.Ok, messageOK200mc, 1, 24, true);
                 }
 
 
@@ -1128,7 +1129,7 @@ namespace consoleRS2toBD
                         blRulonStop = true;
                         blRulonStart = false;
 
-                        messageRulon = stanTimeStart.ToString("HH:mm:ss.fff") + " - " + stanTimeStop.ToString("HH:mm:ss.fff") + "   " + B_Work + "*" + H5_work + "=" + Ves_Work;
+                        //messageRulon = stanTimeStart.ToString("HH:mm:ss.fff") + " - " + stanTimeStop.ToString("HH:mm:ss.fff") + "   " + B_Work + "*" + H5_work + "=" + Ves_Work;
 
 
                         #region База производство
@@ -1137,7 +1138,7 @@ namespace consoleRS2toBD
 
                         string comWorkStanCreate = "if not exists (select * from sysobjects where name ='work_stan' and xtype='U') create table work_stan" +
                        "(" +
-                       "numberRulona string, " +
+                       "numberRulona bigint, " +
                        "start datetime , " +
                        "stop datetime , " +
                        "h5 float , " +
@@ -1148,7 +1149,7 @@ namespace consoleRS2toBD
                        "t2 float , " +
                        "t3 float , " +
                        "t4 float , " +
-                       "t5 float , " +
+                       "t5 float  " +
 
                        ")";
 
@@ -1182,7 +1183,7 @@ namespace consoleRS2toBD
 
                         string beginWork = stanTimeStart.ToString("ddMMyyyyHHmm");
                         string endWork = stanTimeStop.ToString("HHmm");
-                        string strNumberRulona = "stan101mc" + beginWork + endWork + "";
+                        string strNumberRulona = beginWork + endWork;
 
                         //Добавляем в таблицу прокатанных рулонов данные по рулонам
                         using (SqlConnection con3 = new SqlConnection(connectionString))
@@ -1204,7 +1205,7 @@ namespace consoleRS2toBD
                                 int WriteSQL = command.ExecuteNonQuery();
 
                                 messageOKProizvodstvo = strNumberRulona+"("+ stanTimeStart+"-"+ stanTimeStop+") "+ B_Work+"*"+ H5_work + "*"+ Dlina_Work;
-
+                                //messageOKProizvodstvo = "производство";
                             }
                             catch (Exception)
                             {
@@ -1240,10 +1241,10 @@ namespace consoleRS2toBD
                                 conSQL1s3.Open();
                                 string begin = stanTimeStart.ToString("ddMMyyyyHHmm");
                                 string end = stanTimeStop.ToString("HHmm");
-                                string comRulon1s2 = "sp_rename 'TEMPstan101ms','stan101mc" + begin + end + "'";
+                                string comRulon1s2 = "sp_rename 'TEMPstan101ms','" + begin + end + "'";
                                 SqlCommand command = new SqlCommand(comRulon1s2, conSQL1s3);
                                 command.ExecuteNonQuery();
-                                messageOKRulon = "Временная база -> " + "stan101mc" + begin + end;  
+                                messageOKRulon = "Временная база -> " + begin + end;  
                                 conSQL1s3.Close();
                             }
                             catch (Exception)

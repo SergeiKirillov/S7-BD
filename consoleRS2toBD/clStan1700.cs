@@ -189,6 +189,31 @@ namespace consoleRS2toBD
         private string messageOKRulon;
         private string messageErrorProizvodstvo;
         private string messageOKProizvodstvo;
+        private string messageErrorValki;
+        private string messageOKValki;
+
+        private DateTime dtError100mc;
+        private DateTime dtOK100mc;
+        private DateTime dtError101mc;
+        private DateTime dtOK101mc;
+        private DateTime dtError200mc;
+        private DateTime dtOK200mc;
+        private DateTime dtError1c;
+        private DateTime dtOK1c;
+        private DateTime dtErrorRulon;
+        private DateTime dtOKRulon;
+        private DateTime dtErrorProizvodstvo;
+        private DateTime dtOKProizvodstvo;
+        private DateTime dtErrorValki;
+        private DateTime dtOKValki;
+
+        private int d1_pred;
+        private int d2_pred;
+        private int d3_pred;
+        private int d4_pred;
+        private int d5_pred;
+        DataTable dtPerevalkiStan;
+        
 
         public void goStart()
         {
@@ -221,72 +246,72 @@ namespace consoleRS2toBD
                 
                 if (messageError100mc != null)
                 {
-                    LogSystem.Write("Стан1700 ERROR цикла 100mc", Direction.ERROR, messageError100mc, 1, 5, true);
+                    LogSystem.Write("Стан1700 ERROR цикла 100mc", Direction.ERROR, dtError100mc, messageError100mc, 1, 5, true);
                 }
                 if (messageOK100mc!=null)
                 {
-                    LogSystem.Write("Стан1700 connection (цикл 100mc)", Direction.Ok, messageOK100mc, 1, 6, true);
+                    LogSystem.Write("Стан1700 connection (цикл 100mc)", Direction.Ok, dtOK100mc, messageOK100mc, 1, 6, true);
                 }
 
 
                 if (messageError101mc!=null)
                 {
-                    LogSystem.Write("Стан1700 ERROR цикла 101mc", Direction.ERROR, messageError101mc, 1, 8, true);
+                    LogSystem.Write("Стан1700 ERROR цикла 101mc", Direction.ERROR, dtError101mc, messageError101mc, 1, 8, true);
                 }
                 if (messageOK101mc!=null)
                 {
-                    LogSystem.Write("Стан1700 Получение данных и запись во временную таблицу (цикл 101mc)", Direction.Ok, messageOK101mc, 1, 9, true);
+                    LogSystem.Write("Стан1700 Получение данных и запись во временную таблицу (цикл 101mc)", Direction.Ok, dtOK101mc, messageOK101mc, 1, 9, true);
                 }
 
                 if (messageError200mc!=null)
                 {
-                    LogSystem.Write("Стан1700 ERROR цикла 200mc", Direction.ERROR, messageError200mc, 1, 11, true);
+                    LogSystem.Write("Стан1700 ERROR цикла 200mc", Direction.ERROR, dtError200mc, messageError200mc, 1, 11, true);
                 }
                 if (messageOK200mc!=null)
                 {
-                    LogSystem.Write("Стан1700 Сообщения (цикл 200mc)", Direction.Ok, messageOK200mc, 1, 12, true);
+                    LogSystem.Write("Стан1700 Сообщения (цикл 200mc)", Direction.Ok, dtOK200mc, messageOK200mc, 1, 12, true);
                 }
 
                 if (messageError1c != null)
                 {
-                    LogSystem.Write("Стан1700 ERROR цикла 1c", Direction.ERROR, messageError1c, 1, 14, true);
+                    LogSystem.Write("Стан1700 ERROR цикла 1c", Direction.ERROR, dtError1c, messageError1c, 1, 14, true);
                 }
                 if (messageOK1c != null)
                 {
-                    LogSystem.Write("Стан1700 Получение расходных данных (Цикл 1c)", Direction.Ok, messageOK1c, 1, 15, true);
+                    LogSystem.Write("Стан1700 Получение данных с энергосистемы (Цикл 1c)", Direction.Ok, dtOK1c, messageOK1c, 1, 15, true);
                 }
                 
                 
 
                 if (messageErrorRulon != null)
                 {
-                    LogSystem.Write("Стан1700 ERROR при переименовании таблицы рулонов", Direction.ERROR, messageErrorRulon, 1, 17, true);
+                    LogSystem.Write("Стан1700 ERROR при переименовании таблицы рулонов", Direction.ERROR, dtErrorRulon, messageErrorRulon, 1, 17, true);
                 }
                 if (messageOKRulon != null)
                 {
-                    LogSystem.Write("Стан1700 переименование таблицы рулонов", Direction.Ok, messageOKRulon, 1, 18, true);
+                    LogSystem.Write("Стан1700 переименование таблицы рулонов", Direction.Ok, dtOKRulon, messageOKRulon, 1, 18, true);
                 }
                 
                 
 
                 if (messageErrorProizvodstvo != null)
                 {
-                    LogSystem.Write("Стан1700 ERROR записи в таблицу Производства", Direction.ERROR, messageErrorProizvodstvo, 1, 20, true);
+                    LogSystem.Write("Стан1700 ERROR записи в таблицу Производства", Direction.ERROR, dtErrorProizvodstvo, messageErrorProizvodstvo, 1, 20, true);
                 }
                 if (messageOKProizvodstvo != null)
                 {
-                    LogSystem.Write("Стан1700 запись в таблицу производства", Direction.Ok, messageOKProizvodstvo, 1, 21, true);
+                    LogSystem.Write("Стан1700 запись в таблицу производства", Direction.Ok, dtOKProizvodstvo, messageOKProizvodstvo, 1, 21, true);
                 }
                 
                 
 
-                if (messageError200mc != null)
+                if (messageErrorValki != null)
                 {
-                    LogSystem.Write("Стан1700 ERROR записи в таблицу перевалок валков", Direction.ERROR, messageError200mc, 1, 23, true);
+                    LogSystem.Write("Стан1700 ERROR записи в таблицу перевалок валков", Direction.ERROR, dtErrorValki, messageErrorValki, 1, 23, true);
                 }
-                if (messageOK200mc != null)
+                if (messageOKValki != null)
                 {
-                    LogSystem.Write("Стан1700 запись в таблицу перевалок валков", Direction.Ok, messageOK200mc, 1, 24, true);
+                    LogSystem.Write("Стан1700 запись в таблицу перевалок валков", Direction.Ok, dtOKValki, messageOKValki, 1, 24, true);
                 }
 
 
@@ -350,7 +375,9 @@ namespace consoleRS2toBD
                         {
                             //Console.WriteLine("error" + rs2.Error(res));
                             //LogSystem.Write(stanNamePLC + " start", Direction.ERROR, "Error connection!. Error - " + rs2.Error(res), 1, 1, true);
-                            messageError100mc= rs2.Error(res);
+                          
+                            messageError100mc = rs2.Error(res);
+                            dtError100mc = DateTime.Now;
 
                         }
                         else
@@ -368,6 +395,7 @@ namespace consoleRS2toBD
                     {
                         //LogSystem.Write(stanNamePLC + " start", Direction.Ok, "Соединение активно.", 1, 2, true);
                         messageOK100mc = "Соединение активно";
+                        dtOK100mc = DateTime.Now;
 
                         //Буфер PLC
                         Thread PLS100ms = new Thread(BufferToBuffer);
@@ -389,6 +417,7 @@ namespace consoleRS2toBD
                         rs2.UnloadConnection(stanconnect);
                         //LogSystem.Write(stanNamePLC + " 100ms", Direction.ERROR, "Error.Read fied PLC. " + rs2.Error(resultReadField), 1, 1, true);
                         messageError100mc = "Ошибка чтения тегов c контроллера:"+rs2.Error(resultReadField);
+                        dtError100mc = DateTime.Now;
                     }
 
                 }
@@ -400,6 +429,7 @@ namespace consoleRS2toBD
                 /*все исключения кидаем в пустоту*/
                 LogSystem.Write(stanNamePLC + " start -" + ex.Source, Direction.ERROR, "Start Error-" + ex.Message, 1, 1, true);
                 messageError100mc = "Общая ошибка 100mc -" + ex.Message;
+                dtError100mc = DateTime.Now;
 
             }
         }
@@ -689,11 +719,13 @@ namespace consoleRS2toBD
                                     SqlCommand command = new SqlCommand(comRulon101ms2, conSQL101ms2);
                                     command.ExecuteNonQuery();
                                     messageOK101mc = "101мс во временную базу записана.";
+                                    dtOK101mc = DateTime.Now;
                                     conSQL101ms2.Close();
                                 }
                                 catch (Exception)
                                 {
                                     messageError101mc = "101mc НЕ ЗАПИСАНЫ.";
+                                    dtError101mc = DateTime.Now;
                                 }
                             }   
                         }
@@ -709,6 +741,7 @@ namespace consoleRS2toBD
 
                 //LogSystem.Write(stanNamePLC + " SQL(101ms)-" + ex.Source, Direction.ERROR, "Start Error-" + ex.Message, 0, 3, true);
                 messageError101mc = "Ошибка 101мс-" + ex.Message;
+                dtError101mc = DateTime.Now;
             }
 
 
@@ -1074,11 +1107,13 @@ namespace consoleRS2toBD
                             command.ExecuteNonQuery();
                             conSQL1s2.Close();
                             messageOK1c = "Данные в БД("+ numberTable + ") 1s записаны";
+                            dtOK1c = DateTime.Now;
                         }
                         catch (Exception)
                         {
 
                             messageError1c = "1s НЕ ЗАПИСАНЫ";
+                            dtError1c = DateTime.Now;
                         }
                         
 
@@ -1206,11 +1241,13 @@ namespace consoleRS2toBD
 
                                 messageOKProizvodstvo = strNumberRulona+"("+ stanTimeStart+"-"+ stanTimeStop+") "+ B_Work+"*"+ H5_work + "*"+ Dlina_Work;
                                 //messageOKProizvodstvo = "производство";
+                                dtOKProizvodstvo = DateTime.Now;
                             }
                             catch (Exception)
                             {
                                 messageErrorProizvodstvo = "Ошибка в сохранении данных о прокатанном рулоне";
-                               
+                                dtErrorProizvodstvo = DateTime.Now;
+
                             }
                             
                         }
@@ -1244,13 +1281,15 @@ namespace consoleRS2toBD
                                 string comRulon1s2 = "sp_rename 'TEMPstan101ms','" + begin + end + "'";
                                 SqlCommand command = new SqlCommand(comRulon1s2, conSQL1s3);
                                 command.ExecuteNonQuery();
-                                messageOKRulon = "Временная база -> " + begin + end;  
+                                messageOKRulon = "Временная база -> " + begin + end; 
+                                dtOKRulon = DateTime.Now;
                                 conSQL1s3.Close();
                             }
                             catch (Exception)
                             {
 
                                 messageErrorRulon = "Временная база не переименована";
+                                dtErrorRulon = DateTime.Now;
                             }
                             
 
@@ -1265,22 +1304,140 @@ namespace consoleRS2toBD
                     #endregion
 
                     stanD_pred_mot = stanD_tek_mot;
-                   
+
+                    #region Перевалки 
                     
+                    int buf85 = (int)BitConverter.ToInt16(stanbuffer1s, 24);
+                    int buf87 = (int)BitConverter.ToInt16(stanbuffer1s, 26);
+                    int buf89 = (int)BitConverter.ToInt16(stanbuffer1s, 28);
+                    int buf91 = (int)BitConverter.ToInt16(stanbuffer1s, 30);
+                    int buf93 = (int)BitConverter.ToInt16(stanbuffer1s, 32);
+
+                    if (d1_pred == 0) d1_pred = buf85;
+                    if (d2_pred == 0) d2_pred = buf87;
+                    if (d3_pred == 0) d3_pred = buf89;
+                    if (d4_pred == 0) d4_pred = buf91;
+                    if (d5_pred == 0) d5_pred = buf93;
+                    bool blSave = false;
+
+
+                    if (d1_pred != (int)BitConverter.ToInt16(stanbuffer1s, 24))
+                    {
+                        blSave = true;
+                        dtPerevalkiStan.Rows.Add(DateTime.Now, buf85, 0, 0, 0, 0);
+                    }
+                    if (d2_pred != BitConverter.ToInt16(stanbuffer1s, 26))
+                    {
+                        blSave = true;
+                        dtPerevalkiStan.Rows.Add(DateTime.Now, 0, buf87, 0, 0, 0);
+                    }
+                    if (d3_pred != BitConverter.ToInt16(stanbuffer1s, 28))
+                    {
+                        blSave = true;
+                        dtPerevalkiStan.Rows.Add(DateTime.Now, 0, 0, buf89, 0, 0);
+                    }
+                    if (d4_pred != BitConverter.ToInt16(stanbuffer1s, 30))
+                    {
+                        blSave = true;
+                        dtPerevalkiStan.Rows.Add(DateTime.Now, 0, 0, 0, buf91, 0);
+                    }
+                    if (d5_pred != BitConverter.ToInt16(stanbuffer1s, 32))
+                    {
+                        blSave = true;
+                        dtPerevalkiStan.Rows.Add(DateTime.Now, 0, 0, 0, 0, buf93);
+                    }
+
+                    d1_pred = buf85;
+                    d2_pred = buf87;
+                    d3_pred = buf89;
+                    d4_pred = buf91;
+                    d5_pred = buf93;
+
+
+
+                    #region Перевалки сохраняем в БД
+                    if (blSave)
+                    {
+                        string strTableNamePerevalki = "StanPerevalki" + DateTime.Now.ToString("yyyyMM");
+                        string comBDPerevalki = "if not exists (select * from sysobjects where name='" + strTableNamePerevalki + "' and xtype='U') create table " + strTableNamePerevalki +
+                                "(" +
+                                "dtPerevalki datetime NOT NULL, " +
+                                "kl1 int NOT NULL, " +
+                                "kl2 int NOT NULL, " +
+                                "kl3 int NOT NULL, " +
+                                "kl4 int NOT NULL, " +
+                                "kl5 int NOT NULL )";
+
+                        //создаем таблицу значений Перевалок
+                        using (SqlConnection conPerevalki1 = new SqlConnection(connectionString))
+                        {
+                            try
+                            {
+                                conPerevalki1.Open();
+                                SqlCommand command = new SqlCommand(comBDPerevalki, conPerevalki1);
+                                command.ExecuteNonQuery();
+                                conPerevalki1.Close();
+                                //messageErrorValki = "OK формировании таблицы валков";
+
+                            }
+                            catch (Exception)
+                            {
+                                messageErrorValki = "Ошибка формировании таблицы валков";
+                                dtErrorValki = DateTime.Now;
+
+                            }
+                            
+                            
+                        }
+                        //записываем в таблицу прокатанного рулона данные по прокатке этого рулона
+                        using (SqlConnection conPerevalki2 = new SqlConnection(connectionString))
+                        {
+                            try
+                            {
+                                conPerevalki2.Open();
+                                using (var bulk = new SqlBulkCopy(conPerevalki2))
+                                {
+                                    bulk.DestinationTableName = strTableNamePerevalki;
+                                    bulk.WriteToServer(dtPerevalkiStan);
+                                    messageOKValki = "Данные перевалки в таблицу " + strTableNamePerevalki +
+                                        " записаны, кол-во строк " + dtPerevalkiStan.Rows.Count + ". Время записи - " + DateTime.Now;
+                                    dtOKValki = DateTime.Now;
+
+
+                                    dtPerevalkiStan.Clear(); //очистка таблицы 
+                                }
+                                conPerevalki2.Close();
+
+                                 
+
+                            }
+                            catch (Exception)
+                            {
+                                messageErrorValki = "Ошибка записи в таблицу валков";
+                                dtErrorValki = DateTime.Now;
+
+                            }
+                        }
+
+                    }
+
+                    #endregion
+
+                    //Console.WriteLine(d1_pred + "-" + d2_pred + "-" + d3_pred + "-" + d4_pred + "-" + d5_pred);
+
+                    #endregion
+
+
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                messageError1c = "Ошибка глобальная - " + ex;
+                dtError1c = DateTime.Now;
 
-                
             }
             
-            
-
-
-
-
-
+           
         }
 
         #endregion

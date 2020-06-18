@@ -96,8 +96,40 @@ namespace LoggerInSystem
 
         }
 
+        public static void Write(string _className, Direction _clasMessage, DateTime dtNow, string _MessageText, int _CurX, int _CurY, bool dtVizible)
+        {
+            classEvents value;
+            if (dicEvent.TryGetValue(_clasMessage, out value))
+            {
+                //Проходимся по словарю и если класс ошибки совпадает с классом словаря со словаря вытаскиваем значения необходимые
+                // для распределения вывода
+                //
+                //к примеру 
+                //LogSystem.Write("StanStart", Direction.ERROR, "Error connection!. Error - " + stan.Error(res));
+                //Direction.Error соответствует в словаре 
+                //  eventToConsole:true
+                //  eventToFile:true
+                //  eventToSystem:true
+                //  eventToDebug:true 
+                //  ELET:EventLogEntryType.Error),
+                //соответственно вывод будет сделан на 
+                //  консоль -   WriteConsoleLog(_clasMessage, _MessageText);
+                //  в файл  -   WriteFileLog(_MessageText);
+                //  в журнал сообщений виндоус - WriteEventLogApplication(_className, _MessageText, value.elet);
+                //  в диагностическое окно VS - WriteOutputVSLog(_MessageText);
+
+
+                if (value.EventToConsole) WriteConsoleLog(_clasMessage, dtNow.ToString("HH:mm:ss.fff")+" - "+_className + ": " + _MessageText, _CurX, _CurY, dtVizible);
+                if (value.EventToFile) WriteFileLog(_MessageText);
+                if (value.EventToSystem) WriteEventLogApplication(_className, _MessageText, value.elet);
+                if (value.EventToDebug) WriteOutputVSLog(_MessageText);
+            }
+
+
+
+        }
         #endregion
-                
+
         #region вывод на консоль
         private static void WriteConsoleLog(Direction clMes, string message, int curx, int cury, bool DateTimeNowVizible)
         {
@@ -138,7 +170,7 @@ namespace LoggerInSystem
             }
 
             Console.SetCursorPosition(curx, cury);
-            Console.Write(DateTime.Now.ToString("HH:mm:ss.fff" ) +" - "+message);
+            Console.Write(message);
             Console.ResetColor();
             
         }

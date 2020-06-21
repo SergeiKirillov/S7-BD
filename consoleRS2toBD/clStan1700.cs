@@ -1127,22 +1127,25 @@ namespace consoleRS2toBD
                     stanD_tek_mot = (float)(BitConverter.ToInt16(stanbuffer1s, 20));
                     #region  Время начало прокатки рулона
 
-                    if (stanD_pred_mot != 0)
+                    if (stanD_pred_mot == 0)
                     {
-                        if (stanD_tek_mot > stanD_pred_mot)
-                        {
+                        stanD_tek_mot = 614;
+                    }
+
+                    if (stanD_tek_mot > stanD_pred_mot)
+                    {
                             if (stanD_pred_mot < 615)
                             {
                                 stanTimeStart = DateTime.Now;
                                 blRulonStart = true;
                             }
 
-                        }
-                        else
-                        {
-                            //blRulonStart = false;
-                        }
                     }
+                    else
+                    {
+                          //blRulonStart = false;
+                    }
+                   
                    
                     #endregion
 
@@ -1307,51 +1310,88 @@ namespace consoleRS2toBD
 
                     #region Перевалки 
                     
-                    int buf85 = (int)BitConverter.ToInt16(stanbuffer1s, 24);
-                    int buf87 = (int)BitConverter.ToInt16(stanbuffer1s, 26);
-                    int buf89 = (int)BitConverter.ToInt16(stanbuffer1s, 28);
-                    int buf91 = (int)BitConverter.ToInt16(stanbuffer1s, 30);
-                    int buf93 = (int)BitConverter.ToInt16(stanbuffer1s, 32);
+                    int d1 = (int)BitConverter.ToInt16(stanbuffer1s, 24);
+                    int d2 = (int)BitConverter.ToInt16(stanbuffer1s, 26);
+                    int d3 = (int)BitConverter.ToInt16(stanbuffer1s, 28);
+                    int d4 = (int)BitConverter.ToInt16(stanbuffer1s, 30);
+                    int d5 = (int)BitConverter.ToInt16(stanbuffer1s, 32);
 
-                    if (d1_pred == 0) d1_pred = buf85;
-                    if (d2_pred == 0) d2_pred = buf87;
-                    if (d3_pred == 0) d3_pred = buf89;
-                    if (d4_pred == 0) d4_pred = buf91;
-                    if (d5_pred == 0) d5_pred = buf93;
+                    if (d1_pred == 0) d1_pred = d1;
+                    if (d2_pred == 0) d2_pred = d2;
+                    if (d3_pred == 0) d3_pred = d3;
+                    if (d4_pred == 0) d4_pred = d4;
+                    if (d5_pred == 0) d5_pred = d5;
                     bool blSave = false;
 
+                    try
+                    {
 
-                    if (d1_pred != (int)BitConverter.ToInt16(stanbuffer1s, 24))
-                    {
-                        blSave = true;
-                        dtPerevalkiStan.Rows.Add(DateTime.Now, buf85, 0, 0, 0, 0);
+                        if (d1_pred != d1)
+                        {
+                            blSave = true;
+                            dtPerevalkiStan.Rows.Add(DateTime.Now, d1, 0, 0, 0, 0);
+                        }
+                        if (d2_pred != d2)
+                        {
+                            blSave = true;
+                            dtPerevalkiStan.Rows.Add(DateTime.Now, 0, d2, 0, 0, 0);
+                        }
+                        if (d3_pred != d3)
+                        {
+                            blSave = true;
+                            dtPerevalkiStan.Rows.Add(DateTime.Now, 0, 0, d3, 0, 0);
+                        }
+                        if (d4_pred != d4)
+                        {
+                            blSave = true;
+                            dtPerevalkiStan.Rows.Add(DateTime.Now, 0, 0, 0, d4, 0);
+                        }
+                        if (d5_pred != d5)
+                        {
+                            blSave = true;
+                            dtPerevalkiStan.Rows.Add(DateTime.Now, 0, 0, 0, 0, d5);
+                        }
+
+                        //if (d1_pred != (int)BitConverter.ToInt16(stanbuffer1s, 24))
+                        //{
+                        //    blSave = true;
+                        //    dtPerevalkiStan.Rows.Add(DateTime.Now, buf85, 0, 0, 0, 0);
+                        //}
+                        //if (d2_pred != BitConverter.ToInt16(stanbuffer1s, 26))
+                        //{
+                        //    blSave = true;
+                        //    dtPerevalkiStan.Rows.Add(DateTime.Now, 0, buf87, 0, 0, 0);
+                        //}
+                        //if (d3_pred != BitConverter.ToInt16(stanbuffer1s, 28))
+                        //{
+                        //    blSave = true;
+                        //    dtPerevalkiStan.Rows.Add(DateTime.Now, 0, 0, buf89, 0, 0);
+                        //}
+                        //if (d4_pred != BitConverter.ToInt16(stanbuffer1s, 30))
+                        //{
+                        //    blSave = true;
+                        //    dtPerevalkiStan.Rows.Add(DateTime.Now, 0, 0, 0, buf91, 0);
+                        //}
+                        //if (d5_pred != BitConverter.ToInt16(stanbuffer1s, 32))
+                        //{
+                        //    blSave = true;
+                        //    dtPerevalkiStan.Rows.Add(DateTime.Now, 0, 0, 0, 0, buf93);
+                        //}
                     }
-                    if (d2_pred != BitConverter.ToInt16(stanbuffer1s, 26))
+                    catch (Exception ex)
                     {
-                        blSave = true;
-                        dtPerevalkiStan.Rows.Add(DateTime.Now, 0, buf87, 0, 0, 0);
-                    }
-                    if (d3_pred != BitConverter.ToInt16(stanbuffer1s, 28))
-                    {
-                        blSave = true;
-                        dtPerevalkiStan.Rows.Add(DateTime.Now, 0, 0, buf89, 0, 0);
-                    }
-                    if (d4_pred != BitConverter.ToInt16(stanbuffer1s, 30))
-                    {
-                        blSave = true;
-                        dtPerevalkiStan.Rows.Add(DateTime.Now, 0, 0, 0, buf91, 0);
-                    }
-                    if (d5_pred != BitConverter.ToInt16(stanbuffer1s, 32))
-                    {
-                        blSave = true;
-                        dtPerevalkiStan.Rows.Add(DateTime.Now, 0, 0, 0, 0, buf93);
+                        //ошибка
+                        messageErrorValki = "Ошибка формировании таблицы валков - "+ ex.Message;
+                        dtErrorValki = DateTime.Now; ;
                     }
 
-                    d1_pred = buf85;
-                    d2_pred = buf87;
-                    d3_pred = buf89;
-                    d4_pred = buf91;
-                    d5_pred = buf93;
+                    
+
+                    d1_pred = d1;
+                    d2_pred = d2;
+                    d3_pred = d3;
+                    d4_pred = d4;
+                    d5_pred = d5;
 
 
 

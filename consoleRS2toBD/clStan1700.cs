@@ -12,6 +12,24 @@ using LoggerInSystem;
 
 namespace consoleRS2toBD
 {
+    public class MessageClass
+    {
+        public int statusMenshe { get; set; }
+        public int statusBolshe { get; set; }
+        public string PlusMess { get; set; }
+        public string MinusMess { get; set; }
+
+        public MessageClass(int StatusMenshe, string MensheNul, int StatusBolshe, string BolsheNul)
+        {
+            this.statusMenshe = StatusMenshe;
+            this.MinusMess = MensheNul;
+            this.statusBolshe = StatusBolshe;
+            this.PlusMess = BolsheNul;
+
+        }
+
+    }
+
     class clStan1700
     {
         Dictionary<string, ContData> stanData100ms = new Dictionary<string, ContData>
@@ -135,6 +153,141 @@ namespace consoleRS2toBD
             {"mezdoza4", new ContData(220,1,false)},
         };
 
+        Dictionary<int, MessageClass> MessageStan = new Dictionary<int, MessageClass>()
+        {
+            
+            [0] = new MessageClass(1, "Режим ТАК ДЕРЖАТЬ", 0, ""),
+            [1] = new MessageClass(2, "Режим РАЗГОНА", 0, ""),
+            [2] = new MessageClass(3, "Режим НОРМАЛЬНОГО ОСТАНОВА", 0, ""),
+            [3] = new MessageClass(4, "Режим ФОРСИРОВАННОГО ОСТАНОВА", 0, ""),
+            [4] = new MessageClass(5, "Режим ВЫПУСКА", 0, ""),
+            [5] = new MessageClass(6, "Натяжение в 1 промежутке", 7, "Отсутствие натяжения в 1"),
+            [6] = new MessageClass(6, "Натяжение в 2 промежутке", 7, "Отсутствие натяжения в 3"),
+            [7] = new MessageClass(6, "Натяжение в 2 промежутке", 7, "Отсутствие натяжения в 3"),
+            [8] = new MessageClass(2, "Кнопка ЗАПРАВКА", 0, ""),
+            [9] = new MessageClass(1, "Ключ ТАК ДЕРЖАТЬ", 0, ""),
+            [10] = new MessageClass(2, "Ключ РАЗГОН", 0, ""),
+            [11] = new MessageClass(3, "Кнопка НОРМАЛЬНЫЙ ОСТАНОВ", 0, ""),
+            [12] = new MessageClass(4, "Кнопка ФОРСИРОВАННЫЙ ОСТАНОВ", 0, ""),
+            [13] = new MessageClass(6, "Максимальный перегруз", 7, "Отсутствие максимального перегруз"),
+            [14] = new MessageClass(1, "Уставка рабочей скорости", 0, ""),
+            [15] = new MessageClass(2, "Перегруз по скорости", 0, ""),
+            [16] = new MessageClass(2, "ЛК моталки включены", 6, "ЛК моталки выключены"),
+            [17] = new MessageClass(2, "ЛК разматывателя включены", 6, "ЛК разматывателя выключены"),
+            [18] = new MessageClass(1, "Гидравлика 64 кг готова", 4, "Гидравлика 64 кг не готова"),
+            [19] = new MessageClass(7, "РНЗ 12 выключено", 6, "РНЗ 12 включено"),
+            [20] = new MessageClass(6, "РНЗ 23 включено", 7, "РНЗ 23 выключено"),
+            [21] = new MessageClass(6, "РНЗ 34 включено", 7, "РНЗ 34 выключено"),
+            [22] = new MessageClass(6, "ГРТ включено", 7, "ГРТ выключено"),
+            [23] = new MessageClass(6, "ТРТ включено", 7, "ТРТ выключено"),
+            [24] = new MessageClass(6, "Натяжение в 4 промежутке", 7, "Отсутствие натяжения в 4 промежутке"),
+            [25] = new MessageClass(6, "Натяжение на моталке", 0, "Отсутствие натяжения на моталке"),
+            [26] = new MessageClass(6, "Натяжение на разматывателе", 7, "Отсутствие натяжения на разматывателе"),
+            [27] = new MessageClass(2, "ЛК клети 1 включены", 6, "ЛК клети 1 выключены"),
+            [28] = new MessageClass(2, "ЛК клети 2 включены", 6, "ЛК клети 2 выключены"),
+            [29] = new MessageClass(2, "ЛК клети 3 включены", 6, "ЛК клети 3 выключены"),
+            [30] = new MessageClass(2, "ЛК клети 4 включены", 6, "ЛК клети 4 выключены"),
+            [31] = new MessageClass(2, "ЛК клети 5 включены", 6, "ЛК клети 5 выключены"),
+            [32] = new MessageClass(5, "Наличие полосы в толщиномере за 5 клетью", 7, "Отсутствие полосы в толщиномере за 5 клетью"),
+            [33] = new MessageClass(1, "Ноль задания скорости", 2, "Поехали"),
+            [34] = new MessageClass(1, "Сборка схемы стана", 4, "Развал схемы стана"),
+            [35] = new MessageClass(4, "Максимальная скорость клети 1", 5, "Конец максимальной скорости клети 1"),
+            [36] = new MessageClass(4, "Максимальная скорость клети 2", 5, "Конец максимальной скорости клети 2"),
+            [37] = new MessageClass(4, "Максимальная скорость клети 3", 5, "Конец максимальной скорости клети 3"),
+            [38] = new MessageClass(4, "Максимальная скорость клети 4", 5, "Конец максимальной скорости клети 4"),
+            [39] = new MessageClass(4, "Максимальная скорость клети 5", 5, "Конец максимальной скорости клети 5"),
+            [40] = new MessageClass(6, "РКДВ включен", 6, "РКДВ выключен"),
+            [41] = new MessageClass(6, "РПВ включен", 6, "РПВ выключен"),
+            [42] = new MessageClass(1, "РНВ12 включен", 4, "РНВ12 выключен"),
+            [43] = new MessageClass(1, "РНВ23 включен", 4, "РНВ23 выключен"),
+            [44] = new MessageClass(1, "РНВ34 включен", 4, "РНВ34 выключен"),
+            [45] = new MessageClass(6, "РН45 включено", 7, "РН45 выключено"),
+            [46] = new MessageClass(1, "РТВ включен", 7, "РТВ выключен"),
+            [47] = new MessageClass(1, "Гидравлика 100 кг готова", 4, "Гидравлика 100 кг не готова"),
+            [48] = new MessageClass(1, "ПЖТ Ж - 12 готова", 4, "ПЖТ Ж-12 не готова"),
+            [49] = new MessageClass(1, "ПЖТ Ж - 13 готова", 4, "ПЖТ Ж-13 не готова"),
+            [50] = new MessageClass(1, "ПЖТ Ж - 14 готова", 4, "ПЖТ Ж-14 не готова"),
+            [51] = new MessageClass(1, "Смазка Ж-15 готова", 4, "Смазка Ж-15 не готова"),
+            [52] = new MessageClass(1, "Смазка Ж-16 готова", 4, "Смазка Ж-16 не готова"),
+            [53] = new MessageClass(5, "Начальные условия", 0, ""),
+            [54] = new MessageClass(5, "Эмульсионная система готова", 7, "Эмульсионная система не готова"),
+            [55] = new MessageClass(1, "Смазка Ж-17 готова", 4, "Смазка Ж-17 не готова"),
+            [56] = new MessageClass(1, "Смазка Ж - 18 готова", 4, "Смазка Ж-18 не готова"),
+            [57] = new MessageClass(1, "Смазка Ж - 19 готова", 4, "Смазка Ж-19 не готова"),
+            [58] = new MessageClass(1, "Смазка Ж - 20 готова", 4, "Смазка Ж-20 не готова"),
+            [59] = new MessageClass(1, "Температура в ПОУ нормальная", 4, "Температура в ПОУ высокая"),
+            [60] = new MessageClass(1, "Давление редукторов низкое", 4, "Давление редукторов нормальное"),
+            [61] = new MessageClass(1, "Давление ПЖТ низкое", 4, "Давление ПЖТ нормальное"),
+            [62] = new MessageClass(1, "Вентиляция готова", 4, "Вентиляция не готова"),
+            [63] = new MessageClass(1, "Синхронные двигатели готовы", 4, "Синхронные двигатели не готовы"),
+            [64] = new MessageClass(1, "Ограждение моталки закрыто", 4, "Ограждение моталки открыто НО"),
+            [65] = new MessageClass(1, "Захлестыватель у моталки НО", 4, "Захлестыватель отведен"),
+            [66] = new MessageClass(1, "Высокая температура ПЖТ ГП", 4, "Нормальная температура ПЖТ ГП"),
+            [67] = new MessageClass(4, "Перегруз клети 1", 5, "Конец перегруза клети 1"),
+            [68] = new MessageClass(4, "Перегруз клети 2", 5, "Конец перегруза клети 2"),
+            [69] = new MessageClass(4, "Перегруз клети 3", 5, "Конец перегруза клети 3"),
+            [70] = new MessageClass(4, "Перегруз клети 4", 5, "Конец перегруза клети 4"),
+            [71] = new MessageClass(4, "Перегруз клети 5", 5, "Конец перегруза клети 5"),
+            [72] = new MessageClass(1, "Высокая температура ПЖТ СД", 4, "Нормальная температура ПЖТ СД"),
+            [73] = new MessageClass(4, "Кнопка НО на ПУ старшего нажата", 0, ""),
+            [74] = new MessageClass(0, "", 4, "Кнопка НО на ПУР нажата"),
+            [75] = new MessageClass(0, "", 4, "Кнопка НО на ПУ1 нажата"),
+            [76] = new MessageClass(0, "", 4, "Кнопка НО на ПУ2 нажата"),
+            [77] = new MessageClass(0, "", 4, "Кнопка НО на ПУ3 нажата"),
+            [78] = new MessageClass(0, "", 4, "Кнопка НО на ПУ4 нажата"),
+            [79] = new MessageClass(0, "", 4, "Кнопка НО на ПУ5 нажата"),
+            [80] = new MessageClass(4, "Кнопка ФО на ПУ старшего нажата", 0, ""),
+            [81] = new MessageClass(0, "", 4, "Кнопка ФО на ПУ5 нажата"),
+            [82] = new MessageClass(0, "", 4, "Кнопка АО на ПУР нажата"),
+            [83] = new MessageClass(4, "Провал натяжения на разматывателе", 1, "Восстановление натяжения на разматывателе ТД"),
+            [84] = new MessageClass(4, "Провал натяжения в 1 промежутке ФО ", 1, "Восстановление натяжения в 1 промежутке ТД"),
+            [85] = new MessageClass(4, "Провал натяжения в 2 промежутке ФО ", 1, "Восстановление натяжения в 2 промежутке ТД"),
+            [86] = new MessageClass(4, "Провал натяжения в 3 промежутке ФО ", 1, "Восстановление натяжения в 3 промежутке ТД"),
+            [87] = new MessageClass(4, "Провал натяжения в 4 промежутке ФО ", 1, "Восстановление натяжения в 4 промежутке ТД"),
+            [88] = new MessageClass(4, "Вентилятор обдува 101Г выключен НО", 0, ""),
+            [89] = new MessageClass(4, "Вентилятор обдува 102Г выключен НО", 0, ""),
+            [90] = new MessageClass(4, "Вентилятор обдува 103Г выключен НО", 0, ""),
+            [91] = new MessageClass(4, "Вентилятор обдува 105Г выключен НО", 0, ""),
+            [92] = new MessageClass(4, "Вентилятор обдува 106Г выключен НО", 0, ""),
+            [93] = new MessageClass(4, "Вентилятор подпора ПА - 1 выключен", 0, ""),
+            [94] = new MessageClass(4, "Вентилятор обдува 112Г выключен НО", 0, ""),
+            [95] = new MessageClass(4, "Вентилятор обдува 111Г выключен НО", 0, ""),
+            [96] = new MessageClass(4, "Вентилятор обдува 110Г выключен НО", 0, ""),
+            [97] = new MessageClass(4, "Вентилятор обдува 108Г выключен НО", 0, ""),
+            [98] = new MessageClass(4, "Вентилятор обдува 107Г выключен НО", 0, ""),
+            [99] = new MessageClass(4, "Вентилятор подпора ПА-2 выключен", 0, ""),
+            [100] = new MessageClass(4, "Вентилятор обдува ГП 1 клети выключен", 0, ""),
+            [101] = new MessageClass(4, "Вентилятор обдува ГП 2 клети выключен", 0, ""),
+            [102] = new MessageClass(4, "Вентилятор обдува ГП 3 клети выключен", 0, ""),
+            [103] = new MessageClass(4, "Вентилятор обдува ГП 4 клети выключен", 0, ""),
+            [104] = new MessageClass(0, "", 4, "Кнопка ФО на ПУ4 нажата"),
+            [105] = new MessageClass(0, "", 4, "Кнопка ФО на ПУ3 нажата"),
+            [106] = new MessageClass(0, "", 4, "Кнопка ФО на ПУ2 нажата"),
+            [107] = new MessageClass(0, "", 4, "Кнопка ФО на ПУ1 нажата"),
+            [108] = new MessageClass(0, "", 4, "Кнопка ФО на ПУР нажата"),
+            [109] = new MessageClass(0, "", 4, "Кнопка АО на СУС нажата"),
+            [110] = new MessageClass(0, "", 4, "Кнопка АО на ПУ5 нажата"),
+            [111] = new MessageClass(0, "", 0, ""),
+            [112] = new MessageClass(0, "", 0, ""),
+            [113] = new MessageClass(0, "", 0, ""),
+            [114] = new MessageClass(4, "Кнопка АО на СУС нажата", 0, ""),
+            [115] = new MessageClass(0, "", 0, ""),
+            [116] = new MessageClass(0, "", 0, ""),
+            [117] = new MessageClass(0, "", 0, ""),
+            [118] = new MessageClass(0, "", 0, ""),
+            [119] = new MessageClass(0, "", 0, ""),
+            [120] = new MessageClass(4, "Вентилятор обдува ГП 5 клети выключен НО", 0, ""),
+            [121] = new MessageClass(0, "", 0, ""),
+            [122] = new MessageClass(4, "Вентилятор подпора ГП-1 выключен", 0, ""),
+            [123] = new MessageClass(4, "Вентилятор подпора ГП-2 выключен", 0, ""),
+            [124] = new MessageClass(4, "Вентилятор обдува нажимных винтов выключен", 0, ""),
+            [125] = new MessageClass(4, "ХХХ ПЕРЕГРУЗ ГП ХХХ", 0, ""),
+            [126] = new MessageClass(0, "", 0, ""),
+            [127] = new MessageClass(0, "", 0, ""),
+        };
+
+
+
         byte[] stanbuffer;          //данные c контроллера 100ms
         byte[] stanbufferPLC;       //Промежуточное хранение даных
         byte[] stanbufferSQL;       //Данные 101мс
@@ -159,6 +312,7 @@ namespace consoleRS2toBD
         readonly object stanlocker1 = new object();
         readonly object stanlocker2 = new object();
         readonly object stanlocker3 = new object();
+        readonly object stanlocker4 = new object();
 
         float stanspeed4kl, stanH_work, stanhw, stanBw, stanD_tek_mot, stanB_Work, stanD_pred_mot = 0, stanVes_Work, stanDlina_Work;
 
@@ -214,17 +368,20 @@ namespace consoleRS2toBD
         private int d4_pred;
         private int d5_pred;
         DataTable dtPerevalkiStan;
+        DataTable dtMessagestan;
+        DateTime dtMessage;
+        int writeMessage = 0; //цикл сохранением значений Message
 
-        
 
-        
+
+
 
         public void goStart()
         {
 
             //stan.Data101ms = stanData100ms;
             #region  dtStanPerevalki - формирование dataTable Перевалки(цикл  1s стана)
-            dtPerevalkiStan = new DataTable();
+           
             dtPerevalkiStan = new DataTable();
             dtPerevalkiStan.Columns.Add("dtPerevalki", typeof(DateTime));
             dtPerevalkiStan.Columns.Add("kl1", typeof(int));
@@ -234,6 +391,15 @@ namespace consoleRS2toBD
             dtPerevalkiStan.Columns.Add("kl5", typeof(int));
 
             #endregion
+
+            #region dtMessageStan - формирование DataTable Message(таблица сообщений стана)
+            dtMessagestan = new DataTable();
+            dtMessagestan.Columns.Add("dtmes", typeof(DateTime));
+            dtMessagestan.Columns.Add("status", typeof(int));
+            dtMessagestan.Columns.Add("message", typeof(string));
+            dtMessagestan.Columns.Add("speed", typeof(float));
+            #endregion
+
 
             Thread queryPLC = new Thread(stanPLC);
             queryPLC.Start();
@@ -353,10 +519,7 @@ namespace consoleRS2toBD
 
         
 
-        private void stanMessage200ms()
-        {
-            
-        }
+        
 
        
         
@@ -374,6 +537,9 @@ namespace consoleRS2toBD
                 stanbufferPLC = new byte[stanamount];
                 stanbufferSQL = new byte[stanamount];
                 stanbuffer1s = new byte[stanamount];
+                stanbufferMessage = new byte[22];
+                stanbufferMessageOld = new byte[22];
+
 
                 int resultReadField = 5;
 
@@ -421,6 +587,8 @@ namespace consoleRS2toBD
                         PLS101ms.Start();
 
                         //Буфер сообщений
+                        Thread PLS200ms = new Thread(BufferMessageToBufferPLC);
+                        PLS200ms.Start();
 
                         //Буфер 1с
                         Thread PLS1000ms = new Thread(Buffer1cToBufferPLC);
@@ -484,6 +652,67 @@ namespace consoleRS2toBD
 
             }
         }
+
+        private void BufferMessageToBufferPLC()
+        {
+            //критичная секция которая записывает значение в bufferPLC
+            //У миши Богуша в delphi программе биты переставлялись с помощью оператора swap и он истользовал не byte, а int
+            //У меня используется везьде byte поэтому я просто поменял биты при формировании buffer
+
+            lock (stanlocker4)
+            {
+                stanbufferMessageOld[0] = stanbufferMessage[0];
+                stanbufferMessageOld[1] = stanbufferMessage[1];
+                stanbufferMessageOld[2] = stanbufferMessage[2];
+                stanbufferMessageOld[3] = stanbufferMessage[3];
+                stanbufferMessageOld[4] = stanbufferMessage[4];
+                stanbufferMessageOld[5] = stanbufferMessage[5];
+                stanbufferMessageOld[6] = stanbufferMessage[6];
+                stanbufferMessageOld[7] = stanbufferMessage[7];
+                stanbufferMessageOld[8] = stanbufferMessage[8];
+                stanbufferMessageOld[9] = stanbufferMessage[9];
+                stanbufferMessageOld[10] = stanbufferMessage[10];
+                stanbufferMessageOld[11] = stanbufferMessage[11];
+                stanbufferMessageOld[12] = stanbufferMessage[12];
+                stanbufferMessageOld[13] = stanbufferMessage[13];
+                stanbufferMessageOld[14] = stanbufferMessage[14];
+                stanbufferMessageOld[15] = stanbufferMessage[15];
+                stanbufferMessageOld[16] = stanbufferMessage[16];
+                stanbufferMessageOld[17] = stanbufferMessage[17];
+                stanbufferMessageOld[18] = stanbufferMessage[18];
+                stanbufferMessageOld[19] = stanbufferMessage[19];
+                stanbufferMessageOld[20] = stanbufferMessage[20];
+                stanbufferMessageOld[21] = stanbufferMessage[21];
+
+
+
+                stanbufferMessage[0] = stanbufferPLC[67];
+                stanbufferMessage[1] = stanbufferPLC[66];
+                stanbufferMessage[2] = stanbufferPLC[69];
+                stanbufferMessage[3] = stanbufferPLC[68];
+                stanbufferMessage[4] = stanbufferPLC[71];
+                stanbufferMessage[5] = stanbufferPLC[70];
+                stanbufferMessage[6] = stanbufferPLC[103];
+                stanbufferMessage[7] = stanbufferPLC[102];
+                stanbufferMessage[8] = stanbufferPLC[105];
+                stanbufferMessage[9] = stanbufferPLC[104];
+                stanbufferMessage[10] = stanbufferPLC[107];
+                stanbufferMessage[11] = stanbufferPLC[106];
+                stanbufferMessage[12] = stanbufferPLC[109];
+                stanbufferMessage[13] = stanbufferPLC[108];
+                stanbufferMessage[14] = stanbufferPLC[111];
+                stanbufferMessage[15] = stanbufferPLC[110];
+                stanbufferMessage[16] = stanbufferPLC[6];   //speed 4kl
+                stanbufferMessage[17] = stanbufferPLC[7];
+                stanbufferMessage[18] = stanbufferPLC[312];
+                stanbufferMessage[19] = stanbufferPLC[313];
+                stanbufferMessage[20] = stanbufferPLC[310];
+                stanbufferMessage[21] = stanbufferPLC[311];
+
+            }
+
+        }
+
 
         #endregion
 
@@ -737,9 +966,9 @@ namespace consoleRS2toBD
                                     Program.dtOK101mc = DateTime.Now;
                                     conSQL101ms2.Close();
                                 }
-                                catch (Exception)
+                                catch (Exception ex)
                                 {
-                                    Program.messageError101mc = "101mc НЕ ЗАПИСАНЫ.";
+                                    Program.messageError101mc = "101mc НЕ ЗАПИСАНЫ. " + ex.Message;
                                     Program.dtError101mc = DateTime.Now;
                                 }
                             }   
@@ -768,24 +997,24 @@ namespace consoleRS2toBD
         {
             byte[] stanbuf1s = new byte[95];
 
-            #region Формируем шифр таблицы numberTable = stan1syyyyMMddсмена
+            //#region Формируем шифр таблицы numberTable = stan1syyyyMMddсмена
 
-            numberTable = "";
+            //numberTable = "";
 
-            if (Convert.ToInt32(DateTime.Now.ToString("HH")) >= 7 && Convert.ToInt32(DateTime.Now.ToString("HH")) < 19)
-            {
-                numberTable = "Stan1s" + DateTime.Now.ToString("yyyyMMdd") + "2";
-            }
-            else if (Convert.ToInt32(DateTime.Now.ToString("HH")) < 7)
-            {
-                numberTable = "Stan1s" + DateTime.Now.ToString("yyyyMMdd") + "1";
-            }
-            else if (Convert.ToInt32(DateTime.Now.ToString("HH")) >= 19)
-            {
-                numberTable = "Stan1s" + DateTime.Now.AddDays(1).ToString("yyyyMMdd") + "1";
-            }
+            //if (Convert.ToInt32(DateTime.Now.ToString("HH")) >= 7 && Convert.ToInt32(DateTime.Now.ToString("HH")) < 19)
+            //{
+            //    numberTable = "Stan1s" + DateTime.Now.ToString("yyyyMMdd") + "2";
+            //}
+            //else if (Convert.ToInt32(DateTime.Now.ToString("HH")) < 7)
+            //{
+            //    numberTable = "Stan1s" + DateTime.Now.ToString("yyyyMMdd") + "1";
+            //}
+            //else if (Convert.ToInt32(DateTime.Now.ToString("HH")) >= 19)
+            //{
+            //    numberTable = "Stan1s" + DateTime.Now.AddDays(1).ToString("yyyyMMdd") + "1";
+            //}
 
-            #endregion
+            //#endregion
 
             try
             {
@@ -800,15 +1029,15 @@ namespace consoleRS2toBD
 
                     if (Convert.ToInt32(DateTime.Now.ToString("HH")) >= 7 && Convert.ToInt32(DateTime.Now.ToString("HH")) < 19)
                     {
-                        numberTable = "Stan1s" + DateTime.Now.ToString("yyyyMMdd") + "2";
+                        numberTable = DateTime.Now.ToString("yyyyMMdd") + "2";
                     }
                     else if (Convert.ToInt32(DateTime.Now.ToString("HH")) < 7)
                     {
-                        numberTable = "Stan1s" + DateTime.Now.ToString("yyyyMMdd") + "1";
+                        numberTable = DateTime.Now.ToString("yyyyMMdd") + "1";
                     }
                     else if (Convert.ToInt32(DateTime.Now.ToString("HH")) >= 19)
                     {
-                        numberTable = "Stan1s" + DateTime.Now.AddDays(1).ToString("yyyyMMdd") + "1";
+                        numberTable = DateTime.Now.AddDays(1).ToString("yyyyMMdd") + "1";
                     }
 
                     #endregion
@@ -918,7 +1147,7 @@ namespace consoleRS2toBD
                     #region Запись данных 1s
 
                     
-                    string comBD = "if not exists (select * from sysobjects where name ='" + numberTable + "' and xtype='U') create table " + numberTable +
+                    string comBD = "if not exists (select * from sysobjects where name ='" + "Stan1s" + numberTable + "' and xtype='U') create table " + "Stan1s" + numberTable +
                        "(" +
                        "datetime1s datetime , " +
                        "s191HL int , " +
@@ -1017,15 +1246,15 @@ namespace consoleRS2toBD
                     }
 
 
-                    string comRulon1s1 = "INSERT INTO " + numberTable +
-                   "(datetime1s,s191HL,s192HL,s193BL,s194BL,s191HR,s192HR,s193BR,s194BR,s281NL,s282NL,s283BL,s284BL,s281NR,s282NR," +
+                    string comRulon1s1 = "INSERT INTO " + "Stan1s" + numberTable +
+                   " (datetime1s,s191HL,s192HL,s193BL,s194BL,s191HR,s192HR,s193BR,s194BR,s281NL,s282NL,s283BL,s284BL,s281NR,s282NR," +
                    "s283BR,s284BR,s301BL,s302BL,s303HL,s304HL,s301BR,s302BR,s303HR,s304HR,s321BL,s322BL,s323HL,s324HL,s321BR,s322BR," +
                    "s323HR,s324HR,s341BL,s342BL,s343HL,s344HL,s341BR,s342BR,s343HR,s344HR,s461L,s462L,s463L,s461R,s462R,s463R,sG11L," +
                    "sG12L,sG13L,sG14L,sG15L,sG16L,sG17L,sG11R,sG12R,sG13R,sG14R,sG15R,sG16R,sG17R,sG21L,sG22L,sG23L,sG24L,sG25L,sG26L," +
                    "sG27L,sG21R,sG22R,sG23R,sG24R,sG25R,sG26R,sG27R,sD12,sD13,sD14,sD15,sD16,sD17,sD18,sD19,sD20,sU64,sRasxCD) " +
                    "VALUES" +
-                   " ('"+
-                   DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'," +
+                   " ("+
+                   " @datetime1sStan, " +
                    BitConverter.ToInt16(stanbuf1s, 0) + "," +
                    BitConverter.ToInt16(stanbuf1s, 1) + "," +
                    BitConverter.ToInt16(stanbuf1s, 2) + "," +
@@ -1119,15 +1348,16 @@ namespace consoleRS2toBD
                         {
                             conSQL1s2.Open();
                             SqlCommand command = new SqlCommand(comRulon1s1, conSQL1s2);
+                            command.Parameters.AddWithValue("@datetime1sStan", DateTime.Now);
                             command.ExecuteNonQuery();
                             conSQL1s2.Close();
-                            Program.messageOK1c = "Данные в БД("+ numberTable + ") 1s записаны";
+                            Program.messageOK1c = "Данные в БД("+ "Stan1s" + numberTable + ") 1s записаны";
                             Program.dtOK1c = DateTime.Now;
                         }
-                        catch (Exception)
+                        catch (Exception ex)
                         {
 
-                            Program.messageError1c = "1s НЕ ЗАПИСАНЫ";
+                            Program.messageError1c = "1s НЕ ЗАПИСАНЫ - " + ex.Message;
                             Program.dtError1c = DateTime.Now;
                         }
                         
@@ -1144,7 +1374,9 @@ namespace consoleRS2toBD
 
                     if (stanD_pred_mot == 0)
                     {
-                        stanD_tek_mot = 614;
+                        //при первом цикле все данные равны 0, поэтому мы выставляем значения параметров на 600
+                        stanD_tek_mot = 600;
+                        stanD_pred_mot = 600;
                     }
 
                     if (stanD_tek_mot > stanD_pred_mot)
@@ -1257,13 +1489,13 @@ namespace consoleRS2toBD
 
                                 int WriteSQL = command.ExecuteNonQuery();
 
-                                Program.messageOKProizvodstvo = strNumberRulona+"("+ stanTimeStart+"-"+ stanTimeStop+") "+ B_Work+"*"+ H5_work + "*"+ Dlina_Work;
+                                Program.messageOKProizvodstvo = strNumberRulona+"("+ stanTimeStart.ToString("HH:mm")+"-"+ stanTimeStop.ToString("HH:mm")+") "+ H5_work  +"*"+ B_Work + "->"+ Ves_Work;
                                 //messageOKProizvodstvo = "производство";
                                 Program.dtOKProizvodstvo = DateTime.Now;
                             }
-                            catch (Exception)
+                            catch (Exception ex)
                             {
-                                Program.messageErrorProizvodstvo = "Ошибка в сохранении данных о прокатанном рулоне";
+                                Program.messageErrorProizvodstvo = "Ошибка в сохранении данных о прокатанном рулоне " + ex.Message;
                                 Program.dtErrorProizvodstvo = DateTime.Now;
 
                             }
@@ -1303,10 +1535,10 @@ namespace consoleRS2toBD
                                 Program.dtOKRulon = DateTime.Now;
                                 conSQL1s3.Close();
                             }
-                            catch (Exception)
+                            catch (Exception ex)
                             {
 
-                                Program.messageErrorRulon = "Временная база не переименована";
+                                Program.messageErrorRulon = "Временная база не переименована " + ex.Message;
                                 Program.dtErrorRulon = DateTime.Now;
                             }
                             
@@ -1435,9 +1667,9 @@ namespace consoleRS2toBD
                                 //messageErrorValki = "OK формировании таблицы валков";
 
                             }
-                            catch (Exception)
+                            catch (Exception ex)
                             {
-                                Program.messageErrorValki = "Ошибка формировании таблицы валков";
+                                Program.messageErrorValki = "Ошибка формировании таблицы валков " + ex.Message;
                                 Program.dtErrorValki = DateTime.Now;
 
                             }
@@ -1454,8 +1686,7 @@ namespace consoleRS2toBD
                                 {
                                     bulk.DestinationTableName = strTableNamePerevalki;
                                     bulk.WriteToServer(dtPerevalkiStan);
-                                    Program.messageOKValki = "Данные перевалки в таблицу " + strTableNamePerevalki +
-                                        " записаны, кол-во строк " + dtPerevalkiStan.Rows.Count + ". Время записи - " + DateTime.Now;
+                                    Program.messageOKValki = "Данные перевалки в таблицу " + strTableNamePerevalki + " записаны ";
                                     Program.dtOKValki = DateTime.Now;
 
 
@@ -1466,9 +1697,9 @@ namespace consoleRS2toBD
                                  
 
                             }
-                            catch (Exception)
+                            catch (Exception ex )
                             {
-                                Program.messageErrorValki = "Ошибка записи в таблицу валков";
+                                Program.messageErrorValki = "Ошибка записи в таблицу валков " + ex.Message;
                                 Program.dtErrorValki = DateTime.Now;
 
                             }
@@ -1497,5 +1728,111 @@ namespace consoleRS2toBD
 
         #endregion
 
+
+        #region Формируем и записываем сообщения в Базу
+        private void stanMessage200ms()
+        {
+            try
+            {
+                while (true)
+                {
+                    Thread.Sleep(200);
+
+                    dtMessage = DateTime.Now;
+
+                    float speed = (float)(BitConverter.ToInt16(stanbufferMessage, 16)) / 100;
+
+
+                    int numberMessage = 0;
+                    for (int i = 0; i < 15; i++)
+                    {
+                        for (int b = 0; b < 8; b++)
+                        {
+                            int z = Convert.ToInt32(Math.Pow(2,b));
+                            if (((byte)(stanbufferMessageOld[i]&z)-(byte)(stanbufferMessage[i]&z))<0)
+                            {
+                                if(MessageStan[numberMessage].statusMenshe != 0)
+                                {
+                                    string mes = MessageStan[numberMessage].MinusMess;
+                                    int status = MessageStan[numberMessage].statusMenshe;
+                                    dtMessagestan.Rows.Add(dtMessage.ToString("HH:mm:ss.fff"), status, mes, speed);
+                                }
+                            }
+                            else if (((byte)(stanbufferMessageOld[i] & z) - (byte)(stanbufferMessage[i] & z)) > 0)
+                            {
+                                if(MessageStan[numberMessage].statusBolshe != 0)
+                                {
+                                    string mes = MessageStan[numberMessage].PlusMess;
+                                    int status = MessageStan[numberMessage].statusBolshe;
+                                    dtMessagestan.Rows.Add(dtMessage.ToString("HH:mm:ss.fff"), status, mes, speed);
+                                }
+                            }
+                            numberMessage++;
+
+                        }
+                    }
+
+                    //TODO запись сообщений в БД каждую минуту    
+                    if (writeMessage>300)
+                    {
+                        writeMessage = 0;
+                        string strTableName = "StanMessage"+numberTable;
+                        string comBDMessage = "if not exists (select * from sysobjects where name='" + strTableName + "' and xtype='U') create table " + strTableName +
+                                    "(" +
+                                    "dtmes datetime NOT NULL, " +
+                                    "status int NOT NULL, " +
+                                    "message text NOT NULL, " +
+                                    "speed float NOT NULL)";
+
+                        //создаем таблицу сообщений стана 
+                        using (SqlConnection con1Mess = new SqlConnection(connectionString))
+                        {
+                            con1Mess.Open();
+                            SqlCommand command = new SqlCommand(comBDMessage, con1Mess);
+                            int WriteSQL = command.ExecuteNonQuery();
+                            con1Mess.Close();
+                        }
+                        if (dtMessagestan.Rows.Count > 0)
+                        {
+                            //записываем в таблицу прокатанного рулона данные по прокатке этого рулона
+                            using (SqlConnection con2Mess = new SqlConnection(connectionString))
+                            {
+                                con2Mess.Open();
+                                using (var bulkMessage = new SqlBulkCopy(con2Mess))
+                                {
+                                    bulkMessage.DestinationTableName = strTableName;
+                                    bulkMessage.WriteToServer(dtMessagestan);
+                                    Program.messageOK200mc="Кол-во сообщений записанных в таблицу " + strTableName + " равно " + dtMessagestan.Rows.Count;
+                                    Program.dtOK200mc = dtMessage;
+                                }
+                            }
+                            dtMessagestan.Clear();
+                        }
+                        else
+                        {
+
+                            Program.messageOK200mc = "Сообщений не было с " + DateTime.Now.AddMinutes(-1).ToString() + " по " + DateTime.Now.ToString();
+                            Program.dtOK200mc = dtMessage;
+                        }
+
+                    }
+                    else
+                    {
+                        writeMessage++;
+                    }
+
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Program.messageError200mc = "Global Error в модуле формирования сообщения " + ex.Message;
+                Program.dtOK200mc = DateTime.Now;
+
+
+                
+            }
+        }
+        #endregion
     }
 }

@@ -47,11 +47,15 @@ namespace consoleRS2toBD
 
         static void Main(string[] args)
         {
+            //Настройка на региональных параметров 
+            System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("en-US");
+
             Console.Clear();
             Console.SetWindowSize(200, 40);
 
             clStan1700 stan1700 = new clStan1700();
             Thread task1 = new Thread(stan1700.goStart);
+
             task1.Start();
 
             //clStanDress stanDs = new clStanDress();

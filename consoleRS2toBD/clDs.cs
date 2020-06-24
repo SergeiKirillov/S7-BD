@@ -275,8 +275,8 @@ namespace consoleRS2toBD
                 Thread queryPLC = new Thread(dsPLC);
                 queryPLC.Start();
 
-                //Thread querySQL = new Thread(dsSQL101ms);
-                //querySQL.Start();
+                Thread querySQL = new Thread(dsSQL80ms);
+                querySQL.Start();
 
                 //Thread queryMes = new Thread(dsMessage200ms);
                 //queryMes.Start();
@@ -312,8 +312,8 @@ namespace consoleRS2toBD
                     dsbufferPLC = new byte[dsmount];
                     dsbufferSQL = new byte[dsmount];
                     dsbuffer1s = new byte[dsmount];
-                    dsbufferMessage = new byte[22];
-                    dsbufferMessageOld = new byte[22];
+                    dsbufferMessage = new byte[25];
+                    dsbufferMessageOld = new byte[25];
 
 
                     int resultReadField = 5;
@@ -321,7 +321,7 @@ namespace consoleRS2toBD
 
                     while (true)
                     {
-                        Thread.Sleep(100);
+                        Thread.Sleep(70);
 
                         if (resultReadField != 0)
                         {
@@ -383,7 +383,7 @@ namespace consoleRS2toBD
                 {
                     /*все исключения кидаем в пустоту*/
                     LogSystem.Write(dsNamePLC + " start -" + ex.Source, Direction.ERROR, "Start Error-" + ex.Message, 1, 1, true);
-                    Program.messageErrorDs100mc = "Общая ошибка 100mc -" + ex.Message;
+                    Program.messageErrorDs100mc = "Общая ошибка 70mc -" + ex.Message;
                     Program.dtErrorDs100mc = DateTime.Now;
 
                 }
@@ -455,30 +455,37 @@ namespace consoleRS2toBD
                     dsbufferMessageOld[19] = dsbufferMessage[19];
                     dsbufferMessageOld[20] = dsbufferMessage[20];
                     dsbufferMessageOld[21] = dsbufferMessage[21];
+                    dsbufferMessageOld[22] = dsbufferMessage[21];
+                    dsbufferMessageOld[23] = dsbufferMessage[21];
+                    dsbufferMessageOld[24] = dsbufferMessage[21];
+                
 
 
-                    dsbufferMessage[0] = dsbufferPLC[67];
-                    dsbufferMessage[1] = dsbufferPLC[66];
-                    dsbufferMessage[2] = dsbufferPLC[69];
-                    dsbufferMessage[3] = dsbufferPLC[68];
-                    dsbufferMessage[4] = dsbufferPLC[71];
-                    dsbufferMessage[5] = dsbufferPLC[70];
-                    dsbufferMessage[6] = dsbufferPLC[103];
-                    dsbufferMessage[7] = dsbufferPLC[102];
-                    dsbufferMessage[8] = dsbufferPLC[105];
-                    dsbufferMessage[9] = dsbufferPLC[104];
-                    dsbufferMessage[10] = dsbufferPLC[107];
-                    dsbufferMessage[11] = dsbufferPLC[106];
-                    dsbufferMessage[12] = dsbufferPLC[109];
-                    dsbufferMessage[13] = dsbufferPLC[108];
-                    dsbufferMessage[14] = dsbufferPLC[111];
-                    dsbufferMessage[15] = dsbufferPLC[110];
-                    dsbufferMessage[16] = dsbufferPLC[6];   //speed 4kl
-                    dsbufferMessage[17] = dsbufferPLC[7];
-                    dsbufferMessage[18] = dsbufferPLC[312];
-                    dsbufferMessage[19] = dsbufferPLC[313];
-                    dsbufferMessage[20] = dsbufferPLC[310];
-                    dsbufferMessage[21] = dsbufferPLC[311];
+                dsbufferMessage[0] = dsbufferPLC[0];
+                    dsbufferMessage[1] = dsbufferPLC[1];
+                    dsbufferMessage[2] = dsbufferPLC[24];
+                    dsbufferMessage[3] = dsbufferPLC[25];
+                    dsbufferMessage[4] = dsbufferPLC[26];
+                    dsbufferMessage[5] = dsbufferPLC[27];
+                    dsbufferMessage[6] = dsbufferPLC[28];
+                    dsbufferMessage[7] = dsbufferPLC[29];
+                    dsbufferMessage[8] = dsbufferPLC[30];
+                    dsbufferMessage[9] = dsbufferPLC[31];
+                    dsbufferMessage[10] = dsbufferPLC[32];
+                    dsbufferMessage[11] = dsbufferPLC[33];
+                    dsbufferMessage[12] = dsbufferPLC[34];
+                    dsbufferMessage[13] = dsbufferPLC[35];
+                    dsbufferMessage[14] = dsbufferPLC[36];
+                    dsbufferMessage[15] = dsbufferPLC[37];
+                    dsbufferMessage[16] = dsbufferPLC[38];   //speed 4kl
+                    dsbufferMessage[17] = dsbufferPLC[40];
+                    dsbufferMessage[18] = dsbufferPLC[41];
+                    dsbufferMessage[19] = dsbufferPLC[42];
+                    dsbufferMessage[20] = dsbufferPLC[43];
+                    dsbufferMessage[21] = dsbufferPLC[44];
+                    dsbufferMessage[22] = dsbufferPLC[45];
+                    dsbufferMessage[23] = dsbufferPLC[46];
+                    dsbufferMessage[24] = dsbufferPLC[47];
 
                 }
 
@@ -488,258 +495,121 @@ namespace consoleRS2toBD
             #endregion
 
 
-            #region Запись данных(101ms) с контроллера в Базу Данных
+            #region Запись данных(80ms) с контроллера в Базу Данных
 
-            private void dsSQL101ms()
+            private void dsSQL80ms()
             {
                 try
                 {
                     while (true)
                     {
-                        Thread.Sleep(101);
+                        Thread.Sleep(80);
 
-                        #region Формируем SQL запрос с циклом 101мс и записываем его во временную БД
+                        #region Формируем SQL запрос с циклом 80мс и записываем его во временную БД
 
                         #region Если БД не существует то создаем
-                        string comRulon101ms1 = "if not exists (select * from sysobjects where name ='TEMPds101ms' and xtype='U') create table TEMPds101ms " +
+                        string comRulon80ms1 = "if not exists (select * from sysobjects where name ='TEMPds80ms' and xtype='U') create table TEMPds80ms " +
                            "(" +
-                           "datetime101ms datetime , " +
-                           "v1 float," +
-                           "v2 float," +
-                           "v3 float," +
-                           "v4 float," +
-                           "v5 float," +
-                           "h1 float," +
-                           "h5 float," +
-                           "b int," +
-                           "dvip float," +
-                           "drazm float," +
-                           "dmot float," +
-                           "vvip float," +
-                           "d1 int," +
-                           "d2 int," +
-                           "d3 int," +
-                           "d4 int," +
-                           "d5 int," +
-                           "e2 float," +
-                           "e3 float," +
-                           "e4 float," +
-                           "e5 float," +
-                           "n1l float," +
-                           "n1p float," +
-                           "n2l float," +
-                           "n2p float," +
-                           "n3l float," +
-                           "n3p float," +
-                           "n4l float," +
-                           "n4p float," +
-                           "n5l float," +
-                           "n5p float," +
-                           "reserv1 float," +
-                           "reserv2 float," +
-                           "t1 float," +
-                           "t2 float," +
-                           "t3 float," +
-                           "t4 float," +
-                           "t1l float," +
-                           "t2l float," +
-                           "t3l float," +
-                           "t4l float," +
-                           "t1p float," +
-                           "t2p float," +
-                           "t3p float," +
-                           "t4p float," +
-                           "t1z float," +
-                           "t2z float," +
-                           "t3z float," +
-                           "t4z float," +
-                           "erazm float," +
-                           "ivozbrazm float," +
-                           "izadrazm float," +
-                           "w1 float," +
-                           "w2v float," +
-                           "w2n float," +
-                           "w3v float," +
-                           "w3n float," +
-                           "w4v float," +
-                           "w4n float," +
-                           "w5v float," +
-                           "w5n float," +
-                           "wmot float," +
-                           "imot int," +
-                           "izadmot int," +
-                           "u1 float," +
-                           "u2v float," +
-                           "u2n float," +
-                           "u3v float," +
-                           "u3n float," +
-                           "u4v float," +
-                           "u4n float," +
-                           "u5v float," +
-                           "u5n float," +
-                           "umot float," +
-                           "i1 int," +
-                           "i2v int," +
-                           "i2n int," +
-                           "i3v int," +
-                           "i3n int," +
-                           "i4v int," +
-                           "i4n int," +
-                           "i5v int," +
-                           "i5n int," +
-                           "rtv float," +
-                           "dt1 float," +
-                           "dt2 float," +
-                           "dt3 float," +
-                           "dt4 float," +
-                           "grt float," +
-                           "trt float," +
-                           "mv1 float," +
-                           "mv2 float," +
-                           "mv3 float," +
-                           "dh1 float," +
-                           "dh5 float," +
-                           "os1klvb int," +
-                           "rezerv int," +
-                           "mezdoza4 int" +
+                           "datetime80ms datetime , " +
+                           "VKlet float," +              
+                           "IzadR float," +              
+                           "IzadM float," +              
+                           "NKlet float," +              
+                           "NRazm float," +              
+                           "NMot float," +               
+                           "TRazm float," +              
+                           "TMot float," +               
+                           "RRazm float," +              
+                           "RMot float," +               
+                           "NVlev float," +              
+                           "NVpr float," +               
+                           "IvozM float," +              
+                           "Imot float," +               
+                           "Urazm float," +              
+                           "IvozR float," +              
+                           "Umot float," +               
+                           "IRUZ4 float," +              
+                           "IRUZ5 float," +              
+                           "IMUZ4 float," +              
+                           "IMUZ5 float," +              
+                           "IzovK float," +              
+                           "Ukl float," +                
+                           "IKUZ4 float," +              
+                           "IKUZ5 float," +              
+                           "ObgTek float," +             
+                           "DatObgDo float," +           
+                           "DatObgZa float"  +             
                            ")";
 
-                        using (SqlConnection conSQL101ms1 = new SqlConnection(connectionString))
+
+
+                        using (SqlConnection conSQL80ms1 = new SqlConnection(connectionString))
                         {
-                            conSQL101ms1.Open();
-                            SqlCommand command = new SqlCommand(comRulon101ms1, conSQL101ms1);
+                            conSQL80ms1.Open();
+                            SqlCommand command = new SqlCommand(comRulon80ms1, conSQL80ms1);
                             command.ExecuteNonQuery();
-                            conSQL101ms1.Close();
+                            conSQL80ms1.Close();
 
                         }
                         #endregion
 
-                        if (blRulonStart)
+                        //if (blRulonStart)
+                        if (true)
                         {
 
-                            string comRulon101ms2 = "INSERT INTO TEMPds101ms" +
-                           "(datetime101ms,v1,v2,v3,v4,v5,h1,h5,b,dvip,drazm,dmot,vvip,d1,d2,d3,d4,d5,e2,e3,e4,e5,n1l,n1p,n2l,n2p,n3l,n3p,n4l,n4p,n5l,n5p,reserv1,reserv2,t1,t2,t3,t4,t1l,t2l,t3l,t4l,t1p,t2p,t3p,t4p,t1z,t2z,t3z,t4z,erazm,ivozbrazm,izadrazm,w1,w2v,w2n,w3v,w3n,w4v,w4n,w5v,w5n,wmot,imot,izadmot,u1,u2v,u2n,u3v,u3n,u4v,u4n,u5v,u5n,umot,i1,i2v,i2n,i3v,i3n,i4v,i4n,i5v,i5n,rtv,dt1,dt2,dt3,dt4,grt,trt,mv1,mv2,mv3,dh1,dh5,os1klvb,rezerv,mezdoza4)" +
+                            string comRulon80ms2 = "INSERT INTO TEMPds80ms" +
+                           "(datetime80ms,VKlet,IzadR,IzadM,NKlet,NRazm,NMot,TRazm,TMot,RRazm,RMot,NVlev,NVpr,IvozM,Imot,Urazm,IvozR,Umot,IRUZ4,IRUZ5,IMUZ4,IMUZ5,IzovK,Ukl,IKUZ4,IKUZ5,ObgTek,DatObgDo,DatObgZa)" +
                            " VALUES " +
                            "('" +
-                            DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'," +
-                            (float)(BitConverter.ToInt16(dsbufferSQL, 0)) / 100 + "," +    //v1
-                            (float)(BitConverter.ToInt16(dsbufferSQL, 2)) / 100 + "," +    //v2
-                            (float)(BitConverter.ToInt16(dsbufferSQL, 4)) / 100 + "," +    //v3
-                            (float)(BitConverter.ToInt16(dsbufferSQL, 6)) / 100 + "," +    //v4
-                            (float)(BitConverter.ToInt16(dsbufferSQL, 8)) / 100 + "," +    //v5
-                            (float)(BitConverter.ToInt16(dsbufferSQL, 10)) / 1000 + "," +  //h1    
-                            (float)(BitConverter.ToInt16(dsbufferSQL, 12)) / 1000 + "," +  //h5
-                            BitConverter.ToInt16(dsbufferSQL, 14) + "," +                  //b
-                            (float)(BitConverter.ToInt16(dsbufferSQL, 16)) / 1000 + "," +  //dvip
-                            (float)(BitConverter.ToInt16(dsbufferSQL, 18)) / 1000 + "," +  //drazm
-                            (float)(BitConverter.ToInt16(dsbufferSQL, 20)) / 1000 + "," +  //dmot
-                            (float)(BitConverter.ToInt16(dsbufferSQL, 22)) / 1000 + "," +  //vvip
-                            BitConverter.ToInt16(dsbufferSQL, 24) + "," +                  //d1
-                            BitConverter.ToInt16(dsbufferSQL, 26) + "," +                  //d2
-                            BitConverter.ToInt16(dsbufferSQL, 28) + "," +                  //d3
-                            BitConverter.ToInt16(dsbufferSQL, 30) + "," +                  //d4
-                            BitConverter.ToInt16(dsbufferSQL, 32) + "," +                  //d5
-                            (float)(BitConverter.ToInt16(dsbufferSQL, 34)) / 100 + "," +   //e2
-                            (float)(BitConverter.ToInt16(dsbufferSQL, 36)) / 100 + "," +   //e3
-                            (float)(BitConverter.ToInt16(dsbufferSQL, 38)) / 100 + "," +   //e4
-                            (float)(BitConverter.ToInt16(dsbufferSQL, 40)) / 100 + "," +   //e5
-                            (float)(BitConverter.ToInt16(dsbufferSQL, 42)) / 100 + "," +   //n1l
-                            (float)(BitConverter.ToInt16(dsbufferSQL, 44)) / 100 + "," +   //n1p
-                            (float)(BitConverter.ToInt16(dsbufferSQL, 46)) / 100 + "," +   //n2l
-                            (float)(BitConverter.ToInt16(dsbufferSQL, 48)) / 100 + "," +   //n2p
-                            (float)(BitConverter.ToInt16(dsbufferSQL, 50)) / 100 + "," +   //n3l
-                            (float)(BitConverter.ToInt16(dsbufferSQL, 52)) / 100 + "," +   //n3p
-                            (float)(BitConverter.ToInt16(dsbufferSQL, 54)) / 100 + "," +   //n4l
-                            (float)(BitConverter.ToInt16(dsbufferSQL, 56)) / 100 + "," +   //n4p
-                            (float)(BitConverter.ToInt16(dsbufferSQL, 58)) / 100 + "," +   //n5l
-                            (float)(BitConverter.ToInt16(dsbufferSQL, 60)) / 100 + "," +   //n5p
-                            (float)(BitConverter.ToInt16(dsbufferSQL, 68)) / 100 + "," +   //reserv1
-                            (float)(BitConverter.ToInt16(dsbufferSQL, 70)) / 100 + "," +   //reserv2
-                            (float)(BitConverter.ToInt16(dsbufferSQL, 72)) / 100 + "," +   //t1
-                            (float)(BitConverter.ToInt16(dsbufferSQL, 74)) / 100 + "," +   //t2
-                            (float)(BitConverter.ToInt16(dsbufferSQL, 76)) / 100 + "," +   //t3
-                            (float)(BitConverter.ToInt16(dsbufferSQL, 78)) / 100 + "," +   //t4
-                            (float)(BitConverter.ToInt16(dsbufferSQL, 80)) / 100 + "," +   //t1l
-                            (float)(BitConverter.ToInt16(dsbufferSQL, 82)) / 100 + "," +   //t2l
-                            (float)(BitConverter.ToInt16(dsbufferSQL, 84)) / 100 + "," +   //t3l
-                            (float)(BitConverter.ToInt16(dsbufferSQL, 86)) / 100 + "," +   //t4l
-                            (float)(BitConverter.ToInt16(dsbufferSQL, 88)) / 100 + "," +   //t1p
-                            (float)(BitConverter.ToInt16(dsbufferSQL, 90)) / 100 + "," +   //t2p
-                            (float)(BitConverter.ToInt16(dsbufferSQL, 92)) / 100 + "," +   //t3p
-                            (float)(BitConverter.ToInt16(dsbufferSQL, 94)) / 100 + "," +   //t4p
-                            (float)(BitConverter.ToInt16(dsbufferSQL, 96)) / 100 + "," +   //t1z
-                            (float)(BitConverter.ToInt16(dsbufferSQL, 98)) / 100 + "," +   //t2z
-                            (float)(BitConverter.ToInt16(dsbufferSQL, 100)) / 100 + "," +  //t3z
-                            (float)(BitConverter.ToInt16(dsbufferSQL, 112)) / 100 + "," +  //t4z
-                            (float)(BitConverter.ToInt16(dsbufferSQL, 114)) / 10 + "," +   //erazm
-                            (float)(BitConverter.ToInt16(dsbufferSQL, 116)) / 100 + "," +  //ivozbrazm
-                            (float)(BitConverter.ToInt16(dsbufferSQL, 118)) / 10 + "," +   //izadrazm 
-                            (float)(BitConverter.ToInt16(dsbufferSQL, 120)) / 10 + "," +   //w1
-                            (float)(BitConverter.ToInt16(dsbufferSQL, 122)) / 10 + "," +   //w2v
-                            (float)(BitConverter.ToInt16(dsbufferSQL, 124)) / 10 + "," +   //w2n
-                            (float)(BitConverter.ToInt16(dsbufferSQL, 126)) / 10 + "," +   //w3v
-                            (float)(BitConverter.ToInt16(dsbufferSQL, 128)) / 10 + "," +   //w3n
-                            (float)(BitConverter.ToInt16(dsbufferSQL, 130)) / 10 + "," +   //w4v
-                            (float)(BitConverter.ToInt16(dsbufferSQL, 132)) / 10 + "," +   //w4n
-                            (float)(BitConverter.ToInt16(dsbufferSQL, 134)) / 10 + "," +   //w5v
-                            (float)(BitConverter.ToInt16(dsbufferSQL, 136)) / 10 + "," +   //w5n
-                            (float)(BitConverter.ToInt16(dsbufferSQL, 138)) / 10 + "," +   //wmot
-                            BitConverter.ToInt16(dsbufferSQL, 140) + "," +                 //imot
-                            BitConverter.ToInt16(dsbufferSQL, 142) + "," +                 //izadmot
-                            (float)(BitConverter.ToInt16(dsbufferSQL, 144)) / 10 + "," +   //u1
-                            (float)(BitConverter.ToInt16(dsbufferSQL, 146)) / 10 + "," +   //u2v
-                            (float)(BitConverter.ToInt16(dsbufferSQL, 148)) / 10 + "," +   //u2n
-                            (float)(BitConverter.ToInt16(dsbufferSQL, 150)) / 10 + "," +   //u3v
-                            (float)(BitConverter.ToInt16(dsbufferSQL, 152)) / 10 + "," +   //u3n
-                            (float)(BitConverter.ToInt16(dsbufferSQL, 154)) / 10 + "," +   //u4v
-                            (float)(BitConverter.ToInt16(dsbufferSQL, 156)) / 10 + "," +   //u4n
-                            (float)(BitConverter.ToInt16(dsbufferSQL, 158)) / 10 + "," +   //u5v
-                            (float)(BitConverter.ToInt16(dsbufferSQL, 160)) / 10 + "," +   //u5n
-                            (float)(BitConverter.ToInt16(dsbufferSQL, 162)) / 10 + "," +   //umot
-                            BitConverter.ToInt16(dsbufferSQL, 164) + "," +                 //i1
-                            BitConverter.ToInt16(dsbufferSQL, 166) + "," +                 //i2v
-                            BitConverter.ToInt16(dsbufferSQL, 168) + "," +                 //i2n
-                            BitConverter.ToInt16(dsbufferSQL, 170) + "," +                 //i3v
-                            BitConverter.ToInt16(dsbufferSQL, 172) + "," +                 //i3n
-                            BitConverter.ToInt16(dsbufferSQL, 174) + "," +                 //i4v
-                            BitConverter.ToInt16(dsbufferSQL, 176) + "," +                 //i4n
-                            BitConverter.ToInt16(dsbufferSQL, 178) + "," +                 //i5v
-                            BitConverter.ToInt16(dsbufferSQL, 180) + "," +                 //i5n
-                            (float)(BitConverter.ToInt16(dsbufferSQL, 192)) / 10 + "," +   //rtv
-                            (float)(BitConverter.ToInt16(dsbufferSQL, 194)) / 10 + "," +   //dt1
-                            (float)(BitConverter.ToInt16(dsbufferSQL, 196)) / 10 + "," +   //dt2
-                            (float)(BitConverter.ToInt16(dsbufferSQL, 198)) / 10 + "," +   //dt3
-                            (float)(BitConverter.ToInt16(dsbufferSQL, 200)) / 10 + "," +   //dt4
-                            (float)(BitConverter.ToInt16(dsbufferSQL, 202)) / 10 + "," +   //grt
-                            (float)(BitConverter.ToInt16(dsbufferSQL, 204)) / 10 + "," +   //trt
-                            (float)(BitConverter.ToInt16(dsbufferSQL, 206)) / 10 + "," +   //mv1
-                            (float)(BitConverter.ToInt16(dsbufferSQL, 208)) / 10 + "," +   //mv2
-                            (float)(BitConverter.ToInt16(dsbufferSQL, 210)) / 10 + "," +   //mv3
-                            (float)(BitConverter.ToInt16(dsbufferSQL, 62)) / 10 + "," +    //dh1
-                            (float)(BitConverter.ToInt16(dsbufferSQL, 64)) / 10 + "," +    //dh5
-                            BitConverter.ToInt16(dsbufferSQL, 216) + "," +                 //os1klvb
-                            BitConverter.ToInt16(dsbufferSQL, 218) + "," +                 //rezerv
-                            BitConverter.ToInt16(dsbufferSQL, 220) +                       //mezdoza4
+                            DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'," +       //"datetime101ms datetime , "
+                            (float)(BitConverter.ToInt16(dsbufferSQL, 0)) / 100 + "," +     //"VKlet float," +            
+                            (float)(BitConverter.ToInt16(dsbufferSQL, 2)) / 1 + "," +       //"IzadR float," +            
+                            (float)(BitConverter.ToInt16(dsbufferSQL, 4)) / 1 + "," +       //"IzadM float," +            
+                            (float)(BitConverter.ToInt16(dsbufferSQL, 6)) / 10 + "," +      //"NKlet float," +            
+                            (float)(BitConverter.ToInt16(dsbufferSQL, 8)) / 10 + "," +      //"NRazm float," +            
+                            (float)(BitConverter.ToInt16(dsbufferSQL, 10)) / 10 + "," +     //"NMot float," +             
+                            (float)(BitConverter.ToInt16(dsbufferSQL, 12)) * 10 + "," +     //"TRazm float," +            
+                            (float)(BitConverter.ToInt16(dsbufferSQL, 14)) * 10 + "," +     //"TMot float," +             
+                            (float)(BitConverter.ToInt16(dsbufferSQL, 16)) / 1 + "," +      //"RRazm float," +            
+                            (float)(BitConverter.ToInt16(dsbufferSQL, 18)) / 1 + "," +      //"RMot float," +             
+                            (float)(BitConverter.ToInt16(dsbufferSQL, 20)) / 100 + "," +    //"NVlev float," +            
+                            (float)(BitConverter.ToInt16(dsbufferSQL, 22)) / 100 + "," +    //"NVpr float," +             
+                            (float)(BitConverter.ToInt16(dsbufferSQL, 48)) / 100 + "," +    //"IvozM float," +            
+                            (float)(BitConverter.ToInt16(dsbufferSQL, 50)) / 1 + "," +      //"Imot float," +             
+                            (float)(BitConverter.ToInt16(dsbufferSQL, 52)) / 10 + "," +     //"Urazm float," +            
+                            (float)(BitConverter.ToInt16(dsbufferSQL, 54)) / 100 + "," +    //"IvozR float," +            
+                            (float)(BitConverter.ToInt16(dsbufferSQL, 56)) / 10 + "," +     //"Umot float," +             
+                            (float)(BitConverter.ToInt16(dsbufferSQL, 128)) / 1 + "," +     //"IRUZ4 float," +            
+                            (float)(BitConverter.ToInt16(dsbufferSQL, 130)) / 1 + "," +     //"IRUZ5 float," +            
+                            (float)(BitConverter.ToInt16(dsbufferSQL, 132)) / 1 + "," +     //"IMUZ4 float," +            
+                            (float)(BitConverter.ToInt16(dsbufferSQL, 134)) / 1 + "," +     //"IMUZ5 float," +            
+                            (float)(BitConverter.ToInt16(dsbufferSQL, 136)) / 100 + "," +   //"IzovK float," +            
+                            (float)(BitConverter.ToInt16(dsbufferSQL, 138)) / 10 + "," +    //"Ukl float," +              
+                            (float)(BitConverter.ToInt16(dsbufferSQL, 140)) / 1 + "," +     //"IKUZ4 float," +            
+                            (float)(BitConverter.ToInt16(dsbufferSQL, 142)) / 1 + "," +     //"IKUZ5 float," +            
+                            (float)(BitConverter.ToInt16(dsbufferSQL, 144)) / 100 + "," +   //"ObgTek float," +           
+                            (float)(BitConverter.ToInt16(dsbufferSQL, 146)) / 1 + "," +     //"DatObgDo float," +         
+                            (float)(BitConverter.ToInt16(dsbufferSQL, 148)) / 1 +           //"DatObgZa float"  +         
                             ")";
 
 
 
                             if (true) //TODO Если установлен bit что прокатка рулона(1s) то тогда пишем во временную таблицу
                             {
-                                using (SqlConnection conSQL101ms2 = new SqlConnection(connectionString))
+                                using (SqlConnection conSQL80ms2 = new SqlConnection(connectionString))
                                 {
                                     try
                                     {
-                                        conSQL101ms2.Open();
-                                        SqlCommand command = new SqlCommand(comRulon101ms2, conSQL101ms2);
+                                        conSQL80ms2.Open();
+                                        SqlCommand command = new SqlCommand(comRulon80ms2, conSQL80ms2);
                                         command.ExecuteNonQuery();
-                                        Program.messageOKDs101mc = "101мс во временную базу записана.";
+                                        Program.messageOKDs101mc = "-Write";
                                         Program.dtOKDs101mc = DateTime.Now;
-                                        conSQL101ms2.Close();
+                                        conSQL80ms2.Close();
                                     }
                                     catch (Exception ex)
                                     {
-                                        Program.messageErrorDs101mc = "101mc НЕ ЗАПИСАНЫ. " + ex.Message + " Insert запрос: " + comRulon101ms2;
+                                        Program.messageErrorDs101mc = "80mc НЕ ЗАПИСАНЫ. " + ex.Message + " Insert запрос: " + comRulon80ms2;
                                         Program.dtErrorDs101mc = DateTime.Now;
                                     }
                                 }
@@ -755,7 +625,7 @@ namespace consoleRS2toBD
                 {
 
                     //LogSystem.Write(dsNamePLC + " SQL(101ms)-" + ex.Source, Direction.ERROR, "Start Error-" + ex.Message, 0, 3, true);
-                    Program.messageErrorDs101mc = "Ошибка 101мс-" + ex.Message;
+                    Program.messageErrorDs101mc = "Ошибка 80мс-" + ex.Message;
                     Program.dtErrorDs101mc = DateTime.Now;
                 }
 

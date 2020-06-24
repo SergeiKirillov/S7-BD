@@ -962,7 +962,7 @@ namespace consoleRS2toBD
                                     conSQL101ms2.Open();
                                     SqlCommand command = new SqlCommand(comRulon101ms2, conSQL101ms2);
                                     command.ExecuteNonQuery();
-                                    Program.messageOKSt101mc = "101мс во временную базу записана.";
+                                    Program.messageOKSt101mc = "-Write.";
                                     Program.dtOKSt101mc = DateTime.Now;
                                     conSQL101ms2.Close();
                                 }

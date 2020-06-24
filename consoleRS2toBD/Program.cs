@@ -93,9 +93,9 @@ namespace consoleRS2toBD
             Console.Clear();
             Console.SetWindowSize(190, 40);
 
-            //clStan1700 stan1700 = new clStan1700();
-            //Thread task1 = new Thread(stan1700.goStart);
-            //task1.Start();
+            clStan1700 stan1700 = new clStan1700();
+            Thread task1 = new Thread(stan1700.goStart);
+            task1.Start();
 
             clDs stanDs = new clDs();
             Thread task2 = new Thread(stanDs.goStart);
@@ -126,7 +126,7 @@ namespace consoleRS2toBD
                 }
                 if (messageOKSt101mc != null)
                 {
-                    LogSystem.Write("Стан1700 Получение данных и запись во временную таблицу (цикл 101mc)", Direction.Ok, dtOKSt101mc, messageOKSt101mc, 1, 9, true);
+                    LogSystem.Write("Стан1700. Read PLC and Write во временную таблицу (цикл 101mc)", Direction.Ok, dtOKSt101mc, messageOKSt101mc, 1, 9, true);
                 }
 
                 if (messageErrorSt200mc != null)
@@ -135,7 +135,7 @@ namespace consoleRS2toBD
                 }
                 if (messageOKSt200mc != null)
                 {
-                    LogSystem.Write("Стан1700 Сообщения (цикл 200mc)", Direction.Ok, dtOKSt200mc, messageOKSt200mc, 1, 12, true);
+                    LogSystem.Write("Стан1700 Сообщения(цикл 200mc)", Direction.Ok, dtOKSt200mc, messageOKSt200mc, 1, 12, true);
                 }
 
                 if (messageErrorSt1c != null)
@@ -144,7 +144,7 @@ namespace consoleRS2toBD
                 }
                 if (messageOKSt1c != null)
                 {
-                    LogSystem.Write("Стан1700 Получение данных с энергосистемы (Цикл 1c)", Direction.Ok, dtOKSt1c, messageOKSt1c, 1, 15, true);
+                    LogSystem.Write("Стан1700. Цикл 1c.", Direction.Ok, dtOKSt1c, messageOKSt1c, 1, 15, true);
                 }
 
 
@@ -155,7 +155,7 @@ namespace consoleRS2toBD
                 }
                 if (messageOKStRulon != null)
                 {
-                    LogSystem.Write("Стан1700 переименование таблицы рулонов", Direction.Ok, dtOKStRulon, messageOKStRulon, 1, 18, true);
+                    LogSystem.Write("Стан1700. Rename-", Direction.Ok, dtOKStRulon, messageOKStRulon, 1, 18, true);
                 }
 
 
@@ -166,7 +166,7 @@ namespace consoleRS2toBD
                 }
                 if (messageOKStProizvodstvo != null)
                 {
-                    LogSystem.Write("Стан1700 запись в таблицу производства", Direction.Ok, dtOKStProizvodstvo, messageOKStProizvodstvo, 1, 21, true);
+                    LogSystem.Write("Стан1700. Write производствo.", Direction.Ok, dtOKStProizvodstvo, messageOKStProizvodstvo, 1, 21, true);
                 }
 
 
@@ -177,7 +177,7 @@ namespace consoleRS2toBD
                 }
                 if (messageOKStValki != null)
                 {
-                    LogSystem.Write("Стан1700 запись в таблицу перевалок валков", Direction.Ok, dtOKStValki, messageOKStValki, 1, 24, true);
+                    LogSystem.Write("Стан1700. Write перевалок валков.", Direction.Ok, dtOKStValki, messageOKStValki, 1, 24, true);
                 }
 
 
@@ -189,21 +189,21 @@ namespace consoleRS2toBD
 
                 if (messageErrorDs100mc != null)
                 {
-                    LogSystem.Write("Дрессировка. ERROR цикла 100mc", Direction.ERROR, dtErrorDs100mc, messageErrorDs100mc, 100, 5, true);
+                    LogSystem.Write("Дрессировка. ERROR цикла 70mc", Direction.ERROR, dtErrorDs100mc, messageErrorDs100mc, 100, 5, true);
                 }
                 if (messageOKDs100mc != null)
                 {
-                    LogSystem.Write("Дрессировка. Сonnection (цикл 100mc)", Direction.Ok, dtOKDs100mc, messageOKDs100mc, 100, 6, true);
+                    LogSystem.Write("Дрессировка. Сonnection (цикл 70mc)", Direction.Ok, dtOKDs100mc, messageOKDs100mc, 100, 6, true);
                 }
 
 
                 if (messageErrorDs101mc != null)
                 {
-                    LogSystem.Write("Дрессировка. ERROR цикла 101mc", Direction.ERROR, dtErrorDs101mc, messageErrorDs101mc, 100, 8, true);
+                    LogSystem.Write("Дрессировка. ERROR цикла 80mc", Direction.ERROR, dtErrorDs101mc, messageErrorDs101mc, 100, 8, true);
                 }
                 if (messageOKDs101mc != null)
                 {
-                    LogSystem.Write("Дрессировка. Получение данных и запись во временную таблицу (цикл 101mc)", Direction.Ok, dtOKDs101mc, messageOKDs101mc, 100, 9, true);
+                    LogSystem.Write("Дрессировка. Read PLC and Write во временную таблицу (цикл 80mc)", Direction.Ok, dtOKDs101mc, messageOKDs101mc, 100, 9, true);
                 }
 
                 if (messageErrorDs200mc != null)

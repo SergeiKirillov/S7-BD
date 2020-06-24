@@ -557,8 +557,8 @@ namespace consoleRS2toBD
                             //Console.WriteLine("error" + rs2.Error(res));
                             //LogSystem.Write(stanNamePLC + " start", Direction.ERROR, "Error connection!. Error - " + rs2.Error(res), 1, 1, true);
                           
-                            Program.messageError100mc = rs2.Error(res);
-                            Program.dtError100mc = DateTime.Now;
+                            Program.messageErrorSt100mc = rs2.Error(res);
+                            Program.dtErrorSt100mc = DateTime.Now;
 
                         }
                         else
@@ -575,8 +575,8 @@ namespace consoleRS2toBD
                     if (resultReadField == 0)
                     {
                         //LogSystem.Write(stanNamePLC + " start", Direction.Ok, "Соединение активно.", 1, 2, true);
-                        Program.messageOK100mc = "Соединение активно";
-                        Program.dtOK100mc = DateTime.Now;
+                        Program.messageOKSt100mc = "Соединение активно";
+                        Program.dtOKSt100mc = DateTime.Now;
 
                         //Буфер PLC
                         Thread PLS100ms = new Thread(BufferToBuffer);
@@ -599,8 +599,8 @@ namespace consoleRS2toBD
                     {
                         rs2.UnloadConnection(stanconnect);
                         //LogSystem.Write(stanNamePLC + " 100ms", Direction.ERROR, "Error.Read fied PLC. " + rs2.Error(resultReadField), 1, 1, true);
-                        Program.messageError100mc = "Ошибка чтения тегов c контроллера:"+rs2.Error(resultReadField);
-                        Program.dtError100mc = DateTime.Now;
+                        Program.messageErrorSt100mc = "Ошибка чтения тегов c контроллера:"+rs2.Error(resultReadField);
+                        Program.dtErrorSt100mc = DateTime.Now;
                     }
 
                 }
@@ -611,8 +611,8 @@ namespace consoleRS2toBD
             {
                 /*все исключения кидаем в пустоту*/
                 LogSystem.Write(stanNamePLC + " start -" + ex.Source, Direction.ERROR, "Start Error-" + ex.Message, 1, 1, true);
-                Program.messageError100mc = "Общая ошибка 100mc -" + ex.Message;
-                Program.dtError100mc = DateTime.Now;
+                Program.messageErrorSt100mc = "Общая ошибка 100mc -" + ex.Message;
+                Program.dtErrorSt100mc = DateTime.Now;
 
             }
         }
@@ -962,14 +962,14 @@ namespace consoleRS2toBD
                                     conSQL101ms2.Open();
                                     SqlCommand command = new SqlCommand(comRulon101ms2, conSQL101ms2);
                                     command.ExecuteNonQuery();
-                                    Program.messageOK101mc = "101мс во временную базу записана.";
-                                    Program.dtOK101mc = DateTime.Now;
+                                    Program.messageOKSt101mc = "101мс во временную базу записана.";
+                                    Program.dtOKSt101mc = DateTime.Now;
                                     conSQL101ms2.Close();
                                 }
                                 catch (Exception ex)
                                 {
-                                    Program.messageError101mc = "101mc НЕ ЗАПИСАНЫ. " + ex.Message + " Insert запрос: " + comRulon101ms2;
-                                    Program.dtError101mc = DateTime.Now;
+                                    Program.messageErrorSt101mc = "101mc НЕ ЗАПИСАНЫ. " + ex.Message + " Insert запрос: " + comRulon101ms2;
+                                    Program.dtErrorSt101mc = DateTime.Now;
                                 }
                             }   
                         }
@@ -984,8 +984,8 @@ namespace consoleRS2toBD
             {
 
                 //LogSystem.Write(stanNamePLC + " SQL(101ms)-" + ex.Source, Direction.ERROR, "Start Error-" + ex.Message, 0, 3, true);
-                Program.messageError101mc = "Ошибка 101мс-" + ex.Message;
-                Program.dtError101mc = DateTime.Now;
+                Program.messageErrorSt101mc = "Ошибка 101мс-" + ex.Message;
+                Program.dtErrorSt101mc = DateTime.Now;
             }
 
 
@@ -1483,14 +1483,14 @@ namespace consoleRS2toBD
                             command.Parameters.AddWithValue("@datetime1sStan", DateTime.Now);
                             command.ExecuteNonQuery();
                             conSQL1s2.Close();
-                            Program.messageOK1c = "Данные в БД(" + "Stan1s" + numberTable + ") 1s записаны";
-                            Program.dtOK1c = DateTime.Now;
+                            Program.messageOKSt1c = "Данные в БД(" + "Stan1s" + numberTable + ") 1s записаны";
+                            Program.dtOKSt1c = DateTime.Now;
                         }
                         catch (Exception ex)
                         {
 
-                            Program.messageError1c = "1s НЕ ЗАПИСАНЫ - " + ex.Message + " Insert запрос: " + comRulon1s1;
-                            Program.dtError1c = DateTime.Now;
+                            Program.messageErrorSt1c = "1s НЕ ЗАПИСАНЫ - " + ex.Message + " Insert запрос: " + comRulon1s1;
+                            Program.dtErrorSt1c = DateTime.Now;
                         }
 
 
@@ -1622,14 +1622,14 @@ namespace consoleRS2toBD
 
                                 int WriteSQL = command.ExecuteNonQuery();
 
-                                Program.messageOKProizvodstvo = strNumberRulona+"("+ stanTimeStart.ToString("HH:mm")+"-"+ stanTimeStop.ToString("HH:mm")+") "+ H5_work  +"*"+ B_Work + "->"+ Ves_Work;
+                                Program.messageOKStProizvodstvo = strNumberRulona+"("+ stanTimeStart.ToString("HH:mm")+"-"+ stanTimeStop.ToString("HH:mm")+") "+ H5_work  +"*"+ B_Work + "->"+ Ves_Work;
                                 //messageOKProizvodstvo = "производство";
-                                Program.dtOKProizvodstvo = DateTime.Now;
+                                Program.dtOKStProizvodstvo = DateTime.Now;
                             }
                             catch (Exception ex)
                             {
-                                Program.messageErrorProizvodstvo = "Ошибка в сохранении данных о прокатанном рулоне " + ex.Message + " Insert запрос: " + comWorkStan;
-                                Program.dtErrorProizvodstvo = DateTime.Now;
+                                Program.messageErrorStProizvodstvo = "Ошибка в сохранении данных о прокатанном рулоне " + ex.Message + " Insert запрос: " + comWorkStan;
+                                Program.dtErrorStProizvodstvo = DateTime.Now;
 
                             }
                             
@@ -1664,15 +1664,15 @@ namespace consoleRS2toBD
                                 string comRulon1s2 = "sp_rename 'TEMPstan101ms','" + begin + end + "'";
                                 SqlCommand command = new SqlCommand(comRulon1s2, conSQL1s3);
                                 command.ExecuteNonQuery();
-                                Program.messageOKRulon = "Временная база -> " + begin + end;
-                                Program.dtOKRulon = DateTime.Now;
+                                Program.messageOKStRulon = "Временная база -> " + begin + end;
+                                Program.dtOKStRulon = DateTime.Now;
                                 conSQL1s3.Close();
                             }
                             catch (Exception ex)
                             {
 
-                                Program.messageErrorRulon = "Временная база не переименована " + ex.Message;
-                                Program.dtErrorRulon = DateTime.Now;
+                                Program.messageErrorStRulon = "Временная база не переименована " + ex.Message;
+                                Program.dtErrorStRulon = DateTime.Now;
                             }
                             
 
@@ -1761,8 +1761,8 @@ namespace consoleRS2toBD
                     catch (Exception ex)
                     {
                         //ошибка
-                        Program.messageErrorValki = "Ошибка формировании таблицы валков - "+ ex.Message;
-                        Program.dtErrorValki = DateTime.Now; ;
+                        Program.messageErrorStValki = "Ошибка формировании таблицы валков - "+ ex.Message;
+                        Program.dtErrorStValki = DateTime.Now; ;
                     }
 
                     
@@ -1802,8 +1802,8 @@ namespace consoleRS2toBD
                             }
                             catch (Exception ex)
                             {
-                                Program.messageErrorValki = "Ошибка формировании таблицы валков " + ex.Message;
-                                Program.dtErrorValki = DateTime.Now;
+                                Program.messageErrorStValki = "Ошибка формировании таблицы валков " + ex.Message;
+                                Program.dtErrorStValki = DateTime.Now;
 
                             }
                             
@@ -1819,8 +1819,8 @@ namespace consoleRS2toBD
                                 {
                                     bulk.DestinationTableName = strTableNamePerevalki;
                                     bulk.WriteToServer(dtPerevalkiStan);
-                                    Program.messageOKValki = "Данные перевалки в таблицу " + strTableNamePerevalki + " записаны ";
-                                    Program.dtOKValki = DateTime.Now;
+                                    Program.messageOKStValki = "Данные перевалки в таблицу " + strTableNamePerevalki + " записаны ";
+                                    Program.dtOKStValki = DateTime.Now;
 
 
                                     dtPerevalkiStan.Clear(); //очистка таблицы 
@@ -1832,8 +1832,8 @@ namespace consoleRS2toBD
                             }
                             catch (Exception ex )
                             {
-                                Program.messageErrorValki = "Ошибка записи в таблицу валков " + ex.Message;
-                                Program.dtErrorValki = DateTime.Now;
+                                Program.messageErrorStValki = "Ошибка записи в таблицу валков " + ex.Message;
+                                Program.dtErrorStValki = DateTime.Now;
 
                             }
                         }
@@ -1851,8 +1851,8 @@ namespace consoleRS2toBD
             }
             catch (Exception ex)
             {
-                Program.messageError1c = "Ошибка глобальная - " + ex;
-                Program.dtError1c = DateTime.Now;
+                Program.messageErrorSt1c = "Ошибка глобальная - " + ex;
+                Program.dtErrorSt1c = DateTime.Now;
 
             }
             
@@ -1935,8 +1935,8 @@ namespace consoleRS2toBD
                                 {
                                     bulkMessage.DestinationTableName = strTableName;
                                     bulkMessage.WriteToServer(dtMessagestan);
-                                    Program.messageOK200mc="Кол-во сообщений записанных в таблицу " + strTableName + " равно " + dtMessagestan.Rows.Count;
-                                    Program.dtOK200mc = dtMessage;
+                                    Program.messageOKSt200mc = "Кол-во сообщений записанных в таблицу " + strTableName + " равно " + dtMessagestan.Rows.Count;
+                                    Program.dtOKSt200mc = dtMessage;
                                 }
                             }
                             dtMessagestan.Clear();
@@ -1944,8 +1944,8 @@ namespace consoleRS2toBD
                         else
                         {
 
-                            Program.messageOK200mc = "Сообщений не было с " + DateTime.Now.AddMinutes(-1).ToString() + " по " + DateTime.Now.ToString();
-                            Program.dtOK200mc = dtMessage;
+                            Program.messageOKSt200mc = "Сообщений не было с " + DateTime.Now.AddMinutes(-1).ToString() + " по " + DateTime.Now.ToString();
+                            Program.dtOKSt200mc = dtMessage;
                         }
 
                     }
@@ -1959,8 +1959,8 @@ namespace consoleRS2toBD
             }
             catch (Exception ex)
             {
-                Program.messageError200mc = "Global Error в модуле формирования сообщения " + ex.Message;
-                Program.dtOK200mc = DateTime.Now;
+                Program.messageErrorSt200mc = "Global Error в модуле формирования сообщения " + ex.Message;
+                Program.dtOKSt200mc = DateTime.Now;
 
 
                 

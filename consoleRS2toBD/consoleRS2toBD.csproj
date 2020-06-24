@@ -59,6 +59,7 @@
   <ItemGroup>
     <Compile Include="ClassDs.cs" />
     <Compile Include="ClassStan.cs" />
+    <Compile Include="clDs.cs" />
     <Compile Include="clPLCtoBD.cs" />
     <Compile Include="clStan1700.cs" />
     <Compile Include="clStanDress.cs" />

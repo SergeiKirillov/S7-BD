@@ -91,16 +91,15 @@ namespace consoleRS2toBD
             System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("en-US");
 
             Console.Clear();
-            Console.SetWindowSize(180, 40);
+            Console.SetWindowSize(190, 40);
 
-            clStan1700 stan1700 = new clStan1700();
-            Thread task1 = new Thread(stan1700.goStart);
+            //clStan1700 stan1700 = new clStan1700();
+            //Thread task1 = new Thread(stan1700.goStart);
+            //task1.Start();
 
-            task1.Start();
-
-            //clStanDress stanDs = new clStanDress();
-            //Thread task2 = new Thread(stanDs.goStart);
-            //task2.Start();
+            clDs stanDs = new clDs();
+            Thread task2 = new Thread(stanDs.goStart);
+            task2.Start();
 
             while (true)
             {

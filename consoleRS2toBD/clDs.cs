@@ -278,13 +278,15 @@ namespace consoleRS2toBD
                 Thread querySQL = new Thread(dsSQL80ms);
                 querySQL.Start();
 
+                
+                Thread query1s = new Thread(dsSQL1s);
+                query1s.Start();
+
                 //Thread queryMes = new Thread(dsMessage200ms);
                 //queryMes.Start();
 
-                //Thread query1s = new Thread(dsSQL1s);
-                //query1s.Start();
 
-                while (true)
+            while (true)
                 {
                     Thread.Sleep(5000);
 
@@ -636,7 +638,7 @@ namespace consoleRS2toBD
             #region Формируем и записываем данные  1c. Название таблицы формируется по принципу YYYYmmddW (W - смена(1 ночная(с 19-07), 2дневная(07-19)))
             private void dsSQL1s()
             {
-                byte[] dsbuf1s = new byte[95];
+                byte[] dsbuf1s = new byte[56];
 
                 
                 try
@@ -666,436 +668,197 @@ namespace consoleRS2toBD
                         #endregion
 
 
-                        dsbuf1s[0] = dsbuffer1s[224];           //191HL
-                        dsbuf1s[1] = dsbuffer1s[225];           //192HL
-                        dsbuf1s[2] = dsbuffer1s[226];           //193BL
-                        dsbuf1s[3] = dsbuffer1s[227];           //194BL"
-                        dsbuf1s[4] = dsbuffer1s[228];           //191HR"
-                        dsbuf1s[5] = dsbuffer1s[229];           //192HR"
-                        dsbuf1s[6] = dsbuffer1s[230];           //193BR"
-                        dsbuf1s[7] = dsbuffer1s[231];           //194BR"
-                        dsbuf1s[8] = dsbuffer1s[232];           //281NL"
-                        dsbuf1s[9] = dsbuffer1s[233];           //282NL"
-                        dsbuf1s[10] = dsbuffer1s[234];          //283BL"
-                        dsbuf1s[11] = dsbuffer1s[235];          //284BL"
-                        dsbuf1s[12] = dsbuffer1s[236];          //281NR"
-                        dsbuf1s[13] = dsbuffer1s[237];          //282NR"
-                        dsbuf1s[14] = dsbuffer1s[238];          //283BR"
-                        dsbuf1s[15] = dsbuffer1s[239];          //284BR"
-                        dsbuf1s[16] = dsbuffer1s[240];          //301BL"
-                        dsbuf1s[17] = dsbuffer1s[241];          //302BL"
-                        dsbuf1s[18] = dsbuffer1s[242];          //303HL"
-                        dsbuf1s[19] = dsbuffer1s[243];          //304HL"
-                        dsbuf1s[20] = dsbuffer1s[244];          //301BR"
-                        dsbuf1s[21] = dsbuffer1s[245];          //302BR"
-                        dsbuf1s[22] = dsbuffer1s[246];          //303HR"
-                        dsbuf1s[23] = dsbuffer1s[247];          //304HR"
-                        dsbuf1s[24] = dsbuffer1s[248];          //321BL"
-                        dsbuf1s[25] = dsbuffer1s[249];          //322BL"
-                        dsbuf1s[26] = dsbuffer1s[250];          //323HL"
-                        dsbuf1s[27] = dsbuffer1s[251];          //324HL"
-                        dsbuf1s[28] = dsbuffer1s[252];          //321BR"
-                        dsbuf1s[29] = dsbuffer1s[253];          //322BR"
-                        dsbuf1s[30] = dsbuffer1s[254];          //323HR"
-                        dsbuf1s[31] = dsbuffer1s[255];          //324HR"
-                        dsbuf1s[32] = dsbuffer1s[256];          //341BL"
-                        dsbuf1s[33] = dsbuffer1s[257];          //342BL"
-                        dsbuf1s[34] = dsbuffer1s[258];          //343HL"
-                        dsbuf1s[35] = dsbuffer1s[259];          //344HL"
-                        dsbuf1s[36] = dsbuffer1s[260];          //341BR"
-                        dsbuf1s[37] = dsbuffer1s[261];          //342BR"
-                        dsbuf1s[38] = dsbuffer1s[262];          //343HR"
-                        dsbuf1s[39] = dsbuffer1s[263];          //344HR"
-                        dsbuf1s[40] = dsbuffer1s[264];          //461L",
-                        dsbuf1s[41] = dsbuffer1s[265];          //462L",
-                        dsbuf1s[42] = dsbuffer1s[266];          //463L",
-                        dsbuf1s[43] = dsbuffer1s[267];          //461R",
-                        dsbuf1s[44] = dsbuffer1s[268];          //462R",
-                        dsbuf1s[45] = dsbuffer1s[269];          //463R",
-                        dsbuf1s[46] = dsbuffer1s[270];          //G11L",
-                        dsbuf1s[47] = dsbuffer1s[271];          //G12L",
-                        dsbuf1s[48] = dsbuffer1s[272];          //G13L",
-                        dsbuf1s[49] = dsbuffer1s[273];          //G14L",
-                        dsbuf1s[50] = dsbuffer1s[274];          //G15L",
-                        dsbuf1s[51] = dsbuffer1s[275];          //G16L",
-                        dsbuf1s[52] = dsbuffer1s[276];          //G17L",
-                        dsbuf1s[53] = dsbuffer1s[277];          //G11R",
-                        dsbuf1s[54] = dsbuffer1s[278];          //G12R",
-                        dsbuf1s[55] = dsbuffer1s[279];          //G13R",
-                        dsbuf1s[56] = dsbuffer1s[280];          //G14R",
-                        dsbuf1s[57] = dsbuffer1s[281];          //G15R",
-                        dsbuf1s[58] = dsbuffer1s[282];          //G16R",
-                        dsbuf1s[59] = dsbuffer1s[283];          //G17R",
-                        dsbuf1s[60] = dsbuffer1s[284];          //G21L",
-                        dsbuf1s[61] = dsbuffer1s[285];          //G22L",
-                        dsbuf1s[62] = dsbuffer1s[286];          //G23L",
-                        dsbuf1s[63] = dsbuffer1s[287];          //G24L",
-                        dsbuf1s[64] = dsbuffer1s[288];          //G25L",
-                        dsbuf1s[65] = dsbuffer1s[289];          //G26L",
-                        dsbuf1s[66] = dsbuffer1s[290];          //G27L",
-                        dsbuf1s[67] = dsbuffer1s[291];          //G21R",
-                        dsbuf1s[68] = dsbuffer1s[292];          //G22R",
-                        dsbuf1s[69] = dsbuffer1s[293];          //G23R",
-                        dsbuf1s[70] = dsbuffer1s[294];          //G24R",
-                        dsbuf1s[71] = dsbuffer1s[295];          //G25R",
-                        dsbuf1s[72] = dsbuffer1s[296];          //G26R",
-                        dsbuf1s[73] = dsbuffer1s[297];          //G27R",
-                        dsbuf1s[74] = dsbuffer1s[298];          //D12", 
-                        dsbuf1s[75] = dsbuffer1s[299];          //D13", 
-                        dsbuf1s[76] = dsbuffer1s[300];          //D14", 
-                        dsbuf1s[77] = dsbuffer1s[301];          //D15", 
-                        dsbuf1s[78] = dsbuffer1s[302];          //D16", 
-                        dsbuf1s[79] = dsbuffer1s[303];          //D17", 
-                        dsbuf1s[80] = dsbuffer1s[304];          //D18", 
-                        dsbuf1s[81] = dsbuffer1s[305];          //D19", 
-                        dsbuf1s[82] = dsbuffer1s[306];          //D20", 
-                        dsbuf1s[83] = dsbuffer1s[307];          //U64", 
-                        dsbuf1s[84] = dsbuffer1s[308];          //RasxCD
-                        dsbuf1s[85] = dsbuffer1s[24];          //D1_pred 
-                        dsbuf1s[86] = dsbuffer1s[25];          //D1_pred
-                        dsbuf1s[87] = dsbuffer1s[26];          //D2_pred 
-                        dsbuf1s[88] = dsbuffer1s[27];          //D2_pred
-                        dsbuf1s[89] = dsbuffer1s[28];          //D3_pred 
-                        dsbuf1s[90] = dsbuffer1s[29];          //D3_pred
-                        dsbuf1s[91] = dsbuffer1s[30];          //D4_pred 
-                        dsbuf1s[92] = dsbuffer1s[31];          //D4_pred
-                        dsbuf1s[93] = dsbuffer1s[32];          //D5_pred 
-                        dsbuf1s[94] = dsbuffer1s[33];          //D5_pred
+                    dsbuf1s[0] = dsbuffer1s[58];    //buffer_1s_w[0]:
+                    dsbuf1s[1] = dsbuffer1s[59];
+
+                    dsbuf1s[2] = dsbuffer1s[60];    //buffer_1s_w[1]:
+                    dsbuf1s[3] = dsbuffer1s[61];
+
+                    dsbuf1s[4] = dsbuffer1s[62];    //buffer_1s_w[2]:
+                    dsbuf1s[5] = dsbuffer1s[63];
+                    
+                    dsbuf1s[6] = dsbuffer1s[64];    //buffer_1s_w[3]:  
+                    dsbuf1s[7] = dsbuffer1s[65];    
+
+                    dsbuf1s[8] = dsbuffer1s[66];     //buffer_1s_w[4]:
+                    dsbuf1s[9] = dsbuffer1s[67];
+
+                    dsbuf1s[10] = dsbuffer1s[68];    //buffer_1s_w[5]:   
+                    dsbuf1s[11] = dsbuffer1s[69];
+
+                    dsbuf1s[12] = dsbuffer1s[70];   //buffer_1s_w[6]:   
+                    dsbuf1s[13] = dsbuffer1s[71];
+
+                    dsbuf1s[14] = dsbuffer1s[72];   //buffer_1s_w[7]:   
+                    dsbuf1s[15] = dsbuffer1s[73];   
+
+                    dsbuf1s[16] = dsbuffer1s[74];   //buffer_1s_w[8]: 
+                    dsbuf1s[17] = dsbuffer1s[75];   
+
+                    dsbuf1s[18] = dsbuffer1s[76];   //buffer_1s_w[9]: 
+                    dsbuf1s[19] = dsbuffer1s[77];   
+
+                    dsbuf1s[20] = dsbuffer1s[78];   //buffer_1s_w[10]:      
+                    dsbuf1s[21] = dsbuffer1s[79];   //buffer_1s_w[11]:
+                    dsbuf1s[22] = dsbuffer1s[80];   //buffer_1s_w[12]:
+                    dsbuf1s[23] = dsbuffer1s[81];   //buffer_1s_w[13]:
+                    dsbuf1s[24] = dsbuffer1s[82];   //buffer_1s_w[14]:
+                    dsbuf1s[25] = dsbuffer1s[83];   //buffer_1s_w[15]:   //t1   
+                    dsbuf1s[26] = dsbuffer1s[84];   //buffer_1s_w[16]:   //t2      
+                    dsbuf1s[27] = dsbuffer1s[85];   //buffer_1s_w[17]:   //t3      
+                    dsbuf1s[28] = dsbuffer1s[86];   //buffer_1s_w[18]:   //t4      
+                    dsbuf1s[29] = dsbuffer1s[87];   //buffer_1s_w[19]:   //t5      
+                    dsbuf1s[30] = dsbuffer1s[88];   //buffer_1s_w[20]:   //t6      
+                    dsbuf1s[31] = dsbuffer1s[89];   //buffer_1s_w[21]:   //t7      
+                    dsbuf1s[32] = dsbuffer1s[90];   //buffer_1s_w[22]:   //t8      
+                    dsbuf1s[33] = dsbuffer1s[91];   //buffer_1s_w[23]:   //t9      
+                    dsbuf1s[34] = dsbuffer1s[92];   //buffer_1s_w[24]:   //t10     
+                    dsbuf1s[35] = dsbuffer1s[93];   //buffer_1s_w[25]:   //t11     
+                    dsbuf1s[36] = dsbuffer1s[94];   //buffer_1s_w[26]:   //t12     
+                    dsbuf1s[37] = dsbuffer1s[95];   //buffer_1s_w[27]:   //t13     
+                    dsbuf1s[38] = dsbuffer1s[96];   //buffer_1s_w[28]:   //t14     
+                    dsbuf1s[39] = dsbuffer1s[97];   //buffer_1s_w[29]:   //t15     
+                    dsbuf1s[40] = dsbuffer1s[98];   //buffer_1s_w[30]:   //t16     
+                    dsbuf1s[41] = dsbuffer1s[99];   //buffer_1s_w[31]:   //t17     
+                    dsbuf1s[42] = dsbuffer1s[100];  //buffer_1s_w[32]:   //t18     
+                    dsbuf1s[43] = dsbuffer1s[101];  //buffer_1s_w[33]:   //t19     
+                    dsbuf1s[44] = dsbuffer1s[102];  //buffer_1s_w[34]:   //t20     
+                    dsbuf1s[45] = dsbuffer1s[103];  //buffer_1s_w[35]:   //t21     
+                    dsbuf1s[46] = dsbuffer1s[104];  //buffer_1s_w[36]:   //t22     
+                    dsbuf1s[47] = dsbuffer1s[105];  //buffer_1s_w[37]:   //t23     
+                    dsbuf1s[48] = dsbuffer1s[106];  //buffer_1s_w[38]:   //t24     
+                    dsbuf1s[49] = dsbuffer1s[107];  //buffer_1s_w[39]:   //t25     
+                    dsbuf1s[50] = dsbuffer1s[108];  //buffer_1s_w[40]:   //t26     
+                    dsbuf1s[51] = dsbuffer1s[109];  //buffer_1s_w[41]:   //t27     
+                    dsbuf1s[52] = dsbuffer1s[110];  //buffer_1s_w[42]:   //t28     
+                    dsbuf1s[53] = dsbuffer1s[111];  //buffer_1s_w[43]:   //t29     
+                    dsbuf1s[54] = dsbuffer1s[112];  //buffer_1s_w[44]:   //Voda    
+                    dsbuf1s[55] = dsbuffer1s[113];  //buffer_1s_w[45]:      
 
 
 
 
+                    #region Запись данных 1s
 
 
-                        #region Запись данных 1s
-
-
-                        string comBD = "if not exists (select * from sysobjects where name ='" + "ds1s" + numberTable + "' and xtype='U') create table " + "ds1s" + numberTable +
+                    string comBD = "if not exists (select * from sysobjects where name ='" + "ds1s" + numberTable + "' and xtype='U') create table " + "ds1s" + numberTable +
                            "(" +
-                           "datetime1s datetime , " +
-                           "s191HL int , " +
-                           "s192HL int , " +
-                           "s193BL int , " +
-                           "s194BL int , " +
-                           "s191HR int , " +
-                           "s192HR int , " +
-                           "s193BR int , " +
-                           "s194BR int , " +
-                           "s281NL int , " +
-                           "s282NL int , " +
-                           "s283BL int , " +
-                           "s284BL int , " +
-                           "s281NR int , " +
-                           "s282NR int , " +
-                           "s283BR int , " +
-                           "s284BR int , " +
-                           "s301BL int , " +
-                           "s302BL int , " +
-                           "s303HL int , " +
-                           "s304HL int , " +
-                           "s301BR int , " +
-                           "s302BR int , " +
-                           "s303HR int , " +
-                           "s304HR int , " +
-                           "s321BL int , " +
-                           "s322BL int , " +
-                           "s323HL int , " +
-                           "s324HL int , " +
-                           "s321BR int , " +
-                           "s322BR int , " +
-                           "s323HR int , " +
-                           "s324HR int , " +
-                           "s341BL int , " +
-                           "s342BL int , " +
-                           "s343HL int , " +
-                           "s344HL int , " +
-                           "s341BR int , " +
-                           "s342BR int , " +
-                           "s343HR int , " +
-                           "s344HR int , " +
-                           "s461L int , " +
-                           "s462L int , " +
-                           "s463L int , " +
-                           "s461R int , " +
-                           "s462R int , " +
-                           "s463R int , " +
-                           "sG11L int , " +
-                           "sG12L int , " +
-                           "sG13L int , " +
-                           "sG14L int , " +
-                           "sG15L int , " +
-                           "sG16L int , " +
-                           "sG17L int , " +
-                           "sG11R int , " +
-                           "sG12R int , " +
-                           "sG13R int , " +
-                           "sG14R int , " +
-                           "sG15R int , " +
-                           "sG16R int , " +
-                           "sG17R int , " +
-                           "sG21L int , " +
-                           "sG22L int , " +
-                           "sG23L int , " +
-                           "sG24L int , " +
-                           "sG25L int , " +
-                           "sG26L int , " +
-                           "sG27L int , " +
-                           "sG21R int , " +
-                           "sG22R int , " +
-                           "sG23R int , " +
-                           "sG24R int , " +
-                           "sG25R int , " +
-                           "sG26R int , " +
-                           "sG27R int , " +
-                           "sD12 float , " +
-                           "sD13 float , " +
-                           "sD14 float , " +
-                           "sD15 float , " +
-                           "sD16 float , " +
-                           "sD17 float , " +
-                           "sD18 float , " +
-                           "sD19 float , " +
-                           "sD20 float , " +
-                           "sU64 int , " +
-                           "sRasxCD int " +
+                           "datetime1s datetime , " +           // `timeD` varchar(45) NOT NULL,                  
+                           "Uvvod1 float , " +                  // `Uvvod1` varchar(10) default NULL,           
+                           "Ivvod1 float , " +                    // `Ivvod1` varchar(10) default NULL,            
+                           "Wvvod1 int , " +                    // `Wvvod1` varchar(10) default NULL,          
+                           "WRvvod1 int , " +                    // `WRvvod1` varchar(10) default NULL,       
+                           "WQvvod1 int , " +                    // `WQvvod1` varchar(10) default NULL,       
+                           "Cosvvod1  float , " +                    // `Cosvvod1` varchar(10) default NULL,       
+                           "gar5vvod1 float , " +                    // `gar5vvod1` varchar(10) default NULL,     
+                           "gar7vvod1 float , " +                    // `gar7vvod1` varchar(10) default NULL,     
+                           "gar11vvod1 float , " +                    // `gar11vvod1` varchar(10) default NULL,   
+                           "gar13vvod1 float , " +                    // `gar13vvod1` varchar(10) default NULL,   
+                           "Ur64 float , " +                    // `Ur64` varchar(10) default NULL,               
+                           "D21 float , " +                    // `D21` varchar(10) default NULL,                 
+                           "D22 float , " +                    // `D22` varchar(10) default NULL,                 
+                           "D23 float , " +                    // `D23` varchar(10) default NULL,                 
+                           "D24 float , " +                    // `D24` varchar(10) default NULL,                 
+                           "t1 int , " +                    // `t1` varchar(10) default NULL,               
+                           "t2 int , " +                    // `t2` varchar(10) default NULL,               
+                           "t3 int , " +                    // `t3` varchar(10) default NULL,               
+                           "t4 int , " +                    // `t4` varchar(10) default NULL,               
+                           "t5 int , " +                    // `t5` varchar(10) default NULL,               
+                           "t6 int , " +                    // `t6` varchar(10) default NULL,               
+                           "t7 int , " +                    // `t7` varchar(10) default NULL,               
+                           "t8 int , " +                    // `t8` varchar(10) default NULL,               
+                           "t9 int , " +                    // `t9` varchar(10) default NULL,               
+                           "t10 int , " +                    // `t10` varchar(10) default NULL,            
+                           "t11 int , " +                    // `t11` varchar(10) default NULL,            
+                           "t12 int , " +                    // `t12` varchar(10) default NULL,            
+                           "t13 int , " +                    // `t13` varchar(10) default NULL,            
+                           "t14 int , " +                    // `t14` varchar(10) default NULL,            
+                           "t15old int , " +                 // `t15old` varchar(10) default NULL,       
+                           "t16 int , " +                    // `t16` varchar(10) default NULL,            
+                           "t17 int , " +                    // `t17` varchar(10) default NULL,            
+                           "t18 int , " +                    // `t18` varchar(10) default NULL,            
+                           "t19 int , " +                    // `t19` varchar(10) default NULL,            
+                           "t20 int , " +                    // `t20` varchar(10) default NULL,            
+                           "t21 int , " +                    // `t21` varchar(10) default NULL,            
+                           "t22 int , " +                    // `t22` varchar(10) default NULL,            
+                           "t23 int , " +                    // `t23` varchar(10) default NULL,            
+                           "t24 int , " +                    // `t24` varchar(10) default NULL,            
+                           "t25 int , " +                    // `t25` varchar(10) default NULL,            
+                           "t26 int , " +                     // `t26` varchar(10) default NULL,            
+                           "t27 int , " +                     // `t27` varchar(10) default NULL,            
+                           "t28 int , " +                     // `t28` varchar(10) default NULL,            
+                           "t29 int , " +                     // `t29` varchar(10) default NULL,           
+                           "Voda int  " +                     // `Voda` varchar(10) default NULL,         
                            ")";
 
-                        using (SqlConnection conSQL1s1 = new SqlConnection(connectionString))
-                        {
-                            conSQL1s1.Open();
-                            SqlCommand command = new SqlCommand(comBD, conSQL1s1);
-                            command.ExecuteNonQuery();
-                            conSQL1s1.Close();
-                        }
+                     using (SqlConnection conSQL1s1 = new SqlConnection(connectionString))
+                     {
+                         conSQL1s1.Open();
+                         SqlCommand command = new SqlCommand(comBD, conSQL1s1);
+                         command.ExecuteNonQuery();
+                         conSQL1s1.Close();
+                     }
 
-                        #region В Insert используем передачу параметров через Переменную
-                        // string comRulon1s1 = "INSERT INTO " + "ds1s" + numberTable +
-                        //" (datetime1s,s191HL,s192HL,s193BL,s194BL,s191HR,s192HR,s193BR,s194BR,s281NL,s282NL,s283BL,s284BL,s281NR,s282NR," +
-                        //"s283BR,s284BR,s301BL,s302BL,s303HL,s304HL,s301BR,s302BR,s303HR,s304HR,s321BL,s322BL,s323HL,s324HL,s321BR,s322BR," +
-                        //"s323HR,s324HR,s341BL,s342BL,s343HL,s344HL,s341BR,s342BR,s343HR,s344HR,s461L,s462L,s463L,s461R,s462R,s463R,sG11L," +
-                        //"sG12L,sG13L,sG14L,sG15L,sG16L,sG17L,sG11R,sG12R,sG13R,sG14R,sG15R,sG16R,sG17R,sG21L,sG22L,sG23L,sG24L,sG25L,sG26L," +
-                        //"sG27L,sG21R,sG22R,sG23R,sG24R,sG25R,sG26R,sG27R,sD12,sD13,sD14,sD15,sD16,sD17,sD18,sD19,sD20,sU64,sRasxCD) " +
-                        //"VALUES" +
-                        //" ("+
-                        //" @datetime1sds, " +
-                        //BitConverter.ToInt16(dsbuf1s, 0) + "," +
-                        //BitConverter.ToInt16(dsbuf1s, 1) + "," +
-                        //BitConverter.ToInt16(dsbuf1s, 2) + "," +
-                        //BitConverter.ToInt16(dsbuf1s, 3) + "," +
-                        //BitConverter.ToInt16(dsbuf1s, 4) + "," +
-                        //BitConverter.ToInt16(dsbuf1s, 5) + "," +
-                        //BitConverter.ToInt16(dsbuf1s, 6) + "," +
-                        //BitConverter.ToInt16(dsbuf1s, 7) + "," +
-                        //BitConverter.ToInt16(dsbuf1s, 8) + "," +
-                        //BitConverter.ToInt16(dsbuf1s, 9) + "," +
-                        //BitConverter.ToInt16(dsbuf1s, 10) + "," +
-                        //BitConverter.ToInt16(dsbuf1s, 11) + "," +
-                        //BitConverter.ToInt16(dsbuf1s, 12) + "," +
-                        //BitConverter.ToInt16(dsbuf1s, 13) + "," +
-                        //BitConverter.ToInt16(dsbuf1s, 14) + "," +
-                        //BitConverter.ToInt16(dsbuf1s, 15) + "," +
-                        //BitConverter.ToInt16(dsbuf1s, 16) + "," +
-                        //BitConverter.ToInt16(dsbuf1s, 17) + "," +
-                        //BitConverter.ToInt16(dsbuf1s, 18) + "," +
-                        //BitConverter.ToInt16(dsbuf1s, 19) + "," +
-                        //BitConverter.ToInt16(dsbuf1s, 20) + "," +
-                        //BitConverter.ToInt16(dsbuf1s, 21) + "," +
-                        //BitConverter.ToInt16(dsbuf1s, 22) + "," +
-                        //BitConverter.ToInt16(dsbuf1s, 23) + "," +
-                        //BitConverter.ToInt16(dsbuf1s, 24) + "," +
-                        //BitConverter.ToInt16(dsbuf1s, 25) + "," +
-                        //BitConverter.ToInt16(dsbuf1s, 26) + "," +
-                        //BitConverter.ToInt16(dsbuf1s, 27) + "," +
-                        //BitConverter.ToInt16(dsbuf1s, 28) + "," +
-                        //BitConverter.ToInt16(dsbuf1s, 29) + "," +
-                        //BitConverter.ToInt16(dsbuf1s, 30) + "," +
-                        //BitConverter.ToInt16(dsbuf1s, 31) + "," +
-                        //BitConverter.ToInt16(dsbuf1s, 32) + "," +
-                        //BitConverter.ToInt16(dsbuf1s, 33) + "," +
-                        //BitConverter.ToInt16(dsbuf1s, 34) + "," +
-                        //BitConverter.ToInt16(dsbuf1s, 35) + "," +
-                        //BitConverter.ToInt16(dsbuf1s, 36) + "," +
-                        //BitConverter.ToInt16(dsbuf1s, 37) + "," +
-                        //BitConverter.ToInt16(dsbuf1s, 38) + "," +
-                        //BitConverter.ToInt16(dsbuf1s, 39) + "," +
-                        //BitConverter.ToInt16(dsbuf1s, 40) + "," +
-                        //BitConverter.ToInt16(dsbuf1s, 41) + "," +
-                        //BitConverter.ToInt16(dsbuf1s, 42) + "," +
-                        //BitConverter.ToInt16(dsbuf1s, 43) + "," +
-                        //BitConverter.ToInt16(dsbuf1s, 44) + "," +
-                        //BitConverter.ToInt16(dsbuf1s, 45) + "," +
-                        //BitConverter.ToInt16(dsbuf1s, 46) + "," +
-                        //BitConverter.ToInt16(dsbuf1s, 47) + "," +
-                        //BitConverter.ToInt16(dsbuf1s, 48) + "," +
-                        //BitConverter.ToInt16(dsbuf1s, 49) + "," +
-                        //BitConverter.ToInt16(dsbuf1s, 50) + "," +
-                        //BitConverter.ToInt16(dsbuf1s, 51) + "," +
-                        //BitConverter.ToInt16(dsbuf1s, 52) + "," +
-                        //BitConverter.ToInt16(dsbuf1s, 53) + "," +
-                        //BitConverter.ToInt16(dsbuf1s, 54) + "," +
-                        //BitConverter.ToInt16(dsbuf1s, 55) + "," +
-                        //BitConverter.ToInt16(dsbuf1s, 56) + "," +
-                        //BitConverter.ToInt16(dsbuf1s, 57) + "," +
-                        //BitConverter.ToInt16(dsbuf1s, 58) + "," +
-                        //BitConverter.ToInt16(dsbuf1s, 59) + "," +
-                        //BitConverter.ToInt16(dsbuf1s, 60) + "," +
-                        //BitConverter.ToInt16(dsbuf1s, 61) + "," +
-                        //BitConverter.ToInt16(dsbuf1s, 62) + "," +
-                        //BitConverter.ToInt16(dsbuf1s, 63) + "," +
-                        //BitConverter.ToInt16(dsbuf1s, 64) + "," +
-                        //BitConverter.ToInt16(dsbuf1s, 65) + "," +
-                        //BitConverter.ToInt16(dsbuf1s, 66) + "," +
-                        //BitConverter.ToInt16(dsbuf1s, 67) + "," +
-                        //BitConverter.ToInt16(dsbuf1s, 68) + "," +
-                        //BitConverter.ToInt16(dsbuf1s, 69) + "," +
-                        //BitConverter.ToInt16(dsbuf1s, 70) + "," +
-                        //BitConverter.ToInt16(dsbuf1s, 71) + "," +
-                        //BitConverter.ToInt16(dsbuf1s, 72) + "," +
-                        //BitConverter.ToInt16(dsbuf1s, 73) + "," +
-                        //"@sD12" + "," +
-                        //"@sD13" + "," +
-                        //"@sD14" + "," +
-                        //"@sD15" + "," +
-                        //"@sD16" + "," +
-                        //"@sD17" + "," +
-                        //"@sD18" + "," +
-                        //"@sD19" + "," +
-                        //"@sD20" + "," +
-                        //(int)(BitConverter.ToInt16(dsbuf1s, 83)*10) + "," +
-                        //(int)(BitConverter.ToInt16(dsbuf1s, 84)*10) + 
-                        //")";
-
-                        // using (SqlConnection conSQL1s2 = new SqlConnection(connectionString))
-                        // {
-                        //     try
-                        //     {
-                        //         conSQL1s2.Open();
-                        //         SqlCommand command = new SqlCommand(comRulon1s1, conSQL1s2);
-                        //         command.Parameters.AddWithValue("@datetime1sds", DateTime.Now);
-                        //         command.Parameters.AddWithValue("@sD12",(float)(BitConverter.ToInt16(dsbuf1s, 74)) / 10);
-                        //         command.Parameters.AddWithValue("@sD13",(float)(BitConverter.ToInt16(dsbuf1s, 75)) / 10);
-                        //         command.Parameters.AddWithValue("@sD14",(float)(BitConverter.ToInt16(dsbuf1s, 76)) / 10);
-                        //         command.Parameters.AddWithValue("@sD15",(float)(BitConverter.ToInt16(dsbuf1s, 77)) / 10);
-                        //         command.Parameters.AddWithValue("@sD16",(float)(BitConverter.ToInt16(dsbuf1s, 78)) / 10);
-                        //         command.Parameters.AddWithValue("@sD17",(float)(BitConverter.ToInt16(dsbuf1s, 79)) / 10);
-                        //         command.Parameters.AddWithValue("@sD18",(float)(BitConverter.ToInt16(dsbuf1s, 80)) / 10);
-                        //         command.Parameters.AddWithValue("@sD19",(float)(BitConverter.ToInt16(dsbuf1s, 81)) / 10);
-                        //         command.Parameters.AddWithValue("@sD20",(float)(BitConverter.ToInt16(dsbuf1s, 82)) / 10);
-
-                        //         command.ExecuteNonQuery();
-                        //         conSQL1s2.Close();
-                        //         Program.messageOK1c = "Данные в БД("+ "ds1s" + numberTable + ") 1s записаны";
-                        //         Program.dtOK1c = DateTime.Now;
-                        //     }
-                        //     catch (Exception ex)
-                        //     {
-
-                        //         Program.messageError1c = "1s НЕ ЗАПИСАНЫ - " + ex.Message + " Insert запрос: " + comRulon1s1;
-                        //         Program.dtError1c = DateTime.Now;
-                        //     }
-
-
-
-                        // }
-                        #endregion
+                        
 
                         #region Через обычный инсерт но перед передачей выставили региональные настройки с помощью System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("en-US");
 
                         string comRulon1s1 = "INSERT INTO " + "ds1s" + numberTable +
-                        " (datetime1s,s191HL,s192HL,s193BL,s194BL,s191HR,s192HR,s193BR,s194BR,s281NL,s282NL,s283BL,s284BL,s281NR,s282NR," +
-                        "s283BR,s284BR,s301BL,s302BL,s303HL,s304HL,s301BR,s302BR,s303HR,s304HR,s321BL,s322BL,s323HL,s324HL,s321BR,s322BR," +
-                        "s323HR,s324HR,s341BL,s342BL,s343HL,s344HL,s341BR,s342BR,s343HR,s344HR,s461L,s462L,s463L,s461R,s462R,s463R,sG11L," +
-                        "sG12L,sG13L,sG14L,sG15L,sG16L,sG17L,sG11R,sG12R,sG13R,sG14R,sG15R,sG16R,sG17R,sG21L,sG22L,sG23L,sG24L,sG25L,sG26L," +
-                        "sG27L,sG21R,sG22R,sG23R,sG24R,sG25R,sG26R,sG27R,sD12,sD13,sD14,sD15,sD16,sD17,sD18,sD19,sD20,sU64,sRasxCD) " +
+                        " (" +
+                        "datetime1s,Uvvod1,Ivvod1,Wvvod1,WRvvod1,WQvvod1,Cosvvod1,gar5vvod1,gar7vvod1,gar11vvod1,gar13vvod1,Ur64,D21,D22,D23,D24,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15old,t16,t17,t18,t19,t20,t21,t22,t23,t24,t25,t26,t27,t28,t29,Voda)" +
                         "VALUES" +
                         " (" +
-                        " @datetime1sds, " +
-                        BitConverter.ToInt16(dsbuf1s, 0) + "," +
-                        BitConverter.ToInt16(dsbuf1s, 1) + "," +
-                        BitConverter.ToInt16(dsbuf1s, 2) + "," +
-                        BitConverter.ToInt16(dsbuf1s, 3) + "," +
-                        BitConverter.ToInt16(dsbuf1s, 4) + "," +
-                        BitConverter.ToInt16(dsbuf1s, 5) + "," +
-                        BitConverter.ToInt16(dsbuf1s, 6) + "," +
-                        BitConverter.ToInt16(dsbuf1s, 7) + "," +
-                        BitConverter.ToInt16(dsbuf1s, 8) + "," +
-                        BitConverter.ToInt16(dsbuf1s, 9) + "," +
-                        BitConverter.ToInt16(dsbuf1s, 10) + "," +
-                        BitConverter.ToInt16(dsbuf1s, 11) + "," +
-                        BitConverter.ToInt16(dsbuf1s, 12) + "," +
-                        BitConverter.ToInt16(dsbuf1s, 13) + "," +
-                        BitConverter.ToInt16(dsbuf1s, 14) + "," +
-                        BitConverter.ToInt16(dsbuf1s, 15) + "," +
-                        BitConverter.ToInt16(dsbuf1s, 16) + "," +
-                        BitConverter.ToInt16(dsbuf1s, 17) + "," +
-                        BitConverter.ToInt16(dsbuf1s, 18) + "," +
-                        BitConverter.ToInt16(dsbuf1s, 19) + "," +
-                        BitConverter.ToInt16(dsbuf1s, 20) + "," +
-                        BitConverter.ToInt16(dsbuf1s, 21) + "," +
-                        BitConverter.ToInt16(dsbuf1s, 22) + "," +
-                        BitConverter.ToInt16(dsbuf1s, 23) + "," +
-                        BitConverter.ToInt16(dsbuf1s, 24) + "," +
-                        BitConverter.ToInt16(dsbuf1s, 25) + "," +
-                        BitConverter.ToInt16(dsbuf1s, 26) + "," +
-                        BitConverter.ToInt16(dsbuf1s, 27) + "," +
-                        BitConverter.ToInt16(dsbuf1s, 28) + "," +
-                        BitConverter.ToInt16(dsbuf1s, 29) + "," +
-                        BitConverter.ToInt16(dsbuf1s, 30) + "," +
-                        BitConverter.ToInt16(dsbuf1s, 31) + "," +
-                        BitConverter.ToInt16(dsbuf1s, 32) + "," +
-                        BitConverter.ToInt16(dsbuf1s, 33) + "," +
-                        BitConverter.ToInt16(dsbuf1s, 34) + "," +
-                        BitConverter.ToInt16(dsbuf1s, 35) + "," +
-                        BitConverter.ToInt16(dsbuf1s, 36) + "," +
-                        BitConverter.ToInt16(dsbuf1s, 37) + "," +
-                        BitConverter.ToInt16(dsbuf1s, 38) + "," +
-                        BitConverter.ToInt16(dsbuf1s, 39) + "," +
-                        BitConverter.ToInt16(dsbuf1s, 40) + "," +
-                        BitConverter.ToInt16(dsbuf1s, 41) + "," +
-                        BitConverter.ToInt16(dsbuf1s, 42) + "," +
-                        BitConverter.ToInt16(dsbuf1s, 43) + "," +
-                        BitConverter.ToInt16(dsbuf1s, 44) + "," +
-                        BitConverter.ToInt16(dsbuf1s, 45) + "," +
-                        BitConverter.ToInt16(dsbuf1s, 46) + "," +
-                        BitConverter.ToInt16(dsbuf1s, 47) + "," +
-                        BitConverter.ToInt16(dsbuf1s, 48) + "," +
-                        BitConverter.ToInt16(dsbuf1s, 49) + "," +
-                        BitConverter.ToInt16(dsbuf1s, 50) + "," +
-                        BitConverter.ToInt16(dsbuf1s, 51) + "," +
-                        BitConverter.ToInt16(dsbuf1s, 52) + "," +
-                        BitConverter.ToInt16(dsbuf1s, 53) + "," +
-                        BitConverter.ToInt16(dsbuf1s, 54) + "," +
-                        BitConverter.ToInt16(dsbuf1s, 55) + "," +
-                        BitConverter.ToInt16(dsbuf1s, 56) + "," +
-                        BitConverter.ToInt16(dsbuf1s, 57) + "," +
-                        BitConverter.ToInt16(dsbuf1s, 58) + "," +
-                        BitConverter.ToInt16(dsbuf1s, 59) + "," +
-                        BitConverter.ToInt16(dsbuf1s, 60) + "," +
-                        BitConverter.ToInt16(dsbuf1s, 61) + "," +
-                        BitConverter.ToInt16(dsbuf1s, 62) + "," +
-                        BitConverter.ToInt16(dsbuf1s, 63) + "," +
-                        BitConverter.ToInt16(dsbuf1s, 64) + "," +
-                        BitConverter.ToInt16(dsbuf1s, 65) + "," +
-                        BitConverter.ToInt16(dsbuf1s, 66) + "," +
-                        BitConverter.ToInt16(dsbuf1s, 67) + "," +
-                        BitConverter.ToInt16(dsbuf1s, 68) + "," +
-                        BitConverter.ToInt16(dsbuf1s, 69) + "," +
-                        BitConverter.ToInt16(dsbuf1s, 70) + "," +
-                        BitConverter.ToInt16(dsbuf1s, 71) + "," +
-                        BitConverter.ToInt16(dsbuf1s, 72) + "," +
-                        BitConverter.ToInt16(dsbuf1s, 73) + "," +
-                        (float)(BitConverter.ToInt16(dsbuf1s, 74)) / 10 + "," +
-                        (float)(BitConverter.ToInt16(dsbuf1s, 75)) / 10 + "," +
-                        (float)(BitConverter.ToInt16(dsbuf1s, 76)) / 10 + "," +
-                        (float)(BitConverter.ToInt16(dsbuf1s, 77)) / 10 + "," +
-                        (float)(BitConverter.ToInt16(dsbuf1s, 78)) / 10 + "," +
-                        (float)(BitConverter.ToInt16(dsbuf1s, 79)) / 10 + "," +
-                        (float)(BitConverter.ToInt16(dsbuf1s, 80)) / 10 + "," +
-                        (float)(BitConverter.ToInt16(dsbuf1s, 81)) / 10 + "," +
-                        (float)(BitConverter.ToInt16(dsbuf1s, 82)) / 10 + "," +
-                        (int)(BitConverter.ToInt16(dsbuf1s, 83) * 10) + "," +
-                        (int)(BitConverter.ToInt16(dsbuf1s, 84) * 10) +
+                        " @datetime1sds, " +                                                 //"datetime1s datetime , " + 
+                        (float)(BitConverter.ToInt16(dsbuf1s, 0)) / 100 + "," +                 //"Uvvod1 float , " +        
+                        (float)(BitConverter.ToInt16(dsbuf1s, 2)) / 10 + "," +                  //"Ivvod1 float , " +        
+                        BitConverter.ToInt16(dsbuf1s, 4) + "," +                                //"Wvvod1 int , " +          
+                        BitConverter.ToInt16(dsbuf1s, 6) + "," +                                //"WRvvod1 int , " +         
+                        BitConverter.ToInt16(dsbuf1s, 8) + "," +                                //"WQvvod1 int , " +         
+                        (float)BitConverter.ToInt16(dsbuf1s, 10) / 100 + "," +                  //"Cosvvod1  float , " +     
+                        (float)BitConverter.ToInt16(dsbuf1s, 12) / 100 + "," +                  //"gar5vvod1 float , " +     
+                        (float)BitConverter.ToInt16(dsbuf1s, 14) / 100 + "," +                  //"gar7vvod1 float , " +     
+                        (float)BitConverter.ToInt16(dsbuf1s, 16) / 100 + "," +                  //"gar11vvod1 float , " +    
+                        (float)BitConverter.ToInt16(dsbuf1s, 18) / 100 + "," + //buffer_1s_w[9] //"gar13vvod1 float , " +    
+
+                        (float)BitConverter.ToInt16(dsbuf1s, 20)*10 + "," +     //buffer_1s_w[10] "Ur64 float , " +          
+                        (float)BitConverter.ToInt16(dsbuf1s, 21)/10 + "," +                     //"D21 float , " +           
+                        (float)BitConverter.ToInt16(dsbuf1s, 22)/10 + "," +                     //"D22 float , " +           
+                        (float)BitConverter.ToInt16(dsbuf1s, 23)/10 + "," +                     //"D23 float , " +           
+                        (float)BitConverter.ToInt16(dsbuf1s, 24)/10 + "," +     //buffer_1s_w[14] "D24 float , " +           
+                        BitConverter.ToInt16(dsbuf1s, 25) + "," +                                //t1                                        
+                        BitConverter.ToInt16(dsbuf1s, 26) + "," +                                //t2                          
+                        BitConverter.ToInt16(dsbuf1s, 27) + "," +                                //t3                          
+                        BitConverter.ToInt16(dsbuf1s, 28) + "," +                                //t4                          
+                        BitConverter.ToInt16(dsbuf1s, 29) + "," +                                //t5                          
+                        BitConverter.ToInt16(dsbuf1s, 30) + "," +                                //t6                          
+                        BitConverter.ToInt16(dsbuf1s, 31) + "," +                                //t7                          
+                        BitConverter.ToInt16(dsbuf1s, 32) + "," +                                //t8                          
+                        BitConverter.ToInt16(dsbuf1s, 33) + "," +                                //t9                          
+                        BitConverter.ToInt16(dsbuf1s, 34) + "," +                                //t10                         
+                        BitConverter.ToInt16(dsbuf1s, 35) + "," +                                //t11                         
+                        BitConverter.ToInt16(dsbuf1s, 36) + "," +                                //t12                         
+                        BitConverter.ToInt16(dsbuf1s, 37) + "," +                                //t13                         
+                        BitConverter.ToInt16(dsbuf1s, 38) + "," +                                //t14                         
+                        BitConverter.ToInt16(dsbuf1s, 39) + "," +                                //t15                      
+                        BitConverter.ToInt16(dsbuf1s, 40) + "," +                                //t16                         
+                        BitConverter.ToInt16(dsbuf1s, 41) + "," +                                //t17                         
+                        BitConverter.ToInt16(dsbuf1s, 42) + "," +                                //t18                         
+                        BitConverter.ToInt16(dsbuf1s, 43) + "," +                                //t19                         
+                        BitConverter.ToInt16(dsbuf1s, 44) + "," +                                //t20                         
+                        BitConverter.ToInt16(dsbuf1s, 45) + "," +                                //t21                         
+                        BitConverter.ToInt16(dsbuf1s, 46) + "," +                                //t22                         
+                        BitConverter.ToInt16(dsbuf1s, 47) + "," +                                //t23                         
+                        BitConverter.ToInt16(dsbuf1s, 48) + "," +                                //t24                         
+                        BitConverter.ToInt16(dsbuf1s, 49) + "," +                                //t25                         
+                        BitConverter.ToInt16(dsbuf1s, 50) + "," +                                //t26                         
+                        BitConverter.ToInt16(dsbuf1s, 51) + "," +                                //t27                         
+                        BitConverter.ToInt16(dsbuf1s, 52) + "," +                                //t28                         
+                        BitConverter.ToInt16(dsbuf1s, 53) + "," +                                //t29                        
+                        BitConverter.ToInt16(dsbuf1s, 54) +                               //Voda
+                        
                         ")";
+
+                        
 
                         using (SqlConnection conSQL1s2 = new SqlConnection(connectionString))
                         {
@@ -1123,325 +886,325 @@ namespace consoleRS2toBD
 
                         #endregion
 
-                        #region Расчет параметров прокатанного рулона после окончания прокатки
+                        //#region Расчет параметров прокатанного рулона после окончания прокатки
 
-                        dsD_tek_mot = (float)(BitConverter.ToInt16(dsbuffer1s, 20));
-                        #region  Время начало прокатки рулона
+                        //dsD_tek_mot = (float)(BitConverter.ToInt16(dsbuffer1s, 20));
+                        //#region  Время начало прокатки рулона
 
-                        if (dsD_pred_mot == 0)
-                        {
-                            //при первом цикле все данные равны 0, поэтому мы выставляем значения параметров на 600
-                            dsD_tek_mot = 600;
-                            dsD_pred_mot = 600;
-                        }
+                        //if (dsD_pred_mot == 0)
+                        //{
+                        //    //при первом цикле все данные равны 0, поэтому мы выставляем значения параметров на 600
+                        //    dsD_tek_mot = 600;
+                        //    dsD_pred_mot = 600;
+                        //}
 
-                        if (dsD_tek_mot > dsD_pred_mot)
-                        {
-                            if (dsD_pred_mot < 615)
-                            {
-                                dsTimeStart = DateTime.Now;
-                                blRulonStart = true;
-                            }
+                        //if (dsD_tek_mot > dsD_pred_mot)
+                        //{
+                        //    if (dsD_pred_mot < 615)
+                        //    {
+                        //        dsTimeStart = DateTime.Now;
+                        //        blRulonStart = true;
+                        //    }
 
-                        }
-                        else
-                        {
-                            //blRulonStart = false;
-                        }
+                        //}
+                        //else
+                        //{
+                        //    //blRulonStart = false;
+                        //}
 
 
-                        #endregion
+                        //#endregion
 
-                        #region Толщина и ширина прокатываемого рулона
-                        speed4kl = (float)(BitConverter.ToInt16(dsbuffer1s, 6)) / 100;
-                        if ((dsTimeStart != new DateTime()) && (H5_work == 0) && (dsD_tek_mot > 700) && (speed4kl > 2))
-                        {
-                            H5_work = (float)(BitConverter.ToInt16(dsbuffer1s, 12)) / 1000;
-                            B_Work = (int)BitConverter.ToInt16(dsbuffer1s, 14);
-                        }
-                        #endregion
+                        //#region Толщина и ширина прокатываемого рулона
+                        //speed4kl = (float)(BitConverter.ToInt16(dsbuffer1s, 6)) / 100;
+                        //if ((dsTimeStart != new DateTime()) && (H5_work == 0) && (dsD_tek_mot > 700) && (speed4kl > 2))
+                        //{
+                        //    H5_work = (float)(BitConverter.ToInt16(dsbuffer1s, 12)) / 1000;
+                        //    B_Work = (int)BitConverter.ToInt16(dsbuffer1s, 14);
+                        //}
+                        //#endregion
 
-                        #region Формирование сигнала окончания прокатки
-                        if ((dsTimeStart != new DateTime()) && (H5_work != 0) && (dsD_tek_mot < 610) && (dsD_tek_mot < dsD_pred_mot))
-                        {
-                            Ves_Work = (((((dsD_pred_mot * dsD_pred_mot) / 1000000 - 0.36F) * 3.141593F) / 4) * (B_Work / 1000)) * 7.85F;
-                            dsTimeStop = DateTime.Now;
-                            Dlina_Work = ((Ves_Work / 7.85F) / (B_Work / 1000)) / (H5_work / 1000);
-                            blRulonStop = true;
-                            blRulonStart = false;
+                        //#region Формирование сигнала окончания прокатки
+                        //if ((dsTimeStart != new DateTime()) && (H5_work != 0) && (dsD_tek_mot < 610) && (dsD_tek_mot < dsD_pred_mot))
+                        //{
+                        //    Ves_Work = (((((dsD_pred_mot * dsD_pred_mot) / 1000000 - 0.36F) * 3.141593F) / 4) * (B_Work / 1000)) * 7.85F;
+                        //    dsTimeStop = DateTime.Now;
+                        //    Dlina_Work = ((Ves_Work / 7.85F) / (B_Work / 1000)) / (H5_work / 1000);
+                        //    blRulonStop = true;
+                        //    blRulonStart = false;
 
                             
-                            #region База производство
+                        //    #region База производство
 
-                            #region Создание БД
+                        //    #region Создание БД
 
-                            string comWorkdsCreate = "if not exists (select * from sysobjects where name ='work_ds' and xtype='U') create table work_ds" +
-                           "(" +
-                           "numberRulona bigint, " +
-                           "start datetime , " +
-                           "stop datetime , " +
-                           "h5 float , " +
-                           "b float , " +
-                           "ves float , " +
-                           "dlinna float , " +
-                           "t1 float , " +
-                           "t2 float , " +
-                           "t3 float , " +
-                           "t4 float , " +
-                           "t5 float  " +
+                        //    string comWorkdsCreate = "if not exists (select * from sysobjects where name ='work_ds' and xtype='U') create table work_ds" +
+                        //   "(" +
+                        //   "numberRulona bigint, " +
+                        //   "start datetime , " +
+                        //   "stop datetime , " +
+                        //   "h5 float , " +
+                        //   "b float , " +
+                        //   "ves float , " +
+                        //   "dlinna float , " +
+                        //   "t1 float , " +
+                        //   "t2 float , " +
+                        //   "t3 float , " +
+                        //   "t4 float , " +
+                        //   "t5 float  " +
 
-                           ")";
+                        //   ")";
 
-                            using (SqlConnection conSQL1sWork1 = new SqlConnection(connectionString))
-                            {
-                                conSQL1sWork1.Open();
-                                SqlCommand command = new SqlCommand(comWorkdsCreate, conSQL1sWork1);
-                                command.ExecuteNonQuery();
-                                conSQL1sWork1.Close();
-                            }
-                            #endregion;
+                        //    using (SqlConnection conSQL1sWork1 = new SqlConnection(connectionString))
+                        //    {
+                        //        conSQL1sWork1.Open();
+                        //        SqlCommand command = new SqlCommand(comWorkdsCreate, conSQL1sWork1);
+                        //        command.ExecuteNonQuery();
+                        //        conSQL1sWork1.Close();
+                        //    }
+                        //    #endregion;
 
-                            #region Заполнение производство
-                            string comWorkds = "INSERT INTO work_ds( " +
-                                "numberRulona," +
-                                "start," +
-                                "stop," +
-                                "h5," +
-                                "b," +
-                                "ves," +
-                                "dlinna" +
-                                ") " +
-                                "VALUES(" +
-                                "@NumberRulon, " +
-                                "@TimeStart, " +
-                                "@TimeStop, " +
-                                "@H5_work, " +
-                                "@B_Work, " +
-                                "@Ves_Work, " +
-                                "@Dlina_Work)";
+                        //    #region Заполнение производство
+                        //    string comWorkds = "INSERT INTO work_ds( " +
+                        //        "numberRulona," +
+                        //        "start," +
+                        //        "stop," +
+                        //        "h5," +
+                        //        "b," +
+                        //        "ves," +
+                        //        "dlinna" +
+                        //        ") " +
+                        //        "VALUES(" +
+                        //        "@NumberRulon, " +
+                        //        "@TimeStart, " +
+                        //        "@TimeStop, " +
+                        //        "@H5_work, " +
+                        //        "@B_Work, " +
+                        //        "@Ves_Work, " +
+                        //        "@Dlina_Work)";
 
-                            string beginWork = dsTimeStart.ToString("ddMMyyyyHHmm");
-                            string endWork = dsTimeStop.ToString("HHmm");
-                            string strNumberRulona = beginWork + endWork;
+                        //    string beginWork = dsTimeStart.ToString("ddMMyyyyHHmm");
+                        //    string endWork = dsTimeStop.ToString("HHmm");
+                        //    string strNumberRulona = beginWork + endWork;
 
-                            //Добавляем в таблицу прокатанных рулонов данные по рулонам
-                            using (SqlConnection con3 = new SqlConnection(connectionString))
-                            {
-                                try
-                                {
-                                    con3.Open();
-                                    SqlCommand command = new SqlCommand(comWorkds, con3);
+                        //    //Добавляем в таблицу прокатанных рулонов данные по рулонам
+                        //    using (SqlConnection con3 = new SqlConnection(connectionString))
+                        //    {
+                        //        try
+                        //        {
+                        //            con3.Open();
+                        //            SqlCommand command = new SqlCommand(comWorkds, con3);
 
-                                    command.Parameters.AddWithValue("@NumberRulon", strNumberRulona);
+                        //            command.Parameters.AddWithValue("@NumberRulon", strNumberRulona);
 
-                                    command.Parameters.AddWithValue("@TimeStart", dsTimeStart);
-                                    command.Parameters.AddWithValue("@TimeStop", dsTimeStop);
-                                    command.Parameters.AddWithValue("@H5_work", H5_work);
-                                    command.Parameters.AddWithValue("@B_Work", B_Work);
-                                    command.Parameters.AddWithValue("@Ves_Work", Ves_Work);
-                                    command.Parameters.AddWithValue("@Dlina_Work", Dlina_Work);
+                        //            command.Parameters.AddWithValue("@TimeStart", dsTimeStart);
+                        //            command.Parameters.AddWithValue("@TimeStop", dsTimeStop);
+                        //            command.Parameters.AddWithValue("@H5_work", H5_work);
+                        //            command.Parameters.AddWithValue("@B_Work", B_Work);
+                        //            command.Parameters.AddWithValue("@Ves_Work", Ves_Work);
+                        //            command.Parameters.AddWithValue("@Dlina_Work", Dlina_Work);
 
-                                    int WriteSQL = command.ExecuteNonQuery();
+                        //            int WriteSQL = command.ExecuteNonQuery();
 
-                                    Program.messageOKDsProizvodstvo = strNumberRulona + "(" + dsTimeStart.ToString("HH:mm") + "-" + dsTimeStop.ToString("HH:mm") + ") " + H5_work + "*" + B_Work + "->" + Ves_Work;
-                                    //messageOKProizvodstvo = "производство";
-                                    Program.dtOKDsProizvodstvo = DateTime.Now;
-                                }
-                                catch (Exception ex)
-                                {
-                                    Program.messageErrorDsProizvodstvo = "Ошибка в сохранении данных о прокатанном рулоне " + ex.Message + " Insert запрос: " + comWorkds;
-                                    Program.dtErrorDsProizvodstvo = DateTime.Now;
+                        //            Program.messageOKDsProizvodstvo = strNumberRulona + "(" + dsTimeStart.ToString("HH:mm") + "-" + dsTimeStop.ToString("HH:mm") + ") " + H5_work + "*" + B_Work + "->" + Ves_Work;
+                        //            //messageOKProizvodstvo = "производство";
+                        //            Program.dtOKDsProizvodstvo = DateTime.Now;
+                        //        }
+                        //        catch (Exception ex)
+                        //        {
+                        //            Program.messageErrorDsProizvodstvo = "Ошибка в сохранении данных о прокатанном рулоне " + ex.Message + " Insert запрос: " + comWorkds;
+                        //            Program.dtErrorDsProizvodstvo = DateTime.Now;
 
-                                }
+                        //        }
 
-                            }
-                            #endregion
+                        //    }
+                        //    #endregion
 
-                            #endregion
-
-
-
-                            #region //Очищаем базу временных рулонов
-                            //using (SqlConnection conSQL1s3 = new SqlConnection(connectionString))
-                            //{
-                            //    conSQL1s3.Open();
-                            //    string comRulon1s2 = "DELETE FROM TEMPds101ms";
-                            //    SqlCommand command = new SqlCommand(comRulon1s2, conSQL1s3);
-                            //    command.ExecuteNonQuery();
-
-
-                            //}
-                            #endregion
-
-
-                            #region Мпереименовываем временную базу в базу с именем ds100mc(дата+время начала)(время окончания)
-                            using (SqlConnection conSQL1s3 = new SqlConnection(connectionString))
-                            {
-                                try
-                                {
-                                    conSQL1s3.Open();
-                                    string begin = dsTimeStart.ToString("ddMMyyyyHHmm");
-                                    string end = dsTimeStop.ToString("HHmm");
-                                    string comRulon1s2 = "sp_rename 'TEMPds101ms','" + begin + end + "'";
-                                    SqlCommand command = new SqlCommand(comRulon1s2, conSQL1s3);
-                                    command.ExecuteNonQuery();
-                                    Program.messageOKDsRulon = "Временная база -> " + begin + end;
-                                    Program.dtOKDsRulon = DateTime.Now;
-                                    conSQL1s3.Close();
-                                }
-                                catch (Exception ex)
-                                {
-
-                                    Program.messageErrorDsRulon = "Временная база не переименована " + ex.Message;
-                                    Program.dtErrorDsRulon = DateTime.Now;
-                                }
+                        //    #endregion
 
 
 
-                            }
-                            #endregion
+                        //    #region //Очищаем базу временных рулонов
+                        //    //using (SqlConnection conSQL1s3 = new SqlConnection(connectionString))
+                        //    //{
+                        //    //    conSQL1s3.Open();
+                        //    //    string comRulon1s2 = "DELETE FROM TEMPds101ms";
+                        //    //    SqlCommand command = new SqlCommand(comRulon1s2, conSQL1s3);
+                        //    //    command.ExecuteNonQuery();
 
-                        }
-                        #endregion
+
+                        //    //}
+                        //    #endregion
 
 
-                        #endregion
+                        //    #region Мпереименовываем временную базу в базу с именем ds100mc(дата+время начала)(время окончания)
+                        //    using (SqlConnection conSQL1s3 = new SqlConnection(connectionString))
+                        //    {
+                        //        try
+                        //        {
+                        //            conSQL1s3.Open();
+                        //            string begin = dsTimeStart.ToString("ddMMyyyyHHmm");
+                        //            string end = dsTimeStop.ToString("HHmm");
+                        //            string comRulon1s2 = "sp_rename 'TEMPds101ms','" + begin + end + "'";
+                        //            SqlCommand command = new SqlCommand(comRulon1s2, conSQL1s3);
+                        //            command.ExecuteNonQuery();
+                        //            Program.messageOKDsRulon = "Временная база -> " + begin + end;
+                        //            Program.dtOKDsRulon = DateTime.Now;
+                        //            conSQL1s3.Close();
+                        //        }
+                        //        catch (Exception ex)
+                        //        {
 
-                        dsD_pred_mot = dsD_tek_mot;
+                        //            Program.messageErrorDsRulon = "Временная база не переименована " + ex.Message;
+                        //            Program.dtErrorDsRulon = DateTime.Now;
+                        //        }
 
-                        #region Перевалки 
 
-                        int d1 = (int)BitConverter.ToInt16(dsbuffer1s, 24);
-                        int d2 = (int)BitConverter.ToInt16(dsbuffer1s, 26);
-                        int d3 = (int)BitConverter.ToInt16(dsbuffer1s, 28);
-                        int d4 = (int)BitConverter.ToInt16(dsbuffer1s, 30);
-                        int d5 = (int)BitConverter.ToInt16(dsbuffer1s, 32);
 
-                        if (d1_pred == 0) d1_pred = d1;
-                        if (d2_pred == 0) d2_pred = d2;
-                        if (d3_pred == 0) d3_pred = d3;
-                        if (d4_pred == 0) d4_pred = d4;
-                        if (d5_pred == 0) d5_pred = d5;
-                        bool blSave = false;
+                        //    }
+                        //    #endregion
 
-                        try
-                        {
+                        //}
+                        //#endregion
 
-                            if (d1_pred != d1)
-                            {
-                                blSave = true;
-                                dtPerevalkids.Rows.Add(DateTime.Now, d1, 0, 0, 0, 0);
-                            }
-                            if (d2_pred != d2)
-                            {
-                                blSave = true;
-                                dtPerevalkids.Rows.Add(DateTime.Now, 0, d2, 0, 0, 0);
-                            }
-                            if (d3_pred != d3)
-                            {
-                                blSave = true;
-                                dtPerevalkids.Rows.Add(DateTime.Now, 0, 0, d3, 0, 0);
-                            }
-                            if (d4_pred != d4)
-                            {
-                                blSave = true;
-                                dtPerevalkids.Rows.Add(DateTime.Now, 0, 0, 0, d4, 0);
-                            }
-                            if (d5_pred != d5)
-                            {
-                                blSave = true;
-                                dtPerevalkids.Rows.Add(DateTime.Now, 0, 0, 0, 0, d5);
-                            }
+
+                        //#endregion
+
+                        //dsD_pred_mot = dsD_tek_mot;
+
+                        //#region Перевалки 
+
+                        //int d1 = (int)BitConverter.ToInt16(dsbuffer1s, 24);
+                        //int d2 = (int)BitConverter.ToInt16(dsbuffer1s, 26);
+                        //int d3 = (int)BitConverter.ToInt16(dsbuffer1s, 28);
+                        //int d4 = (int)BitConverter.ToInt16(dsbuffer1s, 30);
+                        //int d5 = (int)BitConverter.ToInt16(dsbuffer1s, 32);
+
+                        //if (d1_pred == 0) d1_pred = d1;
+                        //if (d2_pred == 0) d2_pred = d2;
+                        //if (d3_pred == 0) d3_pred = d3;
+                        //if (d4_pred == 0) d4_pred = d4;
+                        //if (d5_pred == 0) d5_pred = d5;
+                        //bool blSave = false;
+
+                        //try
+                        //{
+
+                        //    if (d1_pred != d1)
+                        //    {
+                        //        blSave = true;
+                        //        dtPerevalkids.Rows.Add(DateTime.Now, d1, 0, 0, 0, 0);
+                        //    }
+                        //    if (d2_pred != d2)
+                        //    {
+                        //        blSave = true;
+                        //        dtPerevalkids.Rows.Add(DateTime.Now, 0, d2, 0, 0, 0);
+                        //    }
+                        //    if (d3_pred != d3)
+                        //    {
+                        //        blSave = true;
+                        //        dtPerevalkids.Rows.Add(DateTime.Now, 0, 0, d3, 0, 0);
+                        //    }
+                        //    if (d4_pred != d4)
+                        //    {
+                        //        blSave = true;
+                        //        dtPerevalkids.Rows.Add(DateTime.Now, 0, 0, 0, d4, 0);
+                        //    }
+                        //    if (d5_pred != d5)
+                        //    {
+                        //        blSave = true;
+                        //        dtPerevalkids.Rows.Add(DateTime.Now, 0, 0, 0, 0, d5);
+                        //    }
 
                            
-                        }
-                        catch (Exception ex)
-                        {
-                            //ошибка
-                            Program.messageErrorDsValki = "Ошибка формировании таблицы валков - " + ex.Message;
-                            Program.dtErrorDsValki = DateTime.Now; ;
-                        }
+                        //}
+                        //catch (Exception ex)
+                        //{
+                        //    //ошибка
+                        //    Program.messageErrorDsValki = "Ошибка формировании таблицы валков - " + ex.Message;
+                        //    Program.dtErrorDsValki = DateTime.Now; ;
+                        //}
 
 
 
-                        d1_pred = d1;
-                        d2_pred = d2;
-                        d3_pred = d3;
-                        d4_pred = d4;
-                        d5_pred = d5;
+                        //d1_pred = d1;
+                        //d2_pred = d2;
+                        //d3_pred = d3;
+                        //d4_pred = d4;
+                        //d5_pred = d5;
 
 
 
-                        #region Перевалки сохраняем в БД
-                        if (blSave)
-                        {
-                            string strTableNamePerevalki = "dsPerevalki" + DateTime.Now.ToString("yyyyMM");
-                            string comBDPerevalki = "if not exists (select * from sysobjects where name='" + strTableNamePerevalki + "' and xtype='U') create table " + strTableNamePerevalki +
-                                    "(" +
-                                    "dtPerevalki datetime NOT NULL, " +
-                                    "kl1 int NOT NULL, " +
-                                    "kl2 int NOT NULL, " +
-                                    "kl3 int NOT NULL, " +
-                                    "kl4 int NOT NULL, " +
-                                    "kl5 int NOT NULL )";
+                        //#region Перевалки сохраняем в БД
+                        //if (blSave)
+                        //{
+                        //    string strTableNamePerevalki = "dsPerevalki" + DateTime.Now.ToString("yyyyMM");
+                        //    string comBDPerevalki = "if not exists (select * from sysobjects where name='" + strTableNamePerevalki + "' and xtype='U') create table " + strTableNamePerevalki +
+                        //            "(" +
+                        //            "dtPerevalki datetime NOT NULL, " +
+                        //            "kl1 int NOT NULL, " +
+                        //            "kl2 int NOT NULL, " +
+                        //            "kl3 int NOT NULL, " +
+                        //            "kl4 int NOT NULL, " +
+                        //            "kl5 int NOT NULL )";
 
-                            //создаем таблицу значений Перевалок
-                            using (SqlConnection conPerevalki1 = new SqlConnection(connectionString))
-                            {
-                                try
-                                {
-                                    conPerevalki1.Open();
-                                    SqlCommand command = new SqlCommand(comBDPerevalki, conPerevalki1);
-                                    command.ExecuteNonQuery();
-                                    conPerevalki1.Close();
-                                    //messageErrorValki = "OK формировании таблицы валков";
+                        //    //создаем таблицу значений Перевалок
+                        //    using (SqlConnection conPerevalki1 = new SqlConnection(connectionString))
+                        //    {
+                        //        try
+                        //        {
+                        //            conPerevalki1.Open();
+                        //            SqlCommand command = new SqlCommand(comBDPerevalki, conPerevalki1);
+                        //            command.ExecuteNonQuery();
+                        //            conPerevalki1.Close();
+                        //            //messageErrorValki = "OK формировании таблицы валков";
 
-                                }
-                                catch (Exception ex)
-                                {
-                                    Program.messageErrorDsValki = "Ошибка формировании таблицы валков " + ex.Message;
-                                    Program.dtErrorDsValki = DateTime.Now;
+                        //        }
+                        //        catch (Exception ex)
+                        //        {
+                        //            Program.messageErrorDsValki = "Ошибка формировании таблицы валков " + ex.Message;
+                        //            Program.dtErrorDsValki = DateTime.Now;
 
-                                }
-
-
-                            }
-                            //записываем в таблицу прокатанного рулона данные по прокатке этого рулона
-                            using (SqlConnection conPerevalki2 = new SqlConnection(connectionString))
-                            {
-                                try
-                                {
-                                    conPerevalki2.Open();
-                                    using (var bulk = new SqlBulkCopy(conPerevalki2))
-                                    {
-                                        bulk.DestinationTableName = strTableNamePerevalki;
-                                        bulk.WriteToServer(dtPerevalkids);
-                                        Program.messageOKDsValki = "Данные перевалки в таблицу " + strTableNamePerevalki + " записаны ";
-                                        Program.dtOKDsValki = DateTime.Now;
+                        //        }
 
 
-                                        dtPerevalkids.Clear(); //очистка таблицы 
-                                    }
-                                    conPerevalki2.Close();
+                        //    }
+                        //    //записываем в таблицу прокатанного рулона данные по прокатке этого рулона
+                        //    using (SqlConnection conPerevalki2 = new SqlConnection(connectionString))
+                        //    {
+                        //        try
+                        //        {
+                        //            conPerevalki2.Open();
+                        //            using (var bulk = new SqlBulkCopy(conPerevalki2))
+                        //            {
+                        //                bulk.DestinationTableName = strTableNamePerevalki;
+                        //                bulk.WriteToServer(dtPerevalkids);
+                        //                Program.messageOKDsValki = "Данные перевалки в таблицу " + strTableNamePerevalki + " записаны ";
+                        //                Program.dtOKDsValki = DateTime.Now;
+
+
+                        //                dtPerevalkids.Clear(); //очистка таблицы 
+                        //            }
+                        //            conPerevalki2.Close();
 
 
 
-                                }
-                                catch (Exception ex)
-                                {
-                                    Program.messageErrorDsValki = "Ошибка записи в таблицу валков " + ex.Message;
-                                    Program.dtErrorDsValki = DateTime.Now;
+                        //        }
+                        //        catch (Exception ex)
+                        //        {
+                        //            Program.messageErrorDsValki = "Ошибка записи в таблицу валков " + ex.Message;
+                        //            Program.dtErrorDsValki = DateTime.Now;
 
-                                }
-                            }
+                        //        }
+                        //    }
 
-                        }
+                        //}
 
-                        #endregion
+                        //#endregion
 
-                        //Console.WriteLine(d1_pred + "-" + d2_pred + "-" + d3_pred + "-" + d4_pred + "-" + d5_pred);
+                        ////Console.WriteLine(d1_pred + "-" + d2_pred + "-" + d3_pred + "-" + d4_pred + "-" + d5_pred);
 
-                        #endregion
+                        //#endregion
 
 
                     }

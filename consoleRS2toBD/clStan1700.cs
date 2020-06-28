@@ -1653,6 +1653,8 @@ namespace consoleRS2toBD
                         #endregion
 
 
+
+
                         #region Мпереименовываем временную базу в базу с именем stan100mc(дата+время начала)(время окончания)
                         using (SqlConnection conSQL1s3 = new SqlConnection(connectionString))
                         {
@@ -1676,6 +1678,121 @@ namespace consoleRS2toBD
                             }
                             
 
+
+                        }
+                        #endregion
+
+
+                        #region Если БД не существует то создаем
+                        string comRulon101ms1 = "if not exists (select * from sysobjects where name ='TEMPstan101ms' and xtype='U') create table TEMPstan101ms " +
+                           "(" +
+                           "datetime101ms datetime , " +
+                           "v1 float," +
+                           "v2 float," +
+                           "v3 float," +
+                           "v4 float," +
+                           "v5 float," +
+                           "h1 float," +
+                           "h5 float," +
+                           "b int," +
+                           "dvip float," +
+                           "drazm float," +
+                           "dmot float," +
+                           "vvip float," +
+                           "d1 int," +
+                           "d2 int," +
+                           "d3 int," +
+                           "d4 int," +
+                           "d5 int," +
+                           "e2 float," +
+                           "e3 float," +
+                           "e4 float," +
+                           "e5 float," +
+                           "n1l float," +
+                           "n1p float," +
+                           "n2l float," +
+                           "n2p float," +
+                           "n3l float," +
+                           "n3p float," +
+                           "n4l float," +
+                           "n4p float," +
+                           "n5l float," +
+                           "n5p float," +
+                           "reserv1 float," +
+                           "reserv2 float," +
+                           "t1 float," +
+                           "t2 float," +
+                           "t3 float," +
+                           "t4 float," +
+                           "t1l float," +
+                           "t2l float," +
+                           "t3l float," +
+                           "t4l float," +
+                           "t1p float," +
+                           "t2p float," +
+                           "t3p float," +
+                           "t4p float," +
+                           "t1z float," +
+                           "t2z float," +
+                           "t3z float," +
+                           "t4z float," +
+                           "erazm float," +
+                           "ivozbrazm float," +
+                           "izadrazm float," +
+                           "w1 float," +
+                           "w2v float," +
+                           "w2n float," +
+                           "w3v float," +
+                           "w3n float," +
+                           "w4v float," +
+                           "w4n float," +
+                           "w5v float," +
+                           "w5n float," +
+                           "wmot float," +
+                           "imot int," +
+                           "izadmot int," +
+                           "u1 float," +
+                           "u2v float," +
+                           "u2n float," +
+                           "u3v float," +
+                           "u3n float," +
+                           "u4v float," +
+                           "u4n float," +
+                           "u5v float," +
+                           "u5n float," +
+                           "umot float," +
+                           "i1 int," +
+                           "i2v int," +
+                           "i2n int," +
+                           "i3v int," +
+                           "i3n int," +
+                           "i4v int," +
+                           "i4n int," +
+                           "i5v int," +
+                           "i5n int," +
+                           "rtv float," +
+                           "dt1 float," +
+                           "dt2 float," +
+                           "dt3 float," +
+                           "dt4 float," +
+                           "grt float," +
+                           "trt float," +
+                           "mv1 float," +
+                           "mv2 float," +
+                           "mv3 float," +
+                           "dh1 float," +
+                           "dh5 float," +
+                           "os1klvb int," +
+                           "rezerv int," +
+                           "mezdoza4 int" +
+                           ")";
+
+                        using (SqlConnection conSQL101ms1 = new SqlConnection(connectionString))
+                        {
+                            conSQL101ms1.Open();
+                            SqlCommand command = new SqlCommand(comRulon101ms1, conSQL101ms1);
+                            command.ExecuteNonQuery();
+                            conSQL101ms1.Close();
 
                         }
                         #endregion
@@ -1935,7 +2052,7 @@ namespace consoleRS2toBD
                                 {
                                     bulkMessage.DestinationTableName = strTableName;
                                     bulkMessage.WriteToServer(dtMessagestan);
-                                    Program.messageOKSt200mc = "Кол-во сообщений записанных в таблицу " + strTableName + " равно " + dtMessagestan.Rows.Count;
+                                    Program.messageOKSt200mc = "Message -->" + strTableName + " = " + dtMessagestan.Rows.Count;
                                     Program.dtOKSt200mc = dtMessage;
                                 }
                             }

@@ -352,6 +352,8 @@ namespace consoleRS2toBD
                             Program.messageOKDs100mc = "Соединение активно";
                             Program.dtOKDs100mc = DateTime.Now;
 
+
+
                             //Буфер PLC
                             Thread PLS100ms = new Thread(BufferToBuffer);
                             PLS100ms.Start();

@@ -326,7 +326,7 @@ namespace consoleRS2toBD
         private string connectionString = "Data Source = 192.168.0.46; Initial Catalog = rs2stan1700; User ID = rs2admin; Password = 159951";
         private string numberTable;
         private float speed4kl;
-        private float H5_work;
+        private float H_work;
         private int B_Work;
         private float Ves_Work;
         private DateTime stanTimeStop;

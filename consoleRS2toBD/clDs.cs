@@ -244,6 +244,9 @@ namespace consoleRS2toBD
             int writeMessage = 0; //цикл сохранением значений Message
 
 
+            private bool blOKPLC;
+
+
 
 
 
@@ -269,21 +272,26 @@ namespace consoleRS2toBD
                 dtMessageds.Columns.Add("status", typeof(int));
                 dtMessageds.Columns.Add("message", typeof(string));
                 dtMessageds.Columns.Add("speed", typeof(float));
-                #endregion
-
+            #endregion
 
                 Thread queryPLC = new Thread(dsPLC);
                 queryPLC.Start();
 
+
+            if (blOKPLC)
+            {
+                
                 Thread querySQL = new Thread(dsSQL80ms);
                 querySQL.Start();
 
-                
+
                 Thread query1s = new Thread(dsSQL1s);
                 query1s.Start();
 
                 //Thread queryMes = new Thread(dsMessage200ms);
                 //queryMes.Start();
+
+            }
 
 
             while (true)
@@ -352,6 +360,7 @@ namespace consoleRS2toBD
                             Program.messageOKDs100mc = "Соединение активно";
                             Program.dtOKDs100mc = DateTime.Now;
 
+                            blOKPLC = true;
 
 
                             //Буфер PLC

@@ -55,134 +55,119 @@ namespace consoleRS2toBD
         Dictionary<int, MessageClass> MessageDs = new Dictionary<int, MessageClass>()
             {
 
-                [0] = new MessageClass(1, "Режим ТАК ДЕРЖАТЬ", 0, ""),
-                [1] = new MessageClass(2, "Режим РАЗГОНА", 0, ""),
-                [2] = new MessageClass(3, "Режим НОРМАЛЬНОГО ОСТАНОВА", 0, ""),
-                [3] = new MessageClass(4, "Режим ФОРСИРОВАННОГО ОСТАНОВА", 0, ""),
-                [4] = new MessageClass(5, "Режим ВЫПУСКА", 0, ""),
-                [5] = new MessageClass(6, "Натяжение в 1 промежутке", 7, "Отсутствие натяжения в 1"),
-                [6] = new MessageClass(6, "Натяжение в 2 промежутке", 7, "Отсутствие натяжения в 3"),
-                [7] = new MessageClass(6, "Натяжение в 2 промежутке", 7, "Отсутствие натяжения в 3"),
-                [8] = new MessageClass(2, "Кнопка ЗАПРАВКА", 0, ""),
-                [9] = new MessageClass(1, "Ключ ТАК ДЕРЖАТЬ", 0, ""),
-                [10] = new MessageClass(2, "Ключ РАЗГОН", 0, ""),
-                [11] = new MessageClass(3, "Кнопка НОРМАЛЬНЫЙ ОСТАНОВ", 0, ""),
-                [12] = new MessageClass(4, "Кнопка ФОРСИРОВАННЫЙ ОСТАНОВ", 0, ""),
-                [13] = new MessageClass(6, "Максимальный перегруз", 7, "Отсутствие максимального перегруз"),
-                [14] = new MessageClass(1, "Уставка рабочей скорости", 0, ""),
-                [15] = new MessageClass(2, "Перегруз по скорости", 0, ""),
-                [16] = new MessageClass(2, "ЛК моталки включены", 6, "ЛК моталки выключены"),
-                [17] = new MessageClass(2, "ЛК разматывателя включены", 6, "ЛК разматывателя выключены"),
-                [18] = new MessageClass(1, "Гидравлика 64 кг готова", 4, "Гидравлика 64 кг не готова"),
-                [19] = new MessageClass(7, "РНЗ 12 выключено", 6, "РНЗ 12 включено"),
-                [20] = new MessageClass(6, "РНЗ 23 включено", 7, "РНЗ 23 выключено"),
-                [21] = new MessageClass(6, "РНЗ 34 включено", 7, "РНЗ 34 выключено"),
-                [22] = new MessageClass(6, "ГРТ включено", 7, "ГРТ выключено"),
-                [23] = new MessageClass(6, "ТРТ включено", 7, "ТРТ выключено"),
-                [24] = new MessageClass(6, "Натяжение в 4 промежутке", 7, "Отсутствие натяжения в 4 промежутке"),
-                [25] = new MessageClass(6, "Натяжение на моталке", 0, "Отсутствие натяжения на моталке"),
-                [26] = new MessageClass(6, "Натяжение на разматывателе", 7, "Отсутствие натяжения на разматывателе"),
-                [27] = new MessageClass(2, "ЛК клети 1 включены", 6, "ЛК клети 1 выключены"),
-                [28] = new MessageClass(2, "ЛК клети 2 включены", 6, "ЛК клети 2 выключены"),
-                [29] = new MessageClass(2, "ЛК клети 3 включены", 6, "ЛК клети 3 выключены"),
-                [30] = new MessageClass(2, "ЛК клети 4 включены", 6, "ЛК клети 4 выключены"),
-                [31] = new MessageClass(2, "ЛК клети 5 включены", 6, "ЛК клети 5 выключены"),
-                [32] = new MessageClass(5, "Наличие полосы в толщиномере за 5 клетью", 7, "Отсутствие полосы в толщиномере за 5 клетью"),
-                [33] = new MessageClass(1, "Ноль задания скорости", 2, "Поехали"),
-                [34] = new MessageClass(1, "Сборка схемы стана", 4, "Развал схемы стана"),
-                [35] = new MessageClass(4, "Максимальная скорость клети 1", 5, "Конец максимальной скорости клети 1"),
-                [36] = new MessageClass(4, "Максимальная скорость клети 2", 5, "Конец максимальной скорости клети 2"),
-                [37] = new MessageClass(4, "Максимальная скорость клети 3", 5, "Конец максимальной скорости клети 3"),
-                [38] = new MessageClass(4, "Максимальная скорость клети 4", 5, "Конец максимальной скорости клети 4"),
-                [39] = new MessageClass(4, "Максимальная скорость клети 5", 5, "Конец максимальной скорости клети 5"),
-                [40] = new MessageClass(6, "РКДВ включен", 6, "РКДВ выключен"),
-                [41] = new MessageClass(6, "РПВ включен", 6, "РПВ выключен"),
-                [42] = new MessageClass(1, "РНВ12 включен", 4, "РНВ12 выключен"),
-                [43] = new MessageClass(1, "РНВ23 включен", 4, "РНВ23 выключен"),
-                [44] = new MessageClass(1, "РНВ34 включен", 4, "РНВ34 выключен"),
-                [45] = new MessageClass(6, "РН45 включено", 7, "РН45 выключено"),
-                [46] = new MessageClass(1, "РТВ включен", 7, "РТВ выключен"),
-                [47] = new MessageClass(1, "Гидравлика 100 кг готова", 4, "Гидравлика 100 кг не готова"),
-                [48] = new MessageClass(1, "ПЖТ Ж - 12 готова", 4, "ПЖТ Ж-12 не готова"),
-                [49] = new MessageClass(1, "ПЖТ Ж - 13 готова", 4, "ПЖТ Ж-13 не готова"),
-                [50] = new MessageClass(1, "ПЖТ Ж - 14 готова", 4, "ПЖТ Ж-14 не готова"),
-                [51] = new MessageClass(1, "Смазка Ж-15 готова", 4, "Смазка Ж-15 не готова"),
-                [52] = new MessageClass(1, "Смазка Ж-16 готова", 4, "Смазка Ж-16 не готова"),
-                [53] = new MessageClass(5, "Начальные условия", 0, ""),
-                [54] = new MessageClass(5, "Эмульсионная система готова", 7, "Эмульсионная система не готова"),
-                [55] = new MessageClass(1, "Смазка Ж-17 готова", 4, "Смазка Ж-17 не готова"),
-                [56] = new MessageClass(1, "Смазка Ж - 18 готова", 4, "Смазка Ж-18 не готова"),
-                [57] = new MessageClass(1, "Смазка Ж - 19 готова", 4, "Смазка Ж-19 не готова"),
-                [58] = new MessageClass(1, "Смазка Ж - 20 готова", 4, "Смазка Ж-20 не готова"),
-                [59] = new MessageClass(1, "Температура в ПОУ нормальная", 4, "Температура в ПОУ высокая"),
-                [60] = new MessageClass(1, "Давление редукторов низкое", 4, "Давление редукторов нормальное"),
-                [61] = new MessageClass(1, "Давление ПЖТ низкое", 4, "Давление ПЖТ нормальное"),
-                [62] = new MessageClass(1, "Вентиляция готова", 4, "Вентиляция не готова"),
-                [63] = new MessageClass(1, "Синхронные двигатели готовы", 4, "Синхронные двигатели не готовы"),
-                [64] = new MessageClass(1, "Ограждение моталки закрыто", 4, "Ограждение моталки открыто НО"),
-                [65] = new MessageClass(1, "Захлестыватель у моталки НО", 4, "Захлестыватель отведен"),
-                [66] = new MessageClass(1, "Высокая температура ПЖТ ГП", 4, "Нормальная температура ПЖТ ГП"),
-                [67] = new MessageClass(4, "Перегруз клети 1", 5, "Конец перегруза клети 1"),
-                [68] = new MessageClass(4, "Перегруз клети 2", 5, "Конец перегруза клети 2"),
-                [69] = new MessageClass(4, "Перегруз клети 3", 5, "Конец перегруза клети 3"),
-                [70] = new MessageClass(4, "Перегруз клети 4", 5, "Конец перегруза клети 4"),
-                [71] = new MessageClass(4, "Перегруз клети 5", 5, "Конец перегруза клети 5"),
-                [72] = new MessageClass(1, "Высокая температура ПЖТ СД", 4, "Нормальная температура ПЖТ СД"),
-                [73] = new MessageClass(4, "Кнопка НО на ПУ старшего нажата", 0, ""),
-                [74] = new MessageClass(0, "", 4, "Кнопка НО на ПУР нажата"),
-                [75] = new MessageClass(0, "", 4, "Кнопка НО на ПУ1 нажата"),
-                [76] = new MessageClass(0, "", 4, "Кнопка НО на ПУ2 нажата"),
-                [77] = new MessageClass(0, "", 4, "Кнопка НО на ПУ3 нажата"),
-                [78] = new MessageClass(0, "", 4, "Кнопка НО на ПУ4 нажата"),
-                [79] = new MessageClass(0, "", 4, "Кнопка НО на ПУ5 нажата"),
-                [80] = new MessageClass(4, "Кнопка ФО на ПУ старшего нажата", 0, ""),
-                [81] = new MessageClass(0, "", 4, "Кнопка ФО на ПУ5 нажата"),
-                [82] = new MessageClass(0, "", 4, "Кнопка АО на ПУР нажата"),
-                [83] = new MessageClass(4, "Провал натяжения на разматывателе", 1, "Восстановление натяжения на разматывателе ТД"),
-                [84] = new MessageClass(4, "Провал натяжения в 1 промежутке ФО ", 1, "Восстановление натяжения в 1 промежутке ТД"),
-                [85] = new MessageClass(4, "Провал натяжения в 2 промежутке ФО ", 1, "Восстановление натяжения в 2 промежутке ТД"),
-                [86] = new MessageClass(4, "Провал натяжения в 3 промежутке ФО ", 1, "Восстановление натяжения в 3 промежутке ТД"),
-                [87] = new MessageClass(4, "Провал натяжения в 4 промежутке ФО ", 1, "Восстановление натяжения в 4 промежутке ТД"),
-                [88] = new MessageClass(4, "Вентилятор обдува 101Г выключен НО", 0, ""),
-                [89] = new MessageClass(4, "Вентилятор обдува 102Г выключен НО", 0, ""),
-                [90] = new MessageClass(4, "Вентилятор обдува 103Г выключен НО", 0, ""),
-                [91] = new MessageClass(4, "Вентилятор обдува 105Г выключен НО", 0, ""),
-                [92] = new MessageClass(4, "Вентилятор обдува 106Г выключен НО", 0, ""),
-                [93] = new MessageClass(4, "Вентилятор подпора ПА - 1 выключен", 0, ""),
-                [94] = new MessageClass(4, "Вентилятор обдува 112Г выключен НО", 0, ""),
-                [95] = new MessageClass(4, "Вентилятор обдува 111Г выключен НО", 0, ""),
-                [96] = new MessageClass(4, "Вентилятор обдува 110Г выключен НО", 0, ""),
-                [97] = new MessageClass(4, "Вентилятор обдува 108Г выключен НО", 0, ""),
-                [98] = new MessageClass(4, "Вентилятор обдува 107Г выключен НО", 0, ""),
-                [99] = new MessageClass(4, "Вентилятор подпора ПА-2 выключен", 0, ""),
-                [100] = new MessageClass(4, "Вентилятор обдува ГП 1 клети выключен", 0, ""),
-                [101] = new MessageClass(4, "Вентилятор обдува ГП 2 клети выключен", 0, ""),
-                [102] = new MessageClass(4, "Вентилятор обдува ГП 3 клети выключен", 0, ""),
-                [103] = new MessageClass(4, "Вентилятор обдува ГП 4 клети выключен", 0, ""),
-                [104] = new MessageClass(0, "", 4, "Кнопка ФО на ПУ4 нажата"),
-                [105] = new MessageClass(0, "", 4, "Кнопка ФО на ПУ3 нажата"),
-                [106] = new MessageClass(0, "", 4, "Кнопка ФО на ПУ2 нажата"),
-                [107] = new MessageClass(0, "", 4, "Кнопка ФО на ПУ1 нажата"),
-                [108] = new MessageClass(0, "", 4, "Кнопка ФО на ПУР нажата"),
-                [109] = new MessageClass(0, "", 4, "Кнопка АО на СУС нажата"),
-                [110] = new MessageClass(0, "", 4, "Кнопка АО на ПУ5 нажата"),
-                [111] = new MessageClass(0, "", 0, ""),
-                [112] = new MessageClass(0, "", 0, ""),
-                [113] = new MessageClass(0, "", 0, ""),
-                [114] = new MessageClass(4, "Кнопка АО на СУС нажата", 0, ""),
-                [115] = new MessageClass(0, "", 0, ""),
-                [116] = new MessageClass(0, "", 0, ""),
-                [117] = new MessageClass(0, "", 0, ""),
-                [118] = new MessageClass(0, "", 0, ""),
-                [119] = new MessageClass(0, "", 0, ""),
-                [120] = new MessageClass(4, "Вентилятор обдува ГП 5 клети выключен НО", 0, ""),
-                [121] = new MessageClass(0, "", 0, ""),
-                [122] = new MessageClass(4, "Вентилятор подпора ГП-1 выключен", 0, ""),
-                [123] = new MessageClass(4, "Вентилятор подпора ГП-2 выключен", 0, ""),
-                [124] = new MessageClass(4, "Вентилятор обдува нажимных винтов выключен", 0, ""),
-                [125] = new MessageClass(4, "ХХХ ПЕРЕГРУЗ ГП ХХХ", 0, ""),
-                [126] = new MessageClass(0, "", 0, ""),
-                [127] = new MessageClass(0, "", 0, ""),
+                [0] = new MessageClass(2, "Разгон", 0, ""),
+                [1] = new MessageClass(1, "Работа с пульта моталки разрешена", 4, "Pабота с пульта моталки запрещена"),
+                [2] = new MessageClass(3, "Нормальный останов", 0, ""),
+                [3] = new MessageClass(1, "Так держать", 0, ""),
+                [4] = new MessageClass(5, "Ноль скорости", 0, ""),
+                [5] = new MessageClass(2, "Кнопка ВС с ПУ клети", 0, ""),
+                [6] = new MessageClass(0, "", 4, "Кнопка АО стана с ПУ клети"),
+                [7] = new MessageClass(2, "Давление ПЖТ нормальное", 4, "Давление ПЖТ отсутствует"),
+                [8] = new MessageClass(2, "Температура редукторов нормальная", 4, "Температура редукторов аварийная"),
+                [9] = new MessageClass(2, "Гидросистема №1 готова", 4, "Гидросистема №1 не готова"),
+                [10] = new MessageClass(2, "Ж-21 (ПЖТ опорных) готова", 4, "Ж-21 (ПЖТ опорных) не готова"),
+                [11] = new MessageClass(2, "Ж-22 (ПЖТ СД) готова ", 4, "Ж-22 (ПЖТ СД) не готова"),
+                [12] = new MessageClass(2, "Ж-23 (смазка редукторов) готова", 4, "Ж-23 (смазка редукторов) не готова"),
+                [13] = new MessageClass(2, "Ж-24 (смазка НВ) готова ", 4, "Ж-24 (смазка НВ) не готова "),
+                [14] = new MessageClass(0, "", 4, "Ж-24 (смазка НВ) не готова "),
+                [15] = new MessageClass(0, "", 4, "Ж-24 (смазка НВ) не готова "),
+                [16] = new MessageClass(7, "Обрыв полосы ", 0, ""),
+                [17] = new MessageClass(0, "", 4, "Режим Форсированного останова"),
+                [18] = new MessageClass(6, "ВАТ разматывателя включен ", 7, "ВАТ разматывателя отключен "),
+                [19] = new MessageClass(6, "ВАТ клети включен ", 7, "ВАТ клети отключен "),
+                [20] = new MessageClass(6, "ВАТ моталки включен", 7, "ВАТ моталки отключен"),
+                [21] = new MessageClass(6, "ЛК разматывателя включен ", 7, "ЛК разматывателя отключен"),
+                [22] = new MessageClass(6, "ЛК натяжного устройства включен", 7, "ЛК натяжного устройства включен"),
+                [23] = new MessageClass(6, "ЛК моталки включен ", 7, "ЛК моталки отключен "),
+                [24] = new MessageClass(6, "ЛК клети включен ", 7, "ЛК клети отключен "),
+                [25] = new MessageClass(6, "ЛК НВ включен ", 7, "ЛК НВ отключен"),
+                [26] = new MessageClass(2, "Вспоммеханизмы моталки готовы к РС", 1, "Вспоммеханизмы моталки не готовы к РС "),
+                [27] = new MessageClass(6, "Натяжение на разматывателе включено ", 7, "Натяжение на разматывателе отключено "),
+                [28] = new MessageClass(2, "Вспоммеханизмы разматывателя к РС готовы", 1, "Вспоммеханизмы разматывателя к РС не готовы "),
+                [29] = new MessageClass(6, "Натяжение на моталке включено ", 7, "Натяжение на моталке отключено "),
+                [30] = new MessageClass(2, "Натяжение на разматывателе включить", 3, "Натяжение на разматывателе отключить "),
+                [31] = new MessageClass(2, "Натяжение на моталке включить ", 3, "Натяжение на моталке отключить "),
+                [32] = new MessageClass(2, "Выпуск заднего конца", 0, ""),
+                [33] = new MessageClass(2, "Кнопка включения ячейки №29 (НВ)", 0, ""),
+                [34] = new MessageClass(0, "", 3, "Авария ячейки №29 "),
+                [35] = new MessageClass(2, "Предупреждение по температуре тр-ра левого ", 0, ""),
+                [36] = new MessageClass(0, "", 3, "Авария по температуре тр-ра левого НВ "),
+                [37] = new MessageClass(2, "Предупреждение по температуре тр-ра правого ", 0, ""),
+                [38] = new MessageClass(0, "", 3, "Авария по температуре тр-ра правого НВ "),
+                [39] = new MessageClass(2, "Разблокировка включения ячейки №29 (НВ)", 3, "Блокировка включения ячейки №29 (НВ) "),
+                [40] = new MessageClass(2, "Выход включения ячейки №29 (НВ)", 0, ""),
+                [41] = new MessageClass(2, "Выключение ячейки №29 (НВ) с панели", 0, ""),
+                [42] = new MessageClass(0, "", 2, "Выключение ячейки №29 (НВ) со шкафа"),
+                [43] = new MessageClass(0, "", 3, "Выход выключения ячейки №29 (НВ) "),
+                [44] = new MessageClass(2, "Ячейка №29 (НВ) включена ", 0, ""),
+                [45] = new MessageClass(0, "", 2, "Ячейка №29 (НВ) отключена "),
+                [46] = new MessageClass(2, "Выход включения ячейки №27 (НУ) ", 0, ""),
+                [47] = new MessageClass(0, "", 3, "Выход выключения ячейки №27(НУ)"),
+                [48] = new MessageClass(2, "Включение ячейки №27 (НУ) с панели", 0, ""),
+                [49] = new MessageClass(1, "Включение ячейки №27 (НУ) со шкафа", 0, ""),
+                [50] = new MessageClass(1, "Предупреждение по температуре тр-ра НУ", 0, ""),
+                [51] = new MessageClass(0, "", 3, "Авария по температуре тр-ра НУ"),
+                [52] = new MessageClass(0, "", 3, "Авария ячейки №27 (НУ)"),
+                [53] = new MessageClass(5, "Разблокировка включения ячейки №27 (НУ)", 3, "Блокировка включения ячейки №27 (НУ) "),
+                [54] = new MessageClass(2, "Выключение ячейки №27 (НУ) с панели", 0, ""),
+                [55] = new MessageClass(2, "Выключение ячейки №27 (НУ) со шкафа", 0, ""),
+                [56] = new MessageClass(2, "Включение ячейки №43 моталки", 0, ""),
+                [57] = new MessageClass(0, "", 3, "Авария ячейки №43 моталки"),
+                [58] = new MessageClass(2, "Предупреждение по температуре тр-ра №1 моталки", 0, ""),
+                [59] = new MessageClass(0, "", 3, "Авария по температуре тр-ра №1 моталки"),
+                [60] = new MessageClass(2, "Предупреждение по температуре тр-ра №2 моталки", 0, ""),
+                [61] = new MessageClass(0, "", 3, "Авария по температуре тр-ра №2 моталки "),
+                [62] = new MessageClass(2, "Разблокировка включения ячейки №43 моталки", 3, "Блокировка включения ячейки №43 моталки"),
+                [63] = new MessageClass(2, "Выход включения ячейки №43 моталки ", 0, ""),
+                [64] = new MessageClass(2, "Выключение ячейки №43 моталки с панели", 0, ""),
+                [65] = new MessageClass(2, "Выключение ячейки №43 моталки со шкафа", 0, ""),
+                [66] = new MessageClass(0, "", 3, "Выход выключения ячейки №43 моталки"),
+                [67] = new MessageClass(2, "Включение ячейки №41 клети", 0, ""),
+                [68] = new MessageClass(0, "", 3, " Авария ячейки №41 клети"),
+                [69] = new MessageClass(2, "Предупреждение по температуре тр-ра №1 клети", 0, ""),
+                [70] = new MessageClass(0, "", 3, "Авария по температуре тр-ра №1 клети"),
+                [71] = new MessageClass(2, "Предупреждение по температуре тр-ра №2 клети", 0, ""),
+                [72] = new MessageClass(0, "", 3, "Авария по температуре тр-ра №2 клети"),
+                [73] = new MessageClass(2, "Разблокировка включения ячейки №41 клети ", 3, "Блокировка включения ячейки №41 клети "),
+                [74] = new MessageClass(2, "Выход включения ячейки №41 клети ", 0, ""),
+                [75] = new MessageClass(2, "Выключение ячейки №41 клети с панели ", 0, ""),
+                [76] = new MessageClass(2, "Выключение ячейки №41 клети со шкафа", 0, ""),
+                [77] = new MessageClass(0, "", 3, " Выход выключения ячейки №41 клети"),
+                [78] = new MessageClass(2, "Включение ячейки №39 разматывателя", 0, ""),
+                [79] = new MessageClass(0, "", 3, "Авария ячейки №39 разматывателя"),
+                [80] = new MessageClass(0, "", 4, "Кнопка АО стана с ПУ моталки (бок)"),
+                [81] = new MessageClass(2, "Предупреждение по температуре тр-ра №1 разматывателя", 0, ""),
+                [82] = new MessageClass(0, "", 3, "Авария по температуре тр-ра №1 разматывателя"),
+                [83] = new MessageClass(2, "Предупреждение по температуре тр-ра №2 разматывателя", 0, ""),
+                [84] = new MessageClass(0, "", 3, "Авария по температуре тр-ра №2 разматывателя "),
+                [85] = new MessageClass(2, "Разблокировка включения ячейки №39 разматывателя", 3, "Блокировка включения ячейки №39 разматывателя"),
+                [86] = new MessageClass(2, "Выход включения ячейки №39 разматывателя", 0, ""),
+                [87] = new MessageClass(0, "", 4, "Кнопка АО стана с ПУ разматывателя"),
+                [88] = new MessageClass(2, "Выключение ячейки №39 разматывателя с панели ", 0, ""),
+                [89] = new MessageClass(2, "Выключение ячейки №39 разматывателя со шкафа ", 0, ""),
+                [90] = new MessageClass(0, "", 3, "Выход выключения ячейки №39 разматывателя "),
+                [91] = new MessageClass(7, "РДШ ВАТа разматывателя сработало", 0, ""),
+                [92] = new MessageClass(7, "РДШ ВАТа клети сработало", 0, ""),
+                [93] = new MessageClass(7, "РДШ ВАТа моталки сработало", 0, ""),
+                [94] = new MessageClass(2, "Ячейка №27 (НУ) включена", 0, ""),
+                [95] = new MessageClass(2, "Ячейка №27 (НУ) отключена", 0, ""),
+                [96] = new MessageClass(2, "Ячейка №39 разматывателя включена ", 0, ""),
+                [97] = new MessageClass(2, "Ячейка №39 разматывателя отключена", 0, ""),
+                [98] = new MessageClass(2, "Ячейка №41 клети включена", 0, ""),
+                [99] = new MessageClass(2, "Ячейка №41 клети отключена", 0, ""),
+                [100] = new MessageClass(2, "Ячейка №43 моталки включена", 0, ""),
+                [101] = new MessageClass(2, "Ячейка №43 моталки отключена", 0, ""),
+                [102] = new MessageClass(2, "Давление смазки на моталке (ЭКМ) нормальное", 0, ""),
+                [103] = new MessageClass(0, "Кнопка АО со шкафа разматывателя ", 0, ""),
+                [104] = new MessageClass(0, "Кнопка АО со шкафа клети", 0, ""),
+                [105] = new MessageClass(0, "Кнопка АО со шкафа моталки", 0, ""),
+                [106] = new MessageClass(0, "", 7, "ФО от вспоммеханизмов моталки"),
+                [107] = new MessageClass(0, "", 7, "ФО от вспоммеханизмов разматывателя "),
+                [108] = new MessageClass(7, "Высокая температура (термопары) ", 1, "Нормальная температура (термопары)"),
+                [109] = new MessageClass(1, "Работа с пульта клети разрешена", 0, ""),
+                [110] = new MessageClass(0, "", 4, "Кнопка НО с ПУ клети"),
+                [111] = new MessageClass(0, "", 4, "Кнопка НО с ПУ моталки")
+            
             };
 
 
@@ -275,12 +260,12 @@ namespace consoleRS2toBD
                 dtMessageds.Columns.Add("speed", typeof(float));
             #endregion
 
+
                 Thread queryPLC = new Thread(dsPLC);
                 queryPLC.Start();
 
 
-            if (blOKPLC)
-            {
+            
                 
                 Thread querySQL = new Thread(dsSQL80ms);
                 querySQL.Start();
@@ -292,7 +277,7 @@ namespace consoleRS2toBD
                 //Thread queryMes = new Thread(dsMessage200ms);
                 //queryMes.Start();
 
-            }
+            
 
 
             while (true)
@@ -323,8 +308,8 @@ namespace consoleRS2toBD
                     dsbufferPLC = new byte[dsmount];
                     dsbufferSQL = new byte[dsmount];
                     dsbuffer1s = new byte[dsmount];
-                    dsbufferMessage = new byte[25];
-                    dsbufferMessageOld = new byte[25];
+                    dsbufferMessage = new byte[14];
+                    dsbufferMessageOld = new byte[14];
 
 
                     int resultReadField = 5;
@@ -461,45 +446,25 @@ namespace consoleRS2toBD
                     dsbufferMessageOld[11] = dsbufferMessage[11];
                     dsbufferMessageOld[12] = dsbufferMessage[12];
                     dsbufferMessageOld[13] = dsbufferMessage[13];
-                    dsbufferMessageOld[14] = dsbufferMessage[14];
-                    dsbufferMessageOld[15] = dsbufferMessage[15];
-                    dsbufferMessageOld[16] = dsbufferMessage[16];
-                    dsbufferMessageOld[17] = dsbufferMessage[17];
-                    dsbufferMessageOld[18] = dsbufferMessage[18];
-                    dsbufferMessageOld[19] = dsbufferMessage[19];
-                    dsbufferMessageOld[20] = dsbufferMessage[20];
-                    dsbufferMessageOld[21] = dsbufferMessage[21];
-                    dsbufferMessageOld[22] = dsbufferMessage[21];
-                    dsbufferMessageOld[23] = dsbufferMessage[21];
-                    dsbufferMessageOld[24] = dsbufferMessage[21];
+                    
                 
 
 
-                dsbufferMessage[0] = dsbufferPLC[0];
-                    dsbufferMessage[1] = dsbufferPLC[1];
-                    dsbufferMessage[2] = dsbufferPLC[24];
-                    dsbufferMessage[3] = dsbufferPLC[25];
-                    dsbufferMessage[4] = dsbufferPLC[26];
-                    dsbufferMessage[5] = dsbufferPLC[27];
-                    dsbufferMessage[6] = dsbufferPLC[28];
-                    dsbufferMessage[7] = dsbufferPLC[29];
-                    dsbufferMessage[8] = dsbufferPLC[30];
-                    dsbufferMessage[9] = dsbufferPLC[31];
-                    dsbufferMessage[10] = dsbufferPLC[32];
-                    dsbufferMessage[11] = dsbufferPLC[33];
-                    dsbufferMessage[12] = dsbufferPLC[34];
-                    dsbufferMessage[13] = dsbufferPLC[35];
-                    dsbufferMessage[14] = dsbufferPLC[36];
-                    dsbufferMessage[15] = dsbufferPLC[37];
-                    dsbufferMessage[16] = dsbufferPLC[38];   //speed 4kl
-                    dsbufferMessage[17] = dsbufferPLC[40];
-                    dsbufferMessage[18] = dsbufferPLC[41];
-                    dsbufferMessage[19] = dsbufferPLC[42];
-                    dsbufferMessage[20] = dsbufferPLC[43];
-                    dsbufferMessage[21] = dsbufferPLC[44];
-                    dsbufferMessage[22] = dsbufferPLC[45];
-                    dsbufferMessage[23] = dsbufferPLC[46];
-                    dsbufferMessage[24] = dsbufferPLC[47];
+                    dsbufferMessage[0] = dsbufferPLC[24];
+                    dsbufferMessage[1] = dsbufferPLC[25];
+                    dsbufferMessage[2] = dsbufferPLC[26];
+                    dsbufferMessage[3] = dsbufferPLC[27];
+                    dsbufferMessage[4] = dsbufferPLC[28];
+                    dsbufferMessage[5] = dsbufferPLC[29];
+                    dsbufferMessage[6] = dsbufferPLC[30];
+                    dsbufferMessage[7] = dsbufferPLC[31];
+                    dsbufferMessage[8] = dsbufferPLC[32];
+                    dsbufferMessage[9] = dsbufferPLC[33];
+                    dsbufferMessage[10] = dsbufferPLC[34];
+                    dsbufferMessage[11] = dsbufferPLC[35];
+                    dsbufferMessage[12] = dsbufferPLC[36];
+                    dsbufferMessage[13] = dsbufferPLC[37];
+    
 
                 }
 
@@ -1133,7 +1098,7 @@ namespace consoleRS2toBD
 
                         dtMessage = DateTime.Now;
 
-                        float speed = (float)(BitConverter.ToInt16(dsbufferMessage, 16)) / 100;
+                        float speed = 0;
 
 
                         int numberMessage = 0;
@@ -1195,7 +1160,7 @@ namespace consoleRS2toBD
                                     {
                                         bulkMessage.DestinationTableName = strTableName;
                                         bulkMessage.WriteToServer(dtMessageds);
-                                        Program.messageOKDs200mc = "Кол-во сообщений записанных в таблицу " + strTableName + " равно " + dtMessageds.Rows.Count;
+                                        Program.messageOKDs200mc = strTableName + " = " + dtMessageds.Rows.Count;
                                         Program.dtOKDs200mc = dtMessage;
                                     }
                                 }
@@ -1204,7 +1169,7 @@ namespace consoleRS2toBD
                             else
                             {
 
-                                Program.messageOKDs200mc = "Сообщений не было с " + DateTime.Now.AddMinutes(-1).ToString() + " по " + DateTime.Now.ToString();
+                                Program.messageOKDs200mc = "Сообщений не было с " + DateTime.Now.AddMinutes(-1).ToString("dd.MM HH:mm") + " по " + DateTime.Now.ToString("HH:mm");
                                 Program.dtOKDs200mc = dtMessage;
                             }
 

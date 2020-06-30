@@ -1396,7 +1396,105 @@ namespace consoleRS2toBD
 
                     #region Через обычный инсерт но перед передачей выставили региональные настройки с помощью System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("en-US");
 
-                  string comRulon1s1 = "INSERT INTO " + "Stan1s" + numberTable +
+                    #region //Неправилько сконвртированно значение получаемых данных
+                    //string comRulon1s1 = "INSERT INTO " + "Stan1s" + numberTable +
+                    //" (datetime1s,s191HL,s192HL,s193BL,s194BL,s191HR,s192HR,s193BR,s194BR,s281NL,s282NL,s283BL,s284BL,s281NR,s282NR," +
+                    //"s283BR,s284BR,s301BL,s302BL,s303HL,s304HL,s301BR,s302BR,s303HR,s304HR,s321BL,s322BL,s323HL,s324HL,s321BR,s322BR," +
+                    //"s323HR,s324HR,s341BL,s342BL,s343HL,s344HL,s341BR,s342BR,s343HR,s344HR,s461L,s462L,s463L,s461R,s462R,s463R,sG11L," +
+                    //"sG12L,sG13L,sG14L,sG15L,sG16L,sG17L,sG11R,sG12R,sG13R,sG14R,sG15R,sG16R,sG17R,sG21L,sG22L,sG23L,sG24L,sG25L,sG26L," +
+                    //"sG27L,sG21R,sG22R,sG23R,sG24R,sG25R,sG26R,sG27R,sD12,sD13,sD14,sD15,sD16,sD17,sD18,sD19,sD20,sU64,sRasxCD) " +
+                    //"VALUES" +
+                    //" (" +
+                    //" @datetime1sStan, " +
+                    //BitConverter.ToInt16(stanbuf1s, 0) + "," +
+                    //BitConverter.ToInt16(stanbuf1s, 1) + "," +
+                    //BitConverter.ToInt16(stanbuf1s, 2) + "," +
+                    //BitConverter.ToInt16(stanbuf1s, 3) + "," +
+                    //BitConverter.ToInt16(stanbuf1s, 4) + "," +
+                    //BitConverter.ToInt16(stanbuf1s, 5) + "," +
+                    //BitConverter.ToInt16(stanbuf1s, 6) + "," +
+                    //BitConverter.ToInt16(stanbuf1s, 7) + "," +
+                    //BitConverter.ToInt16(stanbuf1s, 8) + "," +
+                    //BitConverter.ToInt16(stanbuf1s, 9) + "," +
+                    //BitConverter.ToInt16(stanbuf1s, 10) + "," +
+                    //BitConverter.ToInt16(stanbuf1s, 11) + "," +
+                    //BitConverter.ToInt16(stanbuf1s, 12) + "," +
+                    //BitConverter.ToInt16(stanbuf1s, 13) + "," +
+                    //BitConverter.ToInt16(stanbuf1s, 14) + "," +
+                    //BitConverter.ToInt16(stanbuf1s, 15) + "," +
+                    //BitConverter.ToInt16(stanbuf1s, 16) + "," +
+                    //BitConverter.ToInt16(stanbuf1s, 17) + "," +
+                    //BitConverter.ToInt16(stanbuf1s, 18) + "," +
+                    //BitConverter.ToInt16(stanbuf1s, 19) + "," +
+                    //BitConverter.ToInt16(stanbuf1s, 20) + "," +
+                    //BitConverter.ToInt16(stanbuf1s, 21) + "," +
+                    //BitConverter.ToInt16(stanbuf1s, 22) + "," +
+                    //BitConverter.ToInt16(stanbuf1s, 23) + "," +
+                    //BitConverter.ToInt16(stanbuf1s, 24) + "," +
+                    //BitConverter.ToInt16(stanbuf1s, 25) + "," +
+                    //BitConverter.ToInt16(stanbuf1s, 26) + "," +
+                    //BitConverter.ToInt16(stanbuf1s, 27) + "," +
+                    //BitConverter.ToInt16(stanbuf1s, 28) + "," +
+                    //BitConverter.ToInt16(stanbuf1s, 29) + "," +
+                    //BitConverter.ToInt16(stanbuf1s, 30) + "," +
+                    //BitConverter.ToInt16(stanbuf1s, 31) + "," +
+                    //BitConverter.ToInt16(stanbuf1s, 32) + "," +
+                    //BitConverter.ToInt16(stanbuf1s, 33) + "," +
+                    //BitConverter.ToInt16(stanbuf1s, 34) + "," +
+                    //BitConverter.ToInt16(stanbuf1s, 35) + "," +
+                    //BitConverter.ToInt16(stanbuf1s, 36) + "," +
+                    //BitConverter.ToInt16(stanbuf1s, 37) + "," +
+                    //BitConverter.ToInt16(stanbuf1s, 38) + "," +
+                    //BitConverter.ToInt16(stanbuf1s, 39) + "," +
+                    //BitConverter.ToInt16(stanbuf1s, 40) + "," +
+                    //BitConverter.ToInt16(stanbuf1s, 41) + "," +
+                    //BitConverter.ToInt16(stanbuf1s, 42) + "," +
+                    //BitConverter.ToInt16(stanbuf1s, 43) + "," +
+                    //BitConverter.ToInt16(stanbuf1s, 44) + "," +
+                    //BitConverter.ToInt16(stanbuf1s, 45) + "," +
+                    //BitConverter.ToInt16(stanbuf1s, 46) + "," +
+                    //BitConverter.ToInt16(stanbuf1s, 47) + "," +
+                    //BitConverter.ToInt16(stanbuf1s, 48) + "," +
+                    //BitConverter.ToInt16(stanbuf1s, 49) + "," +
+                    //BitConverter.ToInt16(stanbuf1s, 50) + "," +
+                    //BitConverter.ToInt16(stanbuf1s, 51) + "," +
+                    //BitConverter.ToInt16(stanbuf1s, 52) + "," +
+                    //BitConverter.ToInt16(stanbuf1s, 53) + "," +
+                    //BitConverter.ToInt16(stanbuf1s, 54) + "," +
+                    //BitConverter.ToInt16(stanbuf1s, 55) + "," +
+                    //BitConverter.ToInt16(stanbuf1s, 56) + "," +
+                    //BitConverter.ToInt16(stanbuf1s, 57) + "," +
+                    //BitConverter.ToInt16(stanbuf1s, 58) + "," +
+                    //BitConverter.ToInt16(stanbuf1s, 59) + "," +
+                    //BitConverter.ToInt16(stanbuf1s, 60) + "," +
+                    //BitConverter.ToInt16(stanbuf1s, 61) + "," +
+                    //BitConverter.ToInt16(stanbuf1s, 62) + "," +
+                    //BitConverter.ToInt16(stanbuf1s, 63) + "," +
+                    //BitConverter.ToInt16(stanbuf1s, 64) + "," +
+                    //BitConverter.ToInt16(stanbuf1s, 65) + "," +
+                    //BitConverter.ToInt16(stanbuf1s, 66) + "," +
+                    //BitConverter.ToInt16(stanbuf1s, 67) + "," +
+                    //BitConverter.ToInt16(stanbuf1s, 68) + "," +
+                    //BitConverter.ToInt16(stanbuf1s, 69) + "," +
+                    //BitConverter.ToInt16(stanbuf1s, 70) + "," +
+                    //BitConverter.ToInt16(stanbuf1s, 71) + "," +
+                    //BitConverter.ToInt16(stanbuf1s, 72) + "," +
+                    //BitConverter.ToInt16(stanbuf1s, 73) + "," +
+                    //(float)(BitConverter.ToInt16(stanbuf1s, 74)) / 10 + "," +
+                    //(float)(BitConverter.ToInt16(stanbuf1s, 75)) / 10 + "," +
+                    //(float)(BitConverter.ToInt16(stanbuf1s, 76)) / 10 + "," +
+                    //(float)(BitConverter.ToInt16(stanbuf1s, 77)) / 10 + "," +
+                    //(float)(BitConverter.ToInt16(stanbuf1s, 78)) / 10 + "," +
+                    //(float)(BitConverter.ToInt16(stanbuf1s, 79)) / 10 + "," +
+                    //(float)(BitConverter.ToInt16(stanbuf1s, 80)) / 10 + "," +
+                    //(float)(BitConverter.ToInt16(stanbuf1s, 81)) / 10 + "," +
+                    //(float)(BitConverter.ToInt16(stanbuf1s, 82)) / 10 + "," +
+                    //(int)(BitConverter.ToInt16(stanbuf1s, 83) * 10) + "," +
+                    //(int)(BitConverter.ToInt16(stanbuf1s, 84) * 10) +
+                    //")";
+                    #endregion
+
+                    string comRulon1s1 = "INSERT INTO " + "Stan1s" + numberTable +
                   " (datetime1s,s191HL,s192HL,s193BL,s194BL,s191HR,s192HR,s193BR,s194BR,s281NL,s282NL,s283BL,s284BL,s281NR,s282NR," +
                   "s283BR,s284BR,s301BL,s302BL,s303HL,s304HL,s301BR,s302BR,s303HR,s304HR,s321BL,s322BL,s323HL,s324HL,s321BR,s322BR," +
                   "s323HR,s324HR,s341BL,s342BL,s343HL,s344HL,s341BR,s342BR,s343HR,s344HR,s461L,s462L,s463L,s461R,s462R,s463R,sG11L," +
@@ -1405,80 +1503,80 @@ namespace consoleRS2toBD
                   "VALUES" +
                   " (" +
                   " @datetime1sStan, " +
-                  BitConverter.ToInt16(stanbuf1s, 0) + "," +
-                  BitConverter.ToInt16(stanbuf1s, 1) + "," +
-                  BitConverter.ToInt16(stanbuf1s, 2) + "," +
-                  BitConverter.ToInt16(stanbuf1s, 3) + "," +
-                  BitConverter.ToInt16(stanbuf1s, 4) + "," +
-                  BitConverter.ToInt16(stanbuf1s, 5) + "," +
-                  BitConverter.ToInt16(stanbuf1s, 6) + "," +
-                  BitConverter.ToInt16(stanbuf1s, 7) + "," +
-                  BitConverter.ToInt16(stanbuf1s, 8) + "," +
-                  BitConverter.ToInt16(stanbuf1s, 9) + "," +
-                  BitConverter.ToInt16(stanbuf1s, 10) + "," +
-                  BitConverter.ToInt16(stanbuf1s, 11) + "," +
-                  BitConverter.ToInt16(stanbuf1s, 12) + "," +
-                  BitConverter.ToInt16(stanbuf1s, 13) + "," +
-                  BitConverter.ToInt16(stanbuf1s, 14) + "," +
-                  BitConverter.ToInt16(stanbuf1s, 15) + "," +
-                  BitConverter.ToInt16(stanbuf1s, 16) + "," +
-                  BitConverter.ToInt16(stanbuf1s, 17) + "," +
-                  BitConverter.ToInt16(stanbuf1s, 18) + "," +
-                  BitConverter.ToInt16(stanbuf1s, 19) + "," +
-                  BitConverter.ToInt16(stanbuf1s, 20) + "," +
-                  BitConverter.ToInt16(stanbuf1s, 21) + "," +
-                  BitConverter.ToInt16(stanbuf1s, 22) + "," +
-                  BitConverter.ToInt16(stanbuf1s, 23) + "," +
-                  BitConverter.ToInt16(stanbuf1s, 24) + "," +
-                  BitConverter.ToInt16(stanbuf1s, 25) + "," +
-                  BitConverter.ToInt16(stanbuf1s, 26) + "," +
-                  BitConverter.ToInt16(stanbuf1s, 27) + "," +
-                  BitConverter.ToInt16(stanbuf1s, 28) + "," +
-                  BitConverter.ToInt16(stanbuf1s, 29) + "," +
-                  BitConverter.ToInt16(stanbuf1s, 30) + "," +
-                  BitConverter.ToInt16(stanbuf1s, 31) + "," +
-                  BitConverter.ToInt16(stanbuf1s, 32) + "," +
-                  BitConverter.ToInt16(stanbuf1s, 33) + "," +
-                  BitConverter.ToInt16(stanbuf1s, 34) + "," +
-                  BitConverter.ToInt16(stanbuf1s, 35) + "," +
-                  BitConverter.ToInt16(stanbuf1s, 36) + "," +
-                  BitConverter.ToInt16(stanbuf1s, 37) + "," +
-                  BitConverter.ToInt16(stanbuf1s, 38) + "," +
-                  BitConverter.ToInt16(stanbuf1s, 39) + "," +
-                  BitConverter.ToInt16(stanbuf1s, 40) + "," +
-                  BitConverter.ToInt16(stanbuf1s, 41) + "," +
-                  BitConverter.ToInt16(stanbuf1s, 42) + "," +
-                  BitConverter.ToInt16(stanbuf1s, 43) + "," +
-                  BitConverter.ToInt16(stanbuf1s, 44) + "," +
-                  BitConverter.ToInt16(stanbuf1s, 45) + "," +
-                  BitConverter.ToInt16(stanbuf1s, 46) + "," +
-                  BitConverter.ToInt16(stanbuf1s, 47) + "," +
-                  BitConverter.ToInt16(stanbuf1s, 48) + "," +
-                  BitConverter.ToInt16(stanbuf1s, 49) + "," +
-                  BitConverter.ToInt16(stanbuf1s, 50) + "," +
-                  BitConverter.ToInt16(stanbuf1s, 51) + "," +
-                  BitConverter.ToInt16(stanbuf1s, 52) + "," +
-                  BitConverter.ToInt16(stanbuf1s, 53) + "," +
-                  BitConverter.ToInt16(stanbuf1s, 54) + "," +
-                  BitConverter.ToInt16(stanbuf1s, 55) + "," +
-                  BitConverter.ToInt16(stanbuf1s, 56) + "," +
-                  BitConverter.ToInt16(stanbuf1s, 57) + "," +
-                  BitConverter.ToInt16(stanbuf1s, 58) + "," +
-                  BitConverter.ToInt16(stanbuf1s, 59) + "," +
-                  BitConverter.ToInt16(stanbuf1s, 60) + "," +
-                  BitConverter.ToInt16(stanbuf1s, 61) + "," +
-                  BitConverter.ToInt16(stanbuf1s, 62) + "," +
-                  BitConverter.ToInt16(stanbuf1s, 63) + "," +
-                  BitConverter.ToInt16(stanbuf1s, 64) + "," +
-                  BitConverter.ToInt16(stanbuf1s, 65) + "," +
-                  BitConverter.ToInt16(stanbuf1s, 66) + "," +
-                  BitConverter.ToInt16(stanbuf1s, 67) + "," +
-                  BitConverter.ToInt16(stanbuf1s, 68) + "," +
-                  BitConverter.ToInt16(stanbuf1s, 69) + "," +
-                  BitConverter.ToInt16(stanbuf1s, 70) + "," +
-                  BitConverter.ToInt16(stanbuf1s, 71) + "," +
-                  BitConverter.ToInt16(stanbuf1s, 72) + "," +
-                  BitConverter.ToInt16(stanbuf1s, 73) + "," +
+                  stanbuf1s[0] + "," +
+                  stanbuf1s[1] + "," +
+                  stanbuf1s[2] + "," +
+                  stanbuf1s[3] + "," +
+                  stanbuf1s[4] + "," +
+                  stanbuf1s[5] + "," +
+                  stanbuf1s[6] + "," +
+                  stanbuf1s[7] + "," +
+                  stanbuf1s[8] + "," +
+                  stanbuf1s[9] + "," +
+                  stanbuf1s[10] + "," +
+                  stanbuf1s[11] + "," +
+                  stanbuf1s[12] + "," +
+                  stanbuf1s[13] + "," +
+                  stanbuf1s[14] + "," +
+                  stanbuf1s[15] + "," +
+                  stanbuf1s[16] + "," +
+                  stanbuf1s[17] + "," +
+                  stanbuf1s[18] + "," +
+                  stanbuf1s[19] + "," +
+                  stanbuf1s[20] + "," +
+                  stanbuf1s[21] + "," +
+                  stanbuf1s[22] + "," +
+                  stanbuf1s[23] + "," +
+                  stanbuf1s[24] + "," +
+                  stanbuf1s[25] + "," +
+                  stanbuf1s[26] + "," +
+                  stanbuf1s[27] + "," +
+                  stanbuf1s[28] + "," +
+                  stanbuf1s[29] + "," +
+                  stanbuf1s[30] + "," +
+                  stanbuf1s[31] + "," +
+                  stanbuf1s[32] + "," +
+                  stanbuf1s[33] + "," +
+                  stanbuf1s[34] + "," +
+                  stanbuf1s[35] + "," +
+                  stanbuf1s[36] + "," +
+                  stanbuf1s[37] + "," +
+                  stanbuf1s[38] + "," +
+                  stanbuf1s[39] + "," +
+                  stanbuf1s[40] + "," +
+                  stanbuf1s[41] + "," +
+                  stanbuf1s[42] + "," +
+                  stanbuf1s[43] + "," +
+                  stanbuf1s[44] + "," +
+                  stanbuf1s[45] + "," +
+                  stanbuf1s[46] + "," +
+                  stanbuf1s[47] + "," +
+                  stanbuf1s[48] + "," +
+                  stanbuf1s[49] + "," +
+                  stanbuf1s[50] + "," +
+                  stanbuf1s[51] + "," +
+                  stanbuf1s[52] + "," +
+                  stanbuf1s[53] + "," +
+                  stanbuf1s[54] + "," +
+                  stanbuf1s[55] + "," +
+                  stanbuf1s[56] + "," +
+                  stanbuf1s[57] + "," +
+                  stanbuf1s[58] + "," +
+                  stanbuf1s[59] + "," +
+                  stanbuf1s[60] + "," +
+                  stanbuf1s[61] + "," +
+                  stanbuf1s[62] + "," +
+                  stanbuf1s[63] + "," +
+                  stanbuf1s[64] + "," +
+                  stanbuf1s[65] + "," +
+                  stanbuf1s[66] + "," +
+                  stanbuf1s[67] + "," +
+                  stanbuf1s[68] + "," +
+                  stanbuf1s[69] + "," +
+                  stanbuf1s[70] + "," +
+                  stanbuf1s[71] + "," +
+                  stanbuf1s[72] + "," +
+                  stanbuf1s[73] + "," +
                   (float)(BitConverter.ToInt16(stanbuf1s, 74)) / 10 + "," +
                   (float)(BitConverter.ToInt16(stanbuf1s, 75)) / 10 + "," +
                   (float)(BitConverter.ToInt16(stanbuf1s, 76)) / 10 + "," +

@@ -802,36 +802,36 @@ namespace consoleRS2toBD
                         (float)BitConverter.ToInt16(dsbuf1s, 22)/10 + "," +                     //"D22 float , " +           
                         (float)BitConverter.ToInt16(dsbuf1s, 23)/10 + "," +                     //"D23 float , " +           
                         (float)BitConverter.ToInt16(dsbuf1s, 24)/10 + "," +     //buffer_1s_w[14] "D24 float , " +           
-                        BitConverter.ToInt16(dsbuf1s, 25) + "," +                                //t1                                        
-                        BitConverter.ToInt16(dsbuf1s, 26) + "," +                                //t2                          
-                        BitConverter.ToInt16(dsbuf1s, 27) + "," +                                //t3                          
-                        BitConverter.ToInt16(dsbuf1s, 28) + "," +                                //t4                          
-                        BitConverter.ToInt16(dsbuf1s, 29) + "," +                                //t5                          
-                        BitConverter.ToInt16(dsbuf1s, 30) + "," +                                //t6                          
-                        BitConverter.ToInt16(dsbuf1s, 31) + "," +                                //t7                          
-                        BitConverter.ToInt16(dsbuf1s, 32) + "," +                                //t8                          
-                        BitConverter.ToInt16(dsbuf1s, 33) + "," +                                //t9                          
-                        BitConverter.ToInt16(dsbuf1s, 34) + "," +                                //t10                         
-                        BitConverter.ToInt16(dsbuf1s, 35) + "," +                                //t11                         
-                        BitConverter.ToInt16(dsbuf1s, 36) + "," +                                //t12                         
-                        BitConverter.ToInt16(dsbuf1s, 37) + "," +                                //t13                         
-                        BitConverter.ToInt16(dsbuf1s, 38) + "," +                                //t14                         
-                        BitConverter.ToInt16(dsbuf1s, 39) + "," +                                //t15                      
-                        BitConverter.ToInt16(dsbuf1s, 40) + "," +                                //t16                         
-                        BitConverter.ToInt16(dsbuf1s, 41) + "," +                                //t17                         
-                        BitConverter.ToInt16(dsbuf1s, 42) + "," +                                //t18                         
-                        BitConverter.ToInt16(dsbuf1s, 43) + "," +                                //t19                         
-                        BitConverter.ToInt16(dsbuf1s, 44) + "," +                                //t20                         
-                        BitConverter.ToInt16(dsbuf1s, 45) + "," +                                //t21                         
-                        BitConverter.ToInt16(dsbuf1s, 46) + "," +                                //t22                         
-                        BitConverter.ToInt16(dsbuf1s, 47) + "," +                                //t23                         
-                        BitConverter.ToInt16(dsbuf1s, 48) + "," +                                //t24                         
-                        BitConverter.ToInt16(dsbuf1s, 49) + "," +                                //t25                         
-                        BitConverter.ToInt16(dsbuf1s, 50) + "," +                                //t26                         
-                        BitConverter.ToInt16(dsbuf1s, 51) + "," +                                //t27                         
-                        BitConverter.ToInt16(dsbuf1s, 52) + "," +                                //t28                         
-                        BitConverter.ToInt16(dsbuf1s, 53) + "," +                                //t29                        
-                        BitConverter.ToInt16(dsbuf1s, 54) +                               //Voda
+                        dsbuf1s[25] + "," +                                //t1                                        
+                        dsbuf1s[26] + "," +                                //t2                          
+                        dsbuf1s[27] + "," +                                //t3                          
+                        dsbuf1s[28] + "," +                                //t4                          
+                        dsbuf1s[29] + "," +                                //t5                          
+                        dsbuf1s[30] + "," +                                //t6                          
+                        dsbuf1s[31] + "," +                                //t7                          
+                        dsbuf1s[32] + "," +                                //t8                          
+                        dsbuf1s[33] + "," +                                //t9                          
+                        dsbuf1s[34] + "," +                                //t10                         
+                        dsbuf1s[35] + "," +                                //t11                         
+                        dsbuf1s[36] + "," +                                //t12                         
+                        dsbuf1s[37] + "," +                                //t13                         
+                        dsbuf1s[38] + "," +                                //t14                         
+                        dsbuf1s[39] + "," +                                //t15                      
+                        dsbuf1s[40] + "," +                                //t16                         
+                        dsbuf1s[41] + "," +                                //t17                         
+                        dsbuf1s[42] + "," +                                //t18                         
+                        dsbuf1s[43] + "," +                                //t19                         
+                        dsbuf1s[44] + "," +                                //t20                         
+                        dsbuf1s[45] + "," +                                //t21                         
+                        dsbuf1s[46] + "," +                                //t22                         
+                        dsbuf1s[47] + "," +                                //t23                         
+                        dsbuf1s[48] + "," +                                //t24                         
+                        dsbuf1s[49] + "," +                                //t25                         
+                        dsbuf1s[50] + "," +                                //t26                         
+                        dsbuf1s[51] + "," +                                //t27                         
+                        dsbuf1s[52] + "," +                                //t28                         
+                        dsbuf1s[53] + "," +                                //t29                        
+                        dsbuf1s[54] +                               //Voda
                         
                         ")";
 

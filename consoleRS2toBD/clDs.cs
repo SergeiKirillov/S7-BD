@@ -180,7 +180,7 @@ namespace consoleRS2toBD
             byte[] dsbuffer1s;        //Технологические данные
             byte[] dsbufferNet;       //Передача по сети (визуализация)
 
-            int dsmount = 315; //Размер буфера для принятия данных в байтах
+            int dsmount = 150; //Размер буфера для принятия данных в байтах
 
             byte[] dsIPconnPLC = new byte[] { 192, 168, 0, 21 }; //Передаем адресс контроллера
             int dsconnect = 1;
@@ -199,9 +199,10 @@ namespace consoleRS2toBD
             readonly object dslocker4 = new object();
 
             float dsspeed4kl, dsH_work, dshw, dsBw,  dsB_Work,  dsVes_Work, dsDlina_Work;
-        int dsD_tek_mot, dsD_pred_mot = 0;
+        int dsD_tek_mot = 0;
+        float dsD_pred_mot = 0;
 
-            //DataTable dtds101ms;
+        //DataTable dtds101ms;
 
         bool bldsRulonProkatSaveInData101ms;
             private DateTime dsTimeStart;
@@ -274,8 +275,8 @@ namespace consoleRS2toBD
                 Thread query1s = new Thread(dsSQL1s);
                 query1s.Start();
 
-                //Thread queryMes = new Thread(dsMessage200ms);
-                //queryMes.Start();
+                Thread queryMes = new Thread(dsMessage200ms);
+                queryMes.Start();
 
             
 
@@ -533,7 +534,7 @@ namespace consoleRS2toBD
                         #endregion
 
                         if (blRulonStart)
-                        //if (true)
+//                        if (true)
                         {
 
                             string comRulon80ms2 = "INSERT INTO TEMPds80ms" +
@@ -859,49 +860,30 @@ namespace consoleRS2toBD
 
 
                         }
-                        #endregion
+                    #endregion
 
                     #endregion
 
                     #region Расчет параметров прокатанного рулона после окончания прокатки
 
 
+                        
+                        dsD_tek_mot = (int)(BitConverter.ToInt16(dsbuffer1s, 18)); //buffer_1s_work[9]  *2 =18
 
-                        dsD_tek_mot = (int)(BitConverter.ToInt16(dsbuffer1s, 9));
+                    #region Толщина и ширина прокатываемого рулона и Формирование сигнала окончания прокатки
 
-                        #region  Время начало прокатки рулона
-
-                        if (dsD_pred_mot == 0)
+                        if ((dsTimeStart == new DateTime()) && (dsD_tek_mot > 301))
                         {
-                            //при первом цикле все данные равны 0, поэтому мы выставляем значения параметров на 600
-                            dsD_tek_mot = 301;
-                            dsD_pred_mot = 301;
+                            dsTimeStart = DateTime.Now;
+                            blRulonStart = true;    
+
                         }
 
-                        if (dsD_tek_mot > dsD_pred_mot)
-                        {
-                            if (dsD_tek_mot < 301)
-                            {
-                                dsTimeStart = DateTime.Now;
-                                blRulonStart = true;
-                            }
-
-                        }
-                        else
-                        {
-                            //blRulonStart = false;
-                        }
-
-
-                        #endregion
-
-                        #region Толщина и ширина прокатываемого рулона и Формирование сигнала окончания прокатки
-                        //speed4kl = (float)(BitConverter.ToInt16(dsbuffer1s, 6)) / 100;
                         if ((dsTimeStart != new DateTime()) && (dsD_tek_mot < 301))
                         {
                             dsTimeStop = DateTime.Now;
-                            H_work = (float)(BitConverter.ToInt16(dsbuffer1s, 63)) / 100;
-                            B_Work = (int)BitConverter.ToInt16(dsbuffer1s, 62);
+                            H_work = (float)(BitConverter.ToInt16(dsbuffer1s, 126)) / 100;
+                            B_Work = (int)BitConverter.ToInt16(dsbuffer1s, 124);
                             Ves_Work = ((3.141592F * dsD_pred_mot * dsD_pred_mot * B_Work / 1000) - (0.09F * B_Work / 1000)) * 7.85F;
                             Dlina_Work = 0;
 
@@ -909,171 +891,190 @@ namespace consoleRS2toBD
                             blRulonStart = false;
 
                         }
-                        #endregion
-                                        
-                        #region Создание БД производства
-
-                        string comWorkdsCreate = "if not exists (select * from sysobjects where name ='work_ds' and xtype='U') create table work_ds" +
-                           "(" +
-                           "numberRulona bigint, " +
-                           "start datetime , " +
-                           "stop datetime , " +
-                           "h float , " +
-                           "b float , " +
-                           "ves float , " +
-                           "dlinna float , " +
-                           "t1 float , " +
-                           "t2 float , " +
-                           "t3 float , " +
-                           "t4 float , " +
-                           "t5 float  " +
-
-                           ")";
-
-                        using (SqlConnection conSQL1sWork1 = new SqlConnection(connectionString))
+                        else
                         {
-                            conSQL1sWork1.Open();
-                            SqlCommand command = new SqlCommand(comWorkdsCreate, conSQL1sWork1);
-                            command.ExecuteNonQuery();
-                            conSQL1sWork1.Close();
+                            //blRulonStop = false;
+                            //blRulonStart = true;
                         }
-                        #endregion;
 
-                        #region Заполнение производство
-                        string comWorkds = "INSERT INTO work_ds( " +
-                            "numberRulona," +
-                            "start," +
-                            "stop," +
-                            "h5," +
-                            "b," +
-                            "ves," +
-                            "dlinna" +
-                            ") " +
-                            "VALUES(" +
-                            "@NumberRulon, " +
-                            "@TimeStart, " +
-                            "@TimeStop, " +
-                            "@H_work, " +
-                            "@B_Work, " +
-                            "@Ves_Work, " +
-                            "@Dlina_Work)";
 
-                        string beginWork = dsTimeStart.ToString("ddMMyyyyHHmm");
-                        string endWork = dsTimeStop.ToString("HHmm");
-                        string strNumberRulona = beginWork + endWork;
-
-                        //Добавляем в таблицу прокатанных рулонов данные по рулонам
-                        using (SqlConnection con3 = new SqlConnection(connectionString))
+                        if (blRulonStop)
                         {
-                            try
+                            #region Создание БД производства
+
+                            string comWorkdsCreate = "if not exists (select * from sysobjects where name ='work_ds' and xtype='U') create table work_ds" +
+                               "(" +
+                               "numberRulona bigint, " +
+                               "start datetime , " +
+                               "stop datetime , " +
+                               "h float , " +
+                               "b float , " +
+                               "ves float , " +
+                               "dlinna float , " +
+                               "t1 float , " +
+                               "t2 float , " +
+                               "t3 float , " +
+                               "t4 float , " +
+                               "t5 float  " +
+
+                               ")";
+
+                            using (SqlConnection conSQL1sWork1 = new SqlConnection(connectionString))
                             {
-                                con3.Open();
-                                SqlCommand command = new SqlCommand(comWorkds, con3);
-
-                                command.Parameters.AddWithValue("@NumberRulon", strNumberRulona);
-
-                                command.Parameters.AddWithValue("@TimeStart", dsTimeStart);
-                                command.Parameters.AddWithValue("@TimeStop", dsTimeStop);
-                                command.Parameters.AddWithValue("@H_work", H_work);
-                                command.Parameters.AddWithValue("@B_Work", B_Work);
-                                command.Parameters.AddWithValue("@Ves_Work", Ves_Work);
-                                command.Parameters.AddWithValue("@Dlina_Work", Dlina_Work);
-
-                                int WriteSQL = command.ExecuteNonQuery();
-
-                                Program.messageOKDsProizvodstvo = strNumberRulona + "(" + dsTimeStart.ToString("HH:mm") + "-" + dsTimeStop.ToString("HH:mm") + ") " + H_work + "*" + B_Work + "->" + Ves_Work;
-                                //messageOKProizvodstvo = "производство";
-                                Program.dtOKDsProizvodstvo = DateTime.Now;
-                            }
-                            catch (Exception ex)
-                            {
-                                Program.messageErrorDsProizvodstvo = "Ошибка в сохранении данных о прокатанном рулоне " + ex.Message + " Insert запрос: " + comWorkds;
-                                Program.dtErrorDsProizvodstvo = DateTime.Now;
-
-                            }
-
-                        }
-                        #endregion
-                    
-                        #region Мпереименовываем временную базу в базу с именем (дата+время начала)(время окончания)
-                        using (SqlConnection conSQL1s3 = new SqlConnection(connectionString))
-                        {
-                            try
-                            {
-                                conSQL1s3.Open();
-                                string begin = dsTimeStart.ToString("ddMMyyyyHHmm");
-                                string end = dsTimeStop.ToString("HHmm");
-                                string comRulon1s2 = "sp_rename 'TEMPds101ms','" + begin + end + "'";
-                                SqlCommand command = new SqlCommand(comRulon1s2, conSQL1s3);
+                                conSQL1sWork1.Open();
+                                SqlCommand command = new SqlCommand(comWorkdsCreate, conSQL1sWork1);
                                 command.ExecuteNonQuery();
-                                Program.messageOKDsRulon = "Временная база -> " + begin + end;
-                                Program.dtOKDsRulon = DateTime.Now;
-                                conSQL1s3.Close();
+                                conSQL1sWork1.Close();
                             }
-                            catch (Exception ex)
+                            #endregion;
+
+                            #region Заполнение производство
+                            string comWorkds = "INSERT INTO work_ds( " +
+                                    "numberRulona," +
+                                    "start," +
+                                    "stop," +
+                                    "h," +
+                                    "b," +
+                                    "ves," +
+                                    "dlinna" +
+                                    ") " +
+                                    "VALUES(" +
+                                    "@NumberRulon, " +
+                                    "@TimeStart, " +
+                                    "@TimeStop, " +
+                                    "@H_work, " +
+                                    "@B_Work, " +
+                                    "@Ves_Work, " +
+                                    "@Dlina_Work)";
+
+                            string beginWork = dsTimeStart.ToString("ddMMyyyyHHmm");
+                            string endWork = dsTimeStop.ToString("HHmm");
+                            string strNumberRulona = beginWork + endWork;
+
+                            //Добавляем в таблицу прокатанных рулонов данные по рулонам
+                            using (SqlConnection con3 = new SqlConnection(connectionString))
                             {
+                                try
+                                {
+                                    con3.Open();
+                                    SqlCommand command = new SqlCommand(comWorkds, con3);
 
-                                Program.messageErrorDsRulon = "Временная база не переименована " + ex.Message;
-                                Program.dtErrorDsRulon = DateTime.Now;
+                                    command.Parameters.AddWithValue("@NumberRulon", strNumberRulona);
+
+                                    command.Parameters.AddWithValue("@TimeStart", dsTimeStart);
+                                    command.Parameters.AddWithValue("@TimeStop", dsTimeStop);
+                                    command.Parameters.AddWithValue("@H_work", H_work);
+                                    command.Parameters.AddWithValue("@B_Work", B_Work);
+                                    command.Parameters.AddWithValue("@Ves_Work", Ves_Work);
+                                    command.Parameters.AddWithValue("@Dlina_Work", Dlina_Work);
+
+                                    int WriteSQL = command.ExecuteNonQuery();
+
+                                    Program.messageOKDsProizvodstvo = strNumberRulona + "(" + dsTimeStart.ToString("HH:mm") + "-" + dsTimeStop.ToString("HH:mm") + ") " + H_work + "*" + B_Work + "->" + Ves_Work;
+                                    //messageOKProizvodstvo = "производство";
+                                    Program.dtOKDsProizvodstvo = DateTime.Now;
+
+                                    
+
+
+                                }
+                                catch (Exception ex)
+                                {
+                                    Program.messageErrorDsProizvodstvo = "Ошибка в сохранении данных о прокатанном рулоне " + ex.Message + " Insert запрос: " + comWorkds;
+                                    Program.dtErrorDsProizvodstvo = DateTime.Now;
+
+                                }
+
                             }
+                            #endregion
+
+                            #region Мпереименовываем временную базу в базу с именем (дата+время начала)(время окончания)
+                            using (SqlConnection conSQL1s3 = new SqlConnection(connectionString))
+                            {
+                                try
+                                {
+                                    conSQL1s3.Open();
+                                    string begin = dsTimeStart.ToString("ddMMyyyyHHmm");
+                                    string end = dsTimeStop.ToString("HHmm");
+                                    string comRulon1s2 = "sp_rename 'TEMPds80ms','" + begin + end + "'";
+                                    SqlCommand command = new SqlCommand(comRulon1s2, conSQL1s3);
+                                    command.ExecuteNonQuery();
+                                    Program.messageOKDsRulon = "Временная база -> " + begin + end;
+                                    Program.dtOKDsRulon = DateTime.Now;
+                                    conSQL1s3.Close();
+
+                                    dsTimeStart = new DateTime();
+                                    dsTimeStop = new DateTime();
+                                    B_Work = 0;
+                                    H_work = 0;
+                                    Ves_Work = 0;
+
+                                }
+                                catch (Exception ex)
+                                {
+
+                                    Program.messageErrorDsRulon = "Временная база не переименована " + ex.Message;
+                                    Program.dtErrorDsRulon = DateTime.Now;
+                                }
+                            }
+                            #endregion
+
+                            #region Если БД временной не существует то создаем
+                            string comRulon80ms1 = "if not exists (select * from sysobjects where name ='TEMPds80ms' and xtype='U') create table TEMPds80ms " +
+                                   "(" +
+                                   "datetime80ms datetime , " +
+                                   "VKlet float," +
+                                   "IzadR float," +
+                                   "IzadM float," +
+                                   "NKlet float," +
+                                   "NRazm float," +
+                                   "NMot float," +
+                                   "TRazm float," +
+                                   "TMot float," +
+                                   "RRazm float," +
+                                   "RMot float," +
+                                   "NVlev float," +
+                                   "NVpr float," +
+                                   "IvozM float," +
+                                   "Imot float," +
+                                   "Urazm float," +
+                                   "IvozR float," +
+                                   "Umot float," +
+                                   "IRUZ4 float," +
+                                   "IRUZ5 float," +
+                                   "IMUZ4 float," +
+                                   "IMUZ5 float," +
+                                   "IzovK float," +
+                                   "Ukl float," +
+                                   "IKUZ4 float," +
+                                   "IKUZ5 float," +
+                                   "ObgTek float," +
+                                   "DatObgDo float," +
+                                   "DatObgZa float" +
+                                   ")";
+
+
+
+                            using (SqlConnection conSQL80ms1 = new SqlConnection(connectionString))
+                            {
+                                conSQL80ms1.Open();
+                                SqlCommand command = new SqlCommand(comRulon80ms1, conSQL80ms1);
+                                command.ExecuteNonQuery();
+                                conSQL80ms1.Close();
+
+                            }
+                            #endregion
                         }
-                        #endregion
 
-                        #region Если БД не существует то создаем
-                        string comRulon80ms1 = "if not exists (select * from sysobjects where name ='TEMPds80ms' and xtype='U') create table TEMPds80ms " +
-                           "(" +
-                           "datetime80ms datetime , " +
-                           "VKlet float," +
-                           "IzadR float," +
-                           "IzadM float," +
-                           "NKlet float," +
-                           "NRazm float," +
-                           "NMot float," +
-                           "TRazm float," +
-                           "TMot float," +
-                           "RRazm float," +
-                           "RMot float," +
-                           "NVlev float," +
-                           "NVpr float," +
-                           "IvozM float," +
-                           "Imot float," +
-                           "Urazm float," +
-                           "IvozR float," +
-                           "Umot float," +
-                           "IRUZ4 float," +
-                           "IRUZ5 float," +
-                           "IMUZ4 float," +
-                           "IMUZ5 float," +
-                           "IzovK float," +
-                           "Ukl float," +
-                           "IKUZ4 float," +
-                           "IKUZ5 float," +
-                           "ObgTek float," +
-                           "DatObgDo float," +
-                           "DatObgZa float" +
-                           ")";
-
-
-
-                        using (SqlConnection conSQL80ms1 = new SqlConnection(connectionString))
-                        {
-                            conSQL80ms1.Open();
-                            SqlCommand command = new SqlCommand(comRulon80ms1, conSQL80ms1);
-                            command.ExecuteNonQuery();
-                            conSQL80ms1.Close();
-
-                        }
-                        #endregion
-
-
-
-                        dsD_pred_mot = dsD_tek_mot/1000;
                     
+                        dsD_pred_mot =(float)dsD_tek_mot/1000;
+
+                        #endregion
+
                     #endregion
 
-
-                    }
                 }
+            }
                 catch (Exception ex)
                 {
                     Program.messageErrorDs1c = "Ошибка глобальная - " + ex;
@@ -1102,7 +1103,7 @@ namespace consoleRS2toBD
 
 
                         int numberMessage = 0;
-                        for (int i = 0; i < 15; i++)
+                        for (int i = 0; i < 13; i++)
                         {
                             for (int b = 0; b < 8; b++)
                             {

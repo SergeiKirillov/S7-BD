@@ -93,13 +93,13 @@ namespace consoleRS2toBD
             Console.Clear();
             Console.SetWindowSize(190, 40);
 
-            clStan1700 stan1700 = new clStan1700();
-            Thread task1 = new Thread(stan1700.goStart);
-            task1.Start();
+            //clStan1700 stan1700 = new clStan1700();
+            //Thread task1 = new Thread(stan1700.goStart);
+            //task1.Start();
 
-            //clDs stanDs = new clDs();
-            //Thread task2 = new Thread(stanDs.goStart);
-            //task2.Start();
+            clDs stanDs = new clDs();
+            Thread task2 = new Thread(stanDs.goStart);
+            task2.Start();
 
             while (true)
             {
@@ -221,29 +221,29 @@ namespace consoleRS2toBD
                 }
                 if (messageOKDs1c != null)
                 {
-                    LogSystem.Write("Дрессировка. Получение данных с энергосистемы (Цикл 1c)", Direction.Ok, dtOKDs1c, messageOKDs1c, 100, 15, true);
+                    LogSystem.Write("Дрессировка. Цикл 1c.", Direction.Ok, dtOKDs1c, messageOKDs1c, 100, 15, true);
                 }
 
 
 
                 if (messageErrorDsRulon != null)
                 {
-                    LogSystem.Write("Дрессировка. ERROR при переименовании таблицы рулонов", Direction.ERROR, dtErrorDsRulon, messageErrorDsRulon, 100, 17, true);
+                    LogSystem.Write("Дрессировка. ERROR Rename", Direction.ERROR, dtErrorDsRulon, messageErrorDsRulon, 100, 17, true);
                 }
                 if (messageOKDsRulon != null)
                 {
-                    LogSystem.Write("Дрессировка. Переименование таблицы рулонов", Direction.Ok, dtOKDsRulon, messageOKDsRulon, 100, 18, true);
+                    LogSystem.Write("Дрессировка. Rename", Direction.Ok, dtOKDsRulon, messageOKDsRulon, 100, 18, true);
                 }
 
 
 
                 if (messageErrorDsProizvodstvo != null)
                 {
-                    LogSystem.Write("Дрессировка. ERROR записи в таблицу Производства", Direction.ERROR, dtErrorDsProizvodstvo, messageErrorDsProizvodstvo, 100, 20, true);
+                    LogSystem.Write("Дрессировка. ERROR Write Производства", Direction.ERROR, dtErrorDsProizvodstvo, messageErrorDsProizvodstvo, 100, 20, true);
                 }
                 if (messageOKDsProizvodstvo != null)
                 {
-                    LogSystem.Write("Дрессировка. Запись в таблицу производства", Direction.Ok, dtOKDsProizvodstvo, messageOKDsProizvodstvo, 100, 21, true);
+                    LogSystem.Write("Дрессировка. Write производство", Direction.Ok, dtOKDsProizvodstvo, messageOKDsProizvodstvo, 100, 21, true);
                 }
 
 

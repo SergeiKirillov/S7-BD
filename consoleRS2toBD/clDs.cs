@@ -884,22 +884,13 @@ namespace consoleRS2toBD
                             dsTimeStop = DateTime.Now;
                             H_work = (float)(BitConverter.ToInt16(dsbuffer1s, 126)) / 100;
                             B_Work = (int)BitConverter.ToInt16(dsbuffer1s, 124);
-                            Ves_Work = ((3.141592F * dsD_pred_mot * dsD_pred_mot * B_Work / 1000) - (0.09F * B_Work / 1000)) * 7.85F;
-                            Dlina_Work = 0;
+                            Ves_Work = ((3.141592F * dsD_pred_mot * dsD_pred_mot * B_Work / 1000) - (3.141592F * 0.09F * B_Work / 1000)) * 7.85F;
+                            
+                            Dlina_Work = ((Ves_Work / 7.85F) / (B_Work / 1000)) / (H_work / 1000);
 
                             blRulonStop = true;
                             blRulonStart = false;
 
-                        }
-                        else
-                        {
-                            //blRulonStop = false;
-                            //blRulonStart = true;
-                        }
-
-
-                        if (blRulonStop)
-                        {
                             #region Создание БД производства
 
                             string comWorkdsCreate = "if not exists (select * from sysobjects where name ='work_ds' and xtype='U') create table work_ds" +
@@ -926,7 +917,7 @@ namespace consoleRS2toBD
                                 command.ExecuteNonQuery();
                                 conSQL1sWork1.Close();
                             }
-                            #endregion;
+                        #endregion;
 
                             #region Заполнение производство
                             string comWorkds = "INSERT INTO work_ds( " +
@@ -974,7 +965,7 @@ namespace consoleRS2toBD
                                     //messageOKProizvodstvo = "производство";
                                     Program.dtOKDsProizvodstvo = DateTime.Now;
 
-                                    
+
 
 
                                 }
@@ -985,8 +976,8 @@ namespace consoleRS2toBD
 
                                 }
 
-                            }
-                            #endregion
+                        }
+                        #endregion
 
                             #region Мпереименовываем временную базу в базу с именем (дата+время начала)(время окончания)
                             using (SqlConnection conSQL1s3 = new SqlConnection(connectionString))
@@ -1008,6 +999,7 @@ namespace consoleRS2toBD
                                     B_Work = 0;
                                     H_work = 0;
                                     Ves_Work = 0;
+                                    Dlina_Work = 0;
 
                                 }
                                 catch (Exception ex)
@@ -1017,7 +1009,7 @@ namespace consoleRS2toBD
                                     Program.dtErrorDsRulon = DateTime.Now;
                                 }
                             }
-                            #endregion
+                        #endregion
 
                             #region Если БД временной не существует то создаем
                             string comRulon80ms1 = "if not exists (select * from sysobjects where name ='TEMPds80ms' and xtype='U') create table TEMPds80ms " +
@@ -1064,17 +1056,22 @@ namespace consoleRS2toBD
 
                             }
                             #endregion
+
+                        }
+                        else
+                        {
+                            //blRulonStop = false;
+                            //blRulonStart = true;
                         }
 
-                    
                         dsD_pred_mot =(float)dsD_tek_mot/1000;
 
                         #endregion
 
                     #endregion
 
+                    }
                 }
-            }
                 catch (Exception ex)
                 {
                     Program.messageErrorDs1c = "Ошибка глобальная - " + ex;

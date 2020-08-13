@@ -424,7 +424,7 @@ namespace consoleRS2toBD
                 Thread.Sleep(5000); 
                             
 
-                #region //Вывод на консоль
+                #region //Вывод на консоль отключен
 
                 //LogSystem.Write("Стан1700", Direction.Ok, "Информация о работе методов класса clStan1700 ( Цикл 5сек )", 1, 1, true); 
                 

@@ -43,7 +43,7 @@ namespace LoggerInSystem
     public class LogSystem
     {
 
-        
+        static string message0;
         
         static string eventLogName = "ProDave";
 
@@ -321,16 +321,34 @@ namespace LoggerInSystem
         {
             try
             {
-                //Если не удачно то записываем в локальный файл
+                string tmptxt;
                 DateTime currenttime = DateTime.Now;
+
+                if (message0!=message)
+	            {
+                    
+                    tmptxt = String.Format("{0:dd.MM.yyyy HH:mm:ss} {1}", currenttime, message);
+                    
+
+	            }
+                else
+                {
+                    tmptxt = String.Format("{0:dd.MM.yyyy HH:mm:ss} {1}", currenttime, "-----Повтор---- " + message);
+                    
+                }
+                
+                //Если не удачно то записываем в локальный файл
+                
                 string pathProg = System.AppDomain.CurrentDomain.BaseDirectory.ToString() + "Log.txt";
 
                 using (System.IO.StreamWriter file = new System.IO.StreamWriter(pathProg, true))
                 {
-                    string tmptxt = String.Format("{0:dd.MM.yyyy HH:mm:ss} {1}", currenttime, message);
+                   
                     file.WriteLine(tmptxt);
                     file.Close();
                 }
+
+                message0 = message;
             }
             catch
             { }

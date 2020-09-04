@@ -101,6 +101,10 @@ namespace consoleRS2toBD
             Thread task2 = new Thread(stanDs.goStart);
             task2.Start();
 
+            string MesMain = "Время запуска программы: " + DateTime.Now.ToString("HH:mm dd.MM.yyyy");
+
+
+
             while (true)
             {
                 Thread.Sleep(5000);
@@ -143,6 +147,8 @@ namespace consoleRS2toBD
 
 
                 }
+
+                LogSystem.Write("Main", Direction.Ok, MesMain, 70, 0, true);
 
                 #region Вывод на консоль сообщений по стану
 

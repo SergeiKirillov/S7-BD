@@ -151,7 +151,7 @@ namespace consoleRS2toBD
 
                 LogSystem.Write("Время запуска программы: ", Direction.Ok, MesMain, 20, 0, true);
 
-                LogSystem.Write("Version", Direction.Ok, strVersion, 120, 0, true);
+                LogSystem.Write("Version: ", Direction.Ok, strVersion, 120, 0, true);
 
                 #region Вывод на консоль сообщений по стану
 

@@ -101,7 +101,8 @@ namespace consoleRS2toBD
             Thread task2 = new Thread(stanDs.goStart);
             task2.Start();
 
-            string MesMain = "Время запуска программы: " + DateTime.Now.ToString("HH:mm dd.MM.yyyy");
+            string MesMain = DateTime.Now.ToString("HH:mm dd.MM.yyyy");
+            String strVersion = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
 
 
 
@@ -148,7 +149,9 @@ namespace consoleRS2toBD
 
                 }
 
-                LogSystem.Write("Main", Direction.Ok, MesMain, 70, 0, true);
+                LogSystem.Write("Время запуска программы: ", Direction.Ok, MesMain, 20, 0, true);
+
+                LogSystem.Write("Version", Direction.Ok, strVersion, 120, 0, true);
 
                 #region Вывод на консоль сообщений по стану
 

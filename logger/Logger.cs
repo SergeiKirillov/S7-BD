@@ -87,7 +87,7 @@ namespace LoggerInSystem
 
 
                 if (value.EventToConsole) WriteConsoleLog(_clasMessage, _className +": "+_MessageText, _CurX, _CurY, dtVizible);
-                if (value.EventToFile) WriteFileLog(_MessageText);
+                if (value.EventToFile) WriteFileLog(_className,DateTime.Now, _MessageText);
                 if (value.EventToSystem) WriteEventLogApplication(_className, _MessageText, value.elet);
                 if (value.EventToDebug) WriteOutputVSLog(_MessageText);
             }
@@ -120,7 +120,7 @@ namespace LoggerInSystem
 
 
                 if (value.EventToConsole) WriteConsoleLog(_clasMessage, _className + ": " + _MessageText, 10, 10, true);
-                if (value.EventToFile) WriteFileLog(_MessageText);
+                if (value.EventToFile) WriteFileLog(_className, DateTime.Now, _MessageText);
                 if (value.EventToSystem) WriteEventLogApplication(_className, _MessageText, value.elet);
                 if (value.EventToDebug) WriteOutputVSLog(_MessageText);
             }
@@ -154,7 +154,7 @@ namespace LoggerInSystem
 
 
                 if (value.EventToConsole) WriteConsoleLog(_clasMessage, dtNow.ToString("HH:mm:ss.fff")+" - "+_className + ": " + _MessageText, _CurX, _CurY, dtVizible);
-                if (value.EventToFile) WriteFileLog(_MessageText);
+                if (value.EventToFile) WriteFileLog(_className, dtNow, _MessageText);
                 if (value.EventToSystem) WriteEventLogApplication(_className, _MessageText, value.elet);
                 if (value.EventToDebug) WriteOutputVSLog(_MessageText);
             }
@@ -167,6 +167,7 @@ namespace LoggerInSystem
         #region вывод на консоль
         private static void WriteConsoleLog(Direction clMes, string message, int curx, int cury, bool DateTimeNowVizible)
         {
+
             switch (clMes)
             {
                 case Direction.Ok:
@@ -202,6 +203,9 @@ namespace LoggerInSystem
                 default:
                     break;
             }
+
+
+
 
             Console.SetCursorPosition(curx, cury);
             Console.Write(message);
@@ -317,38 +321,42 @@ namespace LoggerInSystem
         #endregion
 
         #region Вывод в файл
-        private static void WriteFileLog(string message)
+        private static void WriteFileLog(string classInMessage, DateTime dt,string message)
         {
             try
             {
-                string tmptxt;
-                DateTime currenttime = DateTime.Now;
-
-                if (message0!=message)
-	            {
-                    
-                    tmptxt = String.Format("{0:dd.MM.yyyy HH:mm:ss} {1}", currenttime, message);
-                    
-
-	            }
-                else
+                if (message!=""||message!=null||message!=" ")
                 {
-                    tmptxt = String.Format("{0:dd.MM.yyyy HH:mm:ss} {1}", currenttime, "-----Повтор---- " + message);
-                    
+                    string tmptxt;
+                    DateTime currenttime = dt;
+
+                    if (message0 != message)
+                    {
+
+                        tmptxt = String.Format("{0:dd.MM.yyyy HH:mm:ss} {1}", currenttime, message);
+
+
+                    }
+                    else
+                    {
+                        tmptxt = String.Format("{0:dd.MM.yyyy HH:mm:ss} {1}", currenttime, "-----Повтор---- " + message);
+
+                    }
+
+                    //Если не удачно то записываем в локальный файл
+
+                    string pathProg = System.AppDomain.CurrentDomain.BaseDirectory.ToString() + "Log.txt";
+
+                    using (System.IO.StreamWriter file = new System.IO.StreamWriter(pathProg, true))
+                    {
+
+                        file.WriteLine(tmptxt);
+                        file.Close();
+                    }
+
+                    message0 = message;
                 }
                 
-                //Если не удачно то записываем в локальный файл
-                
-                string pathProg = System.AppDomain.CurrentDomain.BaseDirectory.ToString() + "Log.txt";
-
-                using (System.IO.StreamWriter file = new System.IO.StreamWriter(pathProg, true))
-                {
-                   
-                    file.WriteLine(tmptxt);
-                    file.Close();
-                }
-
-                message0 = message;
             }
             catch
             { }

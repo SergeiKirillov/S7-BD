@@ -6,8 +6,13 @@ using System.Threading;
 using System.Threading.Tasks;
 using LoggerInSystem;
 
+using System.Runtime.InteropServices;
+
+
 namespace consoleRS2toBD
 {
+    
+
     class Program
     {
         #region Переменные сообщения по стану1700
@@ -120,18 +125,72 @@ namespace consoleRS2toBD
             //Настройка на региональных параметров 
             System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("en-US");
 
+            Console.BackgroundColor = ConsoleColor.Black;
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.WriteLine("Для выбора ветки программы выберите 1 или 2");
+            Console.WriteLine();
+            Console.BackgroundColor = ConsoleColor.Red;
+            Console.ForegroundColor = ConsoleColor.Black;
+            Console.WriteLine("1) Запуск сбора данных по стану 1700");
+            Console.BackgroundColor = ConsoleColor.Black;
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.WriteLine();
+            Console.BackgroundColor = ConsoleColor.Red;
+            Console.ForegroundColor = ConsoleColor.Black;
+            Console.WriteLine("2) Запуск сбора данных по дрессировочному стану");
+            Console.BackgroundColor = ConsoleColor.Black;
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.WriteLine();
+            Console.WriteLine("Выберите 1 или 2");
+            ConsoleKeyInfo key;
+
+            switch (Console.ReadLine())
+            {
+                case "2":
+                    clDs stanDs = new clDs();
+                    Thread task2 = new Thread(stanDs.goStart);
+                    task2.Start();
+                    break;
+                case "1":
+                    clStan1700 stan1700 = new clStan1700();
+                    Thread task1 = new Thread(stan1700.goStart);
+                    task1.Start();
+                    break;
+                default:
+                    break;
+            }
+
+
+
+            //if (key.Key.ToString() == "d" || key.Key.ToString() == "D" || key.Key.ToString() == "В" || key.Key.ToString() == "в")
+            //{
+            //    clDs stanDs = new clDs();
+            //    Thread task2 = new Thread(stanDs.goStart);
+            //    task2.Start();
+            //}
+            //else if (key.Key.ToString() == "s" || key.Key.ToString() == "S" || key.Key.ToString() == "Ы" || key.Key.ToString() == "ы")
+            //{
+            //    clStan1700 stan1700 = new clStan1700();
+            //    Thread task1 = new Thread(stan1700.goStart);
+            //    task1.Start();
+            //}
+
             Console.Clear();
-            //Console.SetWindowPosition(2,1);
-            
             Console.SetWindowSize(190, 40);
+
+
+
+
+
+
 
             //clStan1700 stan1700 = new clStan1700();
             //Thread task1 = new Thread(stan1700.goStart);
             //task1.Start();
 
-            clDs stanDs = new clDs();
-            Thread task2 = new Thread(stanDs.goStart);
-            task2.Start();
+            //clDs stanDs = new clDs();
+            //Thread task2 = new Thread(stanDs.goStart);
+            //task2.Start();
 
             string MesMain = DateTime.Now.ToString("HH:mm dd.MM.yyyy");
             String strVersion = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();

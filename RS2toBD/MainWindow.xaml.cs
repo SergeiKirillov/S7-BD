@@ -425,7 +425,7 @@ namespace RS2toBD
         SolidColorBrush onOK = new SolidColorBrush(Color.FromRgb(130, 190, 125));
         SolidColorBrush onError = new SolidColorBrush(Color.FromRgb(255, 0, 0));
 
-
+        ClassStan clStan;
 
 
         static byte[] buffer;
@@ -1083,15 +1083,15 @@ namespace RS2toBD
 
             if (result == 0)
             {
-                //Console.WriteLine("Connect close");
-                LogSystem.WriteEventLog("ProDaveStan", "Test", "Close connection", EventLogEntryType.Information);
+                
+                //LogSystem.WriteEventLog("ProDaveStan", "Test", "Close connection", EventLogEntryType.Information);
 
                
             }
             else
             {
-                Console.WriteLine("Connect open. Error - " + stan.Error(result));
-                LogSystem.WriteEventLog("ProDaveStan", "Test", "Connect open. Error - " + stan.Error(result), EventLogEntryType.Warning);
+                
+                //LogSystem.WriteEventLog("ProDaveStan", "Test", "Connect open. Error - " + stan.Error(result), EventLogEntryType.Warning);
                 lstStatus.Items.Add("Connect open. Warning - " + stan.Error(result));
                 
             }
@@ -1114,18 +1114,18 @@ namespace RS2toBD
             if (res != 0)
             {
                 Console.WriteLine("Error connection! " + stan.Error(res));
-                LogSystem.WriteEventLog("ProDaveStan", "Test", "Error connection!. Error - " + stan.Error(res), EventLogEntryType.Error);
+                //LogSystem.WriteEventLog("ProDaveStan", "Test", "Error connection!. Error - " + stan.Error(res), EventLogEntryType.Error);
                 lstStatus.Items.Add("Error connection PLC стан! " + stan.Error(res));
             }
             else
             {
-                LogSystem.WriteEventLog("ProDaveStan", "Test", "Connect OK!", EventLogEntryType.Information);
+                //LogSystem.WriteEventLog("ProDaveStan", "Test", "Connect OK!", EventLogEntryType.Information);
 
                 int resSAC = stan.SetActiveConnection(Connect);
                 if (resSAC == 0)
                 {
                     Console.WriteLine("Соединение активно.");
-                    LogSystem.WriteEventLog("ProDaveStan", "Test", "Соединение активно.", EventLogEntryType.Information);
+                   // LogSystem.WriteEventLog("ProDaveStan", "Test", "Соединение активно.", EventLogEntryType.Information);
 
 
 
@@ -1145,7 +1145,7 @@ namespace RS2toBD
                 else
                 {
                     Console.WriteLine("Соединение не активировано. " + stan.Error(resSAC));
-                    LogSystem.WriteEventLog("ProDaveStan", "Test", "Соединение не активировано. " + stan.Error(resSAC), EventLogEntryType.Error);
+                    //LogSystem.WriteEventLog("ProDaveStan", "Test", "Соединение не активировано. " + stan.Error(resSAC), EventLogEntryType.Error);
                     System.Diagnostics.Debug.WriteLine("Error - Соединение не активировано.");
                     lstStatus.Items.Add("Соединение с PLC-стан не активировано. " + stan.Error(resSAC));
 
@@ -1196,7 +1196,7 @@ namespace RS2toBD
             {
                 Console.WriteLine("Error.Read fied M3000-M3315. " + stan.Error(resultReadField));
                 System.Diagnostics.Debug.WriteLine("Error.Read fied M3000-M3315. " + stan.Error(resultReadField));
-                LogSystem.WriteEventLog("ProDaveStan", "Test", "Соединение не активировано. " + stan.Error(resultReadField), EventLogEntryType.Error);
+                //LogSystem.WriteEventLog("ProDaveStan", "Test", "Соединение не активировано. " + stan.Error(resultReadField), EventLogEntryType.Error);
                 lstStatus.Items.Add("Error PLC stan . Error read fied M3000-M3315. " + stan.Error(resultReadField));
             }
 
@@ -1571,7 +1571,7 @@ namespace RS2toBD
                     Console.BackgroundColor = ConsoleColor.Red;
                     Console.WriteLine("Ошибка сохранеия в БД кол-во записей = " + number.ToString());
                     Console.ResetColor();
-                    LogSystem.WriteEventLog("ProDaveStan", "Стан", "Ошибка сохранеия в БД кол - во записей = " + number.ToString() + " Запрос = " + sqlExpression, EventLogEntryType.Error);
+                    //LogSystem.WriteEventLog("ProDaveStan", "Стан", "Ошибка сохранеия в БД кол - во записей = " + number.ToString() + " Запрос = " + sqlExpression, EventLogEntryType.Error);
                     System.Diagnostics.Debug.WriteLine("Ошибка сохранеия в БД кол-во записей = " + number.ToString());
                     lstStatus.Items.Add(DateTime.Now.ToString()+" - Ошибка сохранеия в БД кол-во записей = " + number.ToString());
                 }
@@ -1593,7 +1593,7 @@ namespace RS2toBD
                 Console.BackgroundColor = ConsoleColor.Red;
                 Console.WriteLine("Error в SQL стан - > БД " + ex.Message);
                 Console.ResetColor();
-                LogSystem.WriteEventLog("ProDaveStan", "Стан", "Error в SQL стан - > БД " + ex.Message, EventLogEntryType.Error);
+                //LogSystem.WriteEventLog("ProDaveStan", "Стан", "Error в SQL стан - > БД " + ex.Message, EventLogEntryType.Error);
                 System.Diagnostics.Debug.WriteLine("Error в SQL стан - > БД " + ex.Message);
                 lstStatus.Items.Add("Error в SQL стан - > БД " + ex.Message);
 
@@ -1603,6 +1603,18 @@ namespace RS2toBD
 
             
 
+        }
+
+
+        private void chkStan_Checked(object sender, RoutedEventArgs e)
+        {
+            clStan = new ClassStan(stan101ms: true, stan1s: true, stan200ms: true, NetSend: false);
+            clStan.Start();
+        }
+
+        private void chkStan_Unchecked(object sender, RoutedEventArgs e)
+        {
+            clStan.Stop();
         }
 
         private void ConvertBufferSQLandWriteTable()
@@ -2049,7 +2061,7 @@ namespace RS2toBD
             }
             catch (Exception ex)
             {
-                LogSystem.WriteEventLog("ProDaveStan", "Стан", "Ошибка SQL стан (101ms) - "+ex.ToString(), EventLogEntryType.Error);
+                //LogSystem.WriteEventLog("ProDaveStan", "Стан", "Ошибка SQL стан (101ms) - "+ex.ToString(), EventLogEntryType.Error);
                 //System.Diagnostics.Debug.WriteLine("Ошибка сохранеия в БД кол-во записей = " + number.ToString());
                 lstStatus.Items.Add(DateTime.Now.ToString() + " - Ошибка 101 ms= " + ex.ToString());
                 
@@ -2661,8 +2673,8 @@ namespace RS2toBD
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-           // con.Close();
-           // Console.Write("Соедиение закрыто");
+            clStan.Stop();
+           
         }
 
         private void SQLconBD()

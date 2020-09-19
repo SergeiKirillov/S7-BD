@@ -135,8 +135,9 @@ namespace consoleRS2toBD
 
             string MesMain = DateTime.Now.ToString("HH:mm dd.MM.yyyy");
             String strVersion = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            
 
-            string strVersionData = strVersion + "(" + ")";
+            string strVersionData = strVersion + "  (" + clVersionDT.Decript()+ ")";
             //Console.Clear();
 
 

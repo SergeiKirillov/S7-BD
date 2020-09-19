@@ -63,6 +63,7 @@
     <Compile Include="clPLCtoBD.cs" />
     <Compile Include="clStan1700.cs" />
     <Compile Include="clStanDress.cs" />
+    <Compile Include="clVersionDT.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

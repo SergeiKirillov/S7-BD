@@ -1009,7 +1009,7 @@ namespace consoleRS2toBD
                                     Program.dtErrorDsRulon = DateTime.Now;
                                 }
                             }
-                        #endregion
+                            #endregion
 
                             #region Если БД временной не существует то создаем
                             string comRulon80ms1 = "if not exists (select * from sysobjects where name ='TEMPds80ms' and xtype='U') create table TEMPds80ms " +
@@ -1047,12 +1047,15 @@ namespace consoleRS2toBD
 
 
 
-                            using (SqlConnection conSQL80ms1 = new SqlConnection(connectionString))
+                            using (SqlConnection conSQL1s4 = new SqlConnection(connectionString))
                             {
-                                conSQL80ms1.Open();
-                                SqlCommand command = new SqlCommand(comRulon80ms1, conSQL80ms1);
+                                conSQL1s4.Open();
+                                //SqlCommand command = new SqlCommand(comRulon80ms1, conSQL80ms1);
+                                SqlCommand command = new SqlCommand(comRulon80ms1, conSQL1s4);
+                            
+
                                 command.ExecuteNonQuery();
-                                conSQL80ms1.Close();
+                                conSQL1s4.Close();
 
                             }
                             #endregion

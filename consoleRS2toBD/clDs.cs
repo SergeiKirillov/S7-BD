@@ -487,57 +487,59 @@ namespace consoleRS2toBD
 
                         #region Формируем SQL запрос с циклом 80мс и записываем его во временную БД
 
-                        #region Если БД не существует то создаем
-                        string comRulon80ms1 = "if not exists (select * from sysobjects where name ='TEMPds80ms' and xtype='U') create table TEMPds80ms " +
-                           "(" +
-                           "datetime80ms datetime , " +
-                           "VKlet float," +              
-                           "IzadR float," +              
-                           "IzadM float," +              
-                           "NKlet float," +              
-                           "NRazm float," +              
-                           "NMot float," +               
-                           "TRazm float," +              
-                           "TMot float," +               
-                           "RRazm float," +              
-                           "RMot float," +               
-                           "NVlev float," +              
-                           "NVpr float," +               
-                           "IvozM float," +              
-                           "Imot float," +               
-                           "Urazm float," +              
-                           "IvozR float," +              
-                           "Umot float," +               
-                           "IRUZ4 float," +              
-                           "IRUZ5 float," +              
-                           "IMUZ4 float," +              
-                           "IMUZ5 float," +              
-                           "IzovK float," +              
-                           "Ukl float," +                
-                           "IKUZ4 float," +              
-                           "IKUZ5 float," +              
-                           "ObgTek float," +             
-                           "DatObgDo float," +           
-                           "DatObgZa float"  +             
-                           ")";
-
-
-
-                        using (SqlConnection conSQL80ms1 = new SqlConnection(connectionString))
-                        {
-                            conSQL80ms1.Open();
-                            SqlCommand command = new SqlCommand(comRulon80ms1, conSQL80ms1);
-                            command.ExecuteNonQuery();
-                            conSQL80ms1.Close();
-
-                        }
-                        #endregion
+                        
 
                         if (blRulonStart)
 //                        if (true)
                         {
 
-                            string comRulon80ms2 = "INSERT INTO TEMPds80ms" +
+                            #region Если БД не существует то создаем
+                            string comRulon80ms1 = "if not exists (select * from sysobjects where name ='TEMPds80ms' and xtype='U') create table TEMPds80ms " +
+                               "(" +
+                               "datetime80ms datetime , " +
+                               "VKlet float," +
+                               "IzadR float," +
+                               "IzadM float," +
+                               "NKlet float," +
+                               "NRazm float," +
+                               "NMot float," +
+                               "TRazm float," +
+                               "TMot float," +
+                               "RRazm float," +
+                               "RMot float," +
+                               "NVlev float," +
+                               "NVpr float," +
+                               "IvozM float," +
+                               "Imot float," +
+                               "Urazm float," +
+                               "IvozR float," +
+                               "Umot float," +
+                               "IRUZ4 float," +
+                               "IRUZ5 float," +
+                               "IMUZ4 float," +
+                               "IMUZ5 float," +
+                               "IzovK float," +
+                               "Ukl float," +
+                               "IKUZ4 float," +
+                               "IKUZ5 float," +
+                               "ObgTek float," +
+                               "DatObgDo float," +
+                               "DatObgZa float" +
+                               ")";
+
+
+
+                            using (SqlConnection conSQL80ms1 = new SqlConnection(connectionString))
+                            {
+                                conSQL80ms1.Open();
+                                SqlCommand command = new SqlCommand(comRulon80ms1, conSQL80ms1);
+                                command.ExecuteNonQuery();
+                                conSQL80ms1.Close();
+
+                            }
+                            #endregion
+
+                        string comRulon80ms2 = "INSERT INTO TEMPds80ms" +
                            "(datetime80ms,VKlet,IzadR,IzadM,NKlet,NRazm,NMot,TRazm,TMot,RRazm,RMot,NVlev,NVpr,IvozM,Imot,Urazm,IvozR,Umot,IRUZ4,IRUZ5,IMUZ4,IMUZ5,IzovK,Ukl,IKUZ4,IKUZ5,ObgTek,DatObgDo,DatObgZa)" +
                            " VALUES " +
                            "('" +

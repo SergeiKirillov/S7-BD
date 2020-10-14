@@ -97,6 +97,6 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PreBuildEvent>z:\GitHub\SergeiKirillov\S7-BD\consoleRS2toBD\AutoIncrement.exe  Debug consoleRS2toBD</PreBuildEvent>
+    <PreBuildEvent>C:\Users\user\Source\Repos\SergeiKirillov\S7-BD\consoleRS2toBD\AutoIncrement.exe  Debug consoleRS2toBD</PreBuildEvent>
   </PropertyGroup>
 </Project>

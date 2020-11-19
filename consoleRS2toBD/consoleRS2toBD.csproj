@@ -69,6 +69,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="Алгоритм работы программы.vsdx" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\logger\logger.csproj">

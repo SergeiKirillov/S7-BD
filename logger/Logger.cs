@@ -153,7 +153,7 @@ namespace LoggerInSystem
                 //  в диагностическое окно VS - WriteOutputVSLog(_MessageText);
 
 
-                if (value.EventToConsole) WriteConsoleLog(_clasMessage, dtNow.ToString("HH:mm:ss.fff")+" - "+_className + ": " + _MessageText, _CurX, _CurY, dtVizible);
+                if (value.EventToConsole) WriteConsoleLog(_clasMessage, dtNow.ToString("dd.MM.yyyy HH:mm:ss.fff")+" - "+_className + ": " + _MessageText, _CurX, _CurY, dtVizible);
                 if (value.EventToFile) WriteFileLog(_className, dtNow, _MessageText);
                 if (value.EventToSystem) WriteEventLogApplication(_className, _MessageText, value.elet);
                 if (value.EventToDebug) WriteOutputVSLog(_MessageText);

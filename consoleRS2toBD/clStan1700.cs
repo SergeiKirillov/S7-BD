@@ -323,7 +323,7 @@ namespace consoleRS2toBD
         private bool blRulonStart = false;
         private string messageRulon;
         private bool blRulonStop = false;
-        private string connectionString = "Data Source = 192.168.0.46; Initial Catalog = rs2stan1700; User ID = rs2admin; Password = 159951";
+        private string connectionString = "Data Source = 192.168.0.46; Initial Catalog = standbT; User ID = stanm; Password = 159951";
         private string numberTable;
         private float speed4kl;
         private float H5_work;
@@ -331,6 +331,10 @@ namespace consoleRS2toBD
         private float Ves_Work;
         private DateTime stanTimeStop;
         private float Dlina_Work;
+
+
+        private int intCountMessageOKStPLC;
+        private string strCountMessageOKStPLC;
 
         //private string messageError100mc;
         //private string messageOK100mc;
@@ -372,6 +376,7 @@ namespace consoleRS2toBD
         DateTime dtMessage;
         int writeMessage = 0; //цикл сохранением значений Message
 
+
         private bool blOKplc = false;
 
 
@@ -381,9 +386,11 @@ namespace consoleRS2toBD
         public void goStart()
         {
 
+            
+
             //stan.Data101ms = stanData100ms;
-            #region  dtStanPerevalki - формирование dataTable Перевалки(цикл  1s стана)
-           
+            #region dtStanPerevalki - формирование dataTable Перевалки(цикл  1s стана)
+
             dtPerevalkiStan = new DataTable();
             dtPerevalkiStan.Columns.Add("dtPerevalki", typeof(DateTime));
             dtPerevalkiStan.Columns.Add("kl1", typeof(int));
@@ -406,28 +413,27 @@ namespace consoleRS2toBD
             Thread queryPLC = new Thread(stanPLC);
             queryPLC.Start();
 
-            
+
             Thread querySQL = new Thread(stanSQL101ms);
             querySQL.Start();
-            
-            Thread queryMes = new Thread(stanMessage200ms);
-            queryMes.Start();
-            
-            Thread query1s = new Thread(stanSQL1s);
-            query1s.Start();
-            
+
+            //Thread queryMes = new Thread(stanMessage200ms);
+            //queryMes.Start();
+
+            //Thread query1s = new Thread(stanSQL1s);
+            //query1s.Start();
+
 
 
 
             while (true)
             {
-                Thread.Sleep(5000); 
-                            
+                Thread.Sleep(5000);
 
                 #region //Вывод на консоль отключен
 
                 //LogSystem.Write("Стан1700", Direction.Ok, "Информация о работе методов класса clStan1700 ( Цикл 5сек )", 1, 1, true); 
-                
+
                 //if (messageError100mc != null)
                 //{
                 //    LogSystem.Write("Стан1700 ERROR цикла 100mc", Direction.ERROR, dtError100mc, messageError100mc, 1, 5, true);
@@ -464,8 +470,8 @@ namespace consoleRS2toBD
                 //{
                 //    LogSystem.Write("Стан1700 Получение данных с энергосистемы (Цикл 1c)", Direction.Ok, dtOK1c, messageOK1c, 1, 15, true);
                 //}
-                
-                
+
+
 
                 //if (messageErrorRulon != null)
                 //{
@@ -475,8 +481,8 @@ namespace consoleRS2toBD
                 //{
                 //    LogSystem.Write("Стан1700 переименование таблицы рулонов", Direction.Ok, dtOKRulon, messageOKRulon, 1, 18, true);
                 //}
-                
-                
+
+
 
                 //if (messageErrorProizvodstvo != null)
                 //{
@@ -486,8 +492,8 @@ namespace consoleRS2toBD
                 //{
                 //    LogSystem.Write("Стан1700 запись в таблицу производства", Direction.Ok, dtOKProizvodstvo, messageOKProizvodstvo, 1, 21, true);
                 //}
-                
-                
+
+
 
                 //if (messageErrorValki != null)
                 //{
@@ -517,6 +523,14 @@ namespace consoleRS2toBD
                 ////LogSystem.Write("Стан1700 1s", Direction.Ok, message1s, 1, 11, true);
 
                 #endregion
+
+                Program.CountMessageOKStPLC = strCountMessageOKStPLC+"("+ intCountMessageOKStPLC+")";
+
+                //Program.CountMessageOKStPLC = ""; //Сброс данных после цикла 5 сек
+                
+                strCountMessageOKStPLC = "";
+                intCountMessageOKStPLC = 0;
+
             }
         }
 
@@ -533,6 +547,7 @@ namespace consoleRS2toBD
             {
                 int i = 0;     //начальная позиция по Top
                 int y = 2;     //Конечная позиция по Top
+                
 
                 Prodave rs2 = new Prodave();
 
@@ -578,7 +593,10 @@ namespace consoleRS2toBD
                     if (resultReadField == 0)
                     {
                         //LogSystem.Write(stanNamePLC + " start", Direction.Ok, "Соединение активно.", 1, 2, true);
-                        Program.messageOKSt100mc = "Соединение активно";
+                        Program.messageOKSt100mc =  "Соединение активно";
+                        intCountMessageOKStPLC = intCountMessageOKStPLC + 1;
+                        strCountMessageOKStPLC = strCountMessageOKStPLC + ".";
+
                         Program.dtOKSt100mc = DateTime.Now;
                         blOKplc = true;
 
@@ -648,8 +666,6 @@ namespace consoleRS2toBD
             }
 
         }
-
-
         void BufferSQLToBufferPLC()
         {
             //критичная секция которая записывает значение в bufferPLC
@@ -660,7 +676,6 @@ namespace consoleRS2toBD
             }
 
         }
-
         void Buffer1cToBufferPLC()
         {
             lock (stanlocker3)
@@ -670,7 +685,6 @@ namespace consoleRS2toBD
 
             }
         }
-
         private void BufferMessageToBufferPLC()
         {
             //критичная секция которая записывает значение в bufferPLC
@@ -732,6 +746,7 @@ namespace consoleRS2toBD
         }
 
 
+
         #endregion
 
 
@@ -745,123 +760,136 @@ namespace consoleRS2toBD
                 {
                     Thread.Sleep(101);
 
+                    //System.Diagnostics.Debug.WriteLine("101mc");
+
                     #region Формируем SQL запрос с циклом 101мс и записываем его во временную БД
 
                     #region //Если БД не существует то создаем -> 1sec
-                    //string comRulon101ms1 = "if not exists (select * from sysobjects where name ='TEMPstan101ms' and xtype='U') create table TEMPstan101ms " +
-                    //   "(" +
-                    //   "datetime101ms datetime , " +
-                    //   "v1 float," +
-                    //   "v2 float," +
-                    //   "v3 float," +
-                    //   "v4 float," +
-                    //   "v5 float," +
-                    //   "h1 float," +
-                    //   "h5 float," +
-                    //   "b int," +
-                    //   "dvip float," +
-                    //   "drazm float," +
-                    //   "dmot float," +
-                    //   "vvip float," +
-                    //   "d1 int," +
-                    //   "d2 int," +
-                    //   "d3 int," +
-                    //   "d4 int," +
-                    //   "d5 int," +
-                    //   "e2 float," +
-                    //   "e3 float," +
-                    //   "e4 float," +
-                    //   "e5 float," +
-                    //   "n1l float," +
-                    //   "n1p float," +
-                    //   "n2l float," +
-                    //   "n2p float," +
-                    //   "n3l float," +
-                    //   "n3p float," +
-                    //   "n4l float," +
-                    //   "n4p float," +
-                    //   "n5l float," +
-                    //   "n5p float," +
-                    //   "reserv1 float," +
-                    //   "reserv2 float," +
-                    //   "t1 float," +
-                    //   "t2 float," +
-                    //   "t3 float," +
-                    //   "t4 float," +
-                    //   "t1l float," +
-                    //   "t2l float," +
-                    //   "t3l float," +
-                    //   "t4l float," +
-                    //   "t1p float," +
-                    //   "t2p float," +
-                    //   "t3p float," +
-                    //   "t4p float," +
-                    //   "t1z float," +
-                    //   "t2z float," +
-                    //   "t3z float," +
-                    //   "t4z float," +
-                    //   "erazm float," +
-                    //   "ivozbrazm float," +
-                    //   "izadrazm float," +
-                    //   "w1 float," +
-                    //   "w2v float," +
-                    //   "w2n float," +
-                    //   "w3v float," +
-                    //   "w3n float," +
-                    //   "w4v float," +
-                    //   "w4n float," +
-                    //   "w5v float," +
-                    //   "w5n float," +
-                    //   "wmot float," +
-                    //   "imot int," +
-                    //   "izadmot int," +
-                    //   "u1 float," +
-                    //   "u2v float," +
-                    //   "u2n float," +
-                    //   "u3v float," +
-                    //   "u3n float," +
-                    //   "u4v float," +
-                    //   "u4n float," +
-                    //   "u5v float," +
-                    //   "u5n float," +
-                    //   "umot float," +
-                    //   "i1 int," +
-                    //   "i2v int," +
-                    //   "i2n int," +
-                    //   "i3v int," +
-                    //   "i3n int," +
-                    //   "i4v int," +
-                    //   "i4n int," +
-                    //   "i5v int," +
-                    //   "i5n int," +
-                    //   "rtv float," +
-                    //   "dt1 float," +
-                    //   "dt2 float," +
-                    //   "dt3 float," +
-                    //   "dt4 float," +
-                    //   "grt float," +
-                    //   "trt float," +
-                    //   "mv1 float," +
-                    //   "mv2 float," +
-                    //   "mv3 float," +
-                    //   "dh1 float," +
-                    //   "dh5 float," +
-                    //   "os1klvb int," +
-                    //   "rezerv int," +
-                    //   "mezdoza4 int" +
-                    //   ")";
+                    string comRulon101ms1 = "if not exists (select * from sysobjects where name ='TEMPstan101ms' and xtype='U') create table TEMPstan101ms " +
+                       "(" +
+                       "datetime101ms datetime , " +
+                       "v1 float," +
+                       "v2 float," +
+                       "v3 float," +
+                       "v4 float," +
+                       "v5 float," +
+                       "h1 float," +
+                       "h5 float," +
+                       "b int," +
+                       "dvip float," +
+                       "drazm float," +
+                       "dmot float," +
+                       "vvip float," +
+                       "d1 int," +
+                       "d2 int," +
+                       "d3 int," +
+                       "d4 int," +
+                       "d5 int," +
+                       "e2 float," +
+                       "e3 float," +
+                       "e4 float," +
+                       "e5 float," +
+                       "n1l float," +
+                       "n1p float," +
+                       "n2l float," +
+                       "n2p float," +
+                       "n3l float," +
+                       "n3p float," +
+                       "n4l float," +
+                       "n4p float," +
+                       "n5l float," +
+                       "n5p float," +
+                       "reserv1 float," +
+                       "reserv2 float," +
+                       "t1 float," +
+                       "t2 float," +
+                       "t3 float," +
+                       "t4 float," +
+                       "t1l float," +
+                       "t2l float," +
+                       "t3l float," +
+                       "t4l float," +
+                       "t1p float," +
+                       "t2p float," +
+                       "t3p float," +
+                       "t4p float," +
+                       "t1z float," +
+                       "t2z float," +
+                       "t3z float," +
+                       "t4z float," +
+                       "erazm float," +
+                       "ivozbrazm float," +
+                       "izadrazm float," +
+                       "w1 float," +
+                       "w2v float," +
+                       "w2n float," +
+                       "w3v float," +
+                       "w3n float," +
+                       "w4v float," +
+                       "w4n float," +
+                       "w5v float," +
+                       "w5n float," +
+                       "wmot float," +
+                       "imot int," +
+                       "izadmot int," +
+                       "u1 float," +
+                       "u2v float," +
+                       "u2n float," +
+                       "u3v float," +
+                       "u3n float," +
+                       "u4v float," +
+                       "u4n float," +
+                       "u5v float," +
+                       "u5n float," +
+                       "umot float," +
+                       "i1 int," +
+                       "i2v int," +
+                       "i2n int," +
+                       "i3v int," +
+                       "i3n int," +
+                       "i4v int," +
+                       "i4n int," +
+                       "i5v int," +
+                       "i5n int," +
+                       "rtv float," +
+                       "dt1 float," +
+                       "dt2 float," +
+                       "dt3 float," +
+                       "dt4 float," +
+                       "grt float," +
+                       "trt float," +
+                       "mv1 float," +
+                       "mv2 float," +
+                       "mv3 float," +
+                       "dh1 float," +
+                       "dh5 float," +
+                       "os1klvb int," +
+                       "rezerv int," +
+                       "mezdoza4 int" +
+                       ")";
 
-                    //using (SqlConnection conSQL101ms1 = new SqlConnection(connectionString))
-                    //{
-                    //    conSQL101ms1.Open();
-                    //    SqlCommand command = new SqlCommand(comRulon101ms1, conSQL101ms1);
-                    //    command.ExecuteNonQuery();
-                    //    conSQL101ms1.Close();
+                    using (SqlConnection conSQL101ms1 = new SqlConnection(connectionString))
+                    {
+                        try
+                        {
+                            conSQL101ms1.Open();
+                            SqlCommand command = new SqlCommand(comRulon101ms1, conSQL101ms1);
+                            command.ExecuteNonQuery();
+                            conSQL101ms1.Close();
+                        }
+                        catch (Exception ex)
+                        {
+                            //Program.messageErrorSt101mc = "101mc НЕ ЗАПИСАНЫ. " + ex.Message + " Insert запрос: " + comRulon101ms1;
+                            Program.messageErrorSt101mc = "101mc НЕ ЗАПИСАНЫ. Создание таблицы TEMPstan101ms."; 
+                            Program.dtErrorSt101mc = DateTime.Now;
+                        }
 
-                    //}
+
+                    }
                     #endregion
 
-                    if (blRulonStart)
+                    //if (blRulonStart)
+                    if (true)
                     {
                         
                         string comRulon101ms2 = "INSERT INTO TEMPstan101ms" +
@@ -980,13 +1008,15 @@ namespace consoleRS2toBD
                                     conSQL101ms2.Open();
                                     SqlCommand command = new SqlCommand(comRulon101ms2, conSQL101ms2);
                                     command.ExecuteNonQuery();
-                                    Program.messageOKSt101mc = "-Write.";
+                                    Program.intConMessageOKSt101mc = Program.intConMessageOKSt101mc + 1;
+                                    Program.messageOKSt101mc = Program.messageOKSt101mc+".";
                                     Program.dtOKSt101mc = DateTime.Now;
                                     conSQL101ms2.Close();
                                 }
                                 catch (Exception ex)
                                 {
-                                    Program.messageErrorSt101mc = "101mc НЕ ЗАПИСАНЫ. " + ex.Message + " Insert запрос: " + comRulon101ms2;
+                                    //Program.messageErrorSt101mc = "101mc НЕ ЗАПИСАНЫ. " + ex.Message + " Insert запрос: " + comRulon101ms2;
+                                    Program.messageErrorSt101mc = "101mc НЕ ЗАПИСАНЫ. Вставка данных в таблицу TEMPstan101ms.";
                                     Program.dtErrorSt101mc = DateTime.Now;
                                 }
                             }   

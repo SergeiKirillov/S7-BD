@@ -16,6 +16,9 @@ namespace consoleRS2toBD
     class Program
     {
         #region Переменные сообщения по стану1700
+        public static string CountMessageOKStPLC;
+        
+
         public static string messageErrorSt100mc;
         public static DateTime dtErrorSt100mc;
         public static string messageOKSt100mc;
@@ -29,6 +32,7 @@ namespace consoleRS2toBD
         public static DateTime dtOKSt101mc;
         public static string ConMessageErrorSt101mc;
         public static string ConMessageOKSt101mc;
+        public static int intConMessageOKSt101mc;
 
         public static string messageErrorSt200mc;
         public static DateTime dtErrorSt200mc;
@@ -147,10 +151,11 @@ namespace consoleRS2toBD
             switch (Console.ReadLine())
             {
                 case "2":
-                    clDs stanDs = new clDs();
-                    Thread task2 = new Thread(stanDs.goStart);
-                    task2.Start();
-                    break;
+                ////Одновременно не может происходить сбор информации
+                //clDs stanDs = new clDs();
+                //Thread task2 = new Thread(stanDs.goStart);
+                //task2.Start();
+                //break;
                 case "1":
                     clStan1700 stan1700 = new clStan1700();
                     Thread task1 = new Thread(stan1700.goStart);
@@ -160,6 +165,7 @@ namespace consoleRS2toBD
                     break;
             }
 
+            
 
 
             //if (key.Key.ToString() == "d" || key.Key.ToString() == "D" || key.Key.ToString() == "В" || key.Key.ToString() == "в")
@@ -205,12 +211,12 @@ namespace consoleRS2toBD
             while (true)
             {
                 Thread.Sleep(5000);
-                
 
+                
                 
                 if (false)
                 {
-
+                    CountMessageOKStPLC = null;
                     messageErrorSt100mc = null;
                     messageOKSt100mc = null;
                     messageErrorSt101mc = null;
@@ -254,8 +260,10 @@ namespace consoleRS2toBD
 
 
                 #region Вывод на консоль сообщений по стану
-
+                //LogSystem.Write("Стан1700", Direction.Ok, "                                                           ", 1, 4, true);
                 LogSystem.Write("Стан1700", Direction.Ok, "Информация о работе методов класса clStan1700 ( Цикл 5сек )", 1, 3, true);
+                LogSystem.Write(" ", Direction.Ok, "                                                           ", 1, 4, true);
+                LogSystem.Write("Стан1700", Direction.Ok, CountMessageOKStPLC, 1, 4, true);
 
                 if (messageErrorSt100mc != null)
                 {
@@ -274,8 +282,9 @@ namespace consoleRS2toBD
                 }
                 if (messageOKSt101mc != null)
                 {
+                    LogSystem.Write("Стан1700. Read PLC and Write во временную таблицу (цикл 101mc)", Direction.Ok, dtOKSt101mc, "                                                                 ", 1, 9, true);
                     ConMessageOKSt101mc = messageOKSt101mc;
-                    LogSystem.Write("Стан1700. Read PLC and Write во временную таблицу (цикл 101mc)", Direction.Ok, dtOKSt101mc, ConMessageOKSt101mc, 1, 9, true);
+                    LogSystem.Write("Стан1700. Read PLC and Write во временную таблицу (цикл 101mc)", Direction.Ok, dtOKSt101mc, ConMessageOKSt101mc+"("+intConMessageOKSt101mc+")", 1, 9, true);
                 }
                 if (messageErrorSt200mc != null)
                 {
@@ -335,91 +344,91 @@ namespace consoleRS2toBD
 
                 #endregion
 
-                #region Вывод на консоль сообщений по дрессировке
+                #region Вывод на консоль сообщений по дрессировке -- отключен - причина; одновременно не может работать два класса 
 
 
-                LogSystem.Write("Дрессировка", Direction.Ok, "Информация о работе методов класса Дрессировочного стана ( Цикл 5сек )", 100, 3, true);
+                    //LogSystem.Write("Дрессировка", Direction.Ok, "Информация о работе методов класса Дрессировочного стана ( Цикл 5сек )", 100, 3, true);
 
-                if (messageErrorDs100mc != null)
-                {
-                    ConMessageErrorDs100mc = messageErrorDs100mc;
+                    //if (messageErrorDs100mc != null)
+                    //{
+                    //    ConMessageErrorDs100mc = messageErrorDs100mc;
                     
-                    LogSystem.Write("Дрессировка. ERROR цикла 70mc", Direction.ERROR, dtErrorDs100mc, ConMessageErrorDs100mc, 100, 5, true);
-                }
-                if (messageOKDs100mc != null)
-                {
-                    ConMessageOKDs100mc = messageOKDs100mc;
-                    LogSystem.Write("Дрессировка. Сonnection (цикл 70mc)", Direction.Ok, dtOKDs100mc, ConMessageOKDs100mc, 100, 6, true);
-                }
-                if (messageErrorDs101mc != null)
-                {
-                    ConMessageErrorDs101mc = messageErrorDs101mc;
+                    //    LogSystem.Write("Дрессировка. ERROR цикла 70mc", Direction.ERROR, dtErrorDs100mc, ConMessageErrorDs100mc, 100, 5, true);
+                    //}
+                    //if (messageOKDs100mc != null)
+                    //{
+                    //    ConMessageOKDs100mc = messageOKDs100mc;
+                    //    LogSystem.Write("Дрессировка. Сonnection (цикл 70mc)", Direction.Ok, dtOKDs100mc, ConMessageOKDs100mc, 100, 6, true);
+                    //}
+                    //if (messageErrorDs101mc != null)
+                    //{
+                    //    ConMessageErrorDs101mc = messageErrorDs101mc;
                     
-                    LogSystem.Write("Дрессировка. ERROR цикла 80mc", Direction.ERROR, dtErrorDs101mc, ConMessageErrorDs101mc, 100, 8, true);
-                }
-                if (messageOKDs101mc != null)
-                {
-                    ConMessageOKDs101mc = messageOKDs101mc;
-                    LogSystem.Write("Дрессировка. Read PLC and Write во временную таблицу (цикл 80mc)", Direction.Ok, dtOKDs101mc, ConMessageOKDs101mc, 100, 9, true);
-                }
-                if (messageErrorDs200mc != null)
-                {
-                    ConMessageErrorDs200mc = messageErrorDs200mc;
+                    //    LogSystem.Write("Дрессировка. ERROR цикла 80mc", Direction.ERROR, dtErrorDs101mc, ConMessageErrorDs101mc, 100, 8, true);
+                    //}
+                    //if (messageOKDs101mc != null)
+                    //{
+                    //    ConMessageOKDs101mc = messageOKDs101mc;
+                    //    LogSystem.Write("Дрессировка. Read PLC and Write во временную таблицу (цикл 80mc)", Direction.Ok, dtOKDs101mc, ConMessageOKDs101mc, 100, 9, true);
+                    //}
+                    //if (messageErrorDs200mc != null)
+                    //{
+                    //    ConMessageErrorDs200mc = messageErrorDs200mc;
                     
-                    LogSystem.Write("Дрессировка.ERROR цикла 200mc", Direction.ERROR, dtErrorDs200mc, ConMessageErrorDs200mc, 100, 11, true);
-                }
-                if (messageOKDs200mc != null)
-                {
-                    ConMessageOKDs200mc = messageOKDs200mc;
-                    LogSystem.Write("Дрессировка.Сообщения(цикл 200mc)", Direction.Ok, dtOKDs200mc, ConMessageOKDs200mc, 100, 12, true);
-                }
-                if (messageErrorDs1c != null)
-                {
-                    ConMessageErrorDs1c = messageErrorDs1c;
+                    //    LogSystem.Write("Дрессировка.ERROR цикла 200mc", Direction.ERROR, dtErrorDs200mc, ConMessageErrorDs200mc, 100, 11, true);
+                    //}
+                    //if (messageOKDs200mc != null)
+                    //{
+                    //    ConMessageOKDs200mc = messageOKDs200mc;
+                    //    LogSystem.Write("Дрессировка.Сообщения(цикл 200mc)", Direction.Ok, dtOKDs200mc, ConMessageOKDs200mc, 100, 12, true);
+                    //}
+                    //if (messageErrorDs1c != null)
+                    //{
+                    //    ConMessageErrorDs1c = messageErrorDs1c;
                     
-                    LogSystem.Write("Дрессировка.ERROR цикла 1c", Direction.ERROR, dtErrorDs1c, ConMessageErrorDs1c, 100, 14, true);
-                }
-                if (messageOKDs1c != null)
-                {
-                    ConMessageOKDs1c = messageOKDs1c;
-                    LogSystem.Write("Дрессировка.Цикл 1c.", Direction.Ok, dtOKDs1c, ConMessageOKDs1c, 100, 15, true);
-                }
-                if (messageErrorDsRulon != null)
-                {
-                    ConMessageErrorDsRulon = messageErrorDsRulon;
+                    //    LogSystem.Write("Дрессировка.ERROR цикла 1c", Direction.ERROR, dtErrorDs1c, ConMessageErrorDs1c, 100, 14, true);
+                    //}
+                    //if (messageOKDs1c != null)
+                    //{
+                    //    ConMessageOKDs1c = messageOKDs1c;
+                    //    LogSystem.Write("Дрессировка.Цикл 1c.", Direction.Ok, dtOKDs1c, ConMessageOKDs1c, 100, 15, true);
+                    //}
+                    //if (messageErrorDsRulon != null)
+                    //{
+                    //    ConMessageErrorDsRulon = messageErrorDsRulon;
                     
-                    LogSystem.Write("Дрессировка. ERROR Rename", Direction.ERROR, dtErrorDsRulon, ConMessageErrorDsRulon, 100, 17, true);
-                }
-                if (messageOKDsRulon != null)
-                {
-                    ConMessageOKDsRulon = messageOKDsRulon;
+                    //    LogSystem.Write("Дрессировка. ERROR Rename", Direction.ERROR, dtErrorDsRulon, ConMessageErrorDsRulon, 100, 17, true);
+                    //}
+                    //if (messageOKDsRulon != null)
+                    //{
+                    //    ConMessageOKDsRulon = messageOKDsRulon;
 
-                    LogSystem.Write("Дрессировка. Rename", Direction.Ok, dtOKDsRulon, ConMessageOKDsRulon, 100, 18, true);
-                }
-                if (messageErrorDsProizvodstvo != null)
-                {
-                    ConMessageErrorDsProizvodstvo = messageErrorDsProizvodstvo;
+                    //    LogSystem.Write("Дрессировка. Rename", Direction.Ok, dtOKDsRulon, ConMessageOKDsRulon, 100, 18, true);
+                    //}
+                    //if (messageErrorDsProizvodstvo != null)
+                    //{
+                    //    ConMessageErrorDsProizvodstvo = messageErrorDsProizvodstvo;
                     
-                    LogSystem.Write("Дрессировка. ERROR Write Производства", Direction.ERROR, dtErrorDsProizvodstvo, ConMessageErrorDsProizvodstvo, 100, 20, true);
-                }
-                if (messageOKDsProizvodstvo != null)
-                {
-                    ConMessageOKDsProizvodstvo = messageOKDsProizvodstvo;
+                    //    LogSystem.Write("Дрессировка. ERROR Write Производства", Direction.ERROR, dtErrorDsProizvodstvo, ConMessageErrorDsProizvodstvo, 100, 20, true);
+                    //}
+                    //if (messageOKDsProizvodstvo != null)
+                    //{
+                    //    ConMessageOKDsProizvodstvo = messageOKDsProizvodstvo;
 
-                    LogSystem.Write("Дрессировка. Производство", Direction.Ok, dtOKDsProizvodstvo, ConMessageOKDsProizvodstvo, 100, 21, true);
-                }
-                if (messageErrorDsValki != null)
-                {
-                    ConMessageErrorDsValki = messageErrorDsValki;
+                    //    LogSystem.Write("Дрессировка. Производство", Direction.Ok, dtOKDsProizvodstvo, ConMessageOKDsProizvodstvo, 100, 21, true);
+                    //}
+                    //if (messageErrorDsValki != null)
+                    //{
+                    //    ConMessageErrorDsValki = messageErrorDsValki;
                     
-                    LogSystem.Write("Дрессировка. ERROR записи в таблицу перевалок валков", Direction.ERROR, dtErrorDsValki, ConMessageErrorDsValki, 100, 23, true);
-                }
-                if (messageOKDsValki != null)
-                {
-                    ConMessageOKDsValki = messageOKDsValki;
+                    //    LogSystem.Write("Дрессировка. ERROR записи в таблицу перевалок валков", Direction.ERROR, dtErrorDsValki, ConMessageErrorDsValki, 100, 23, true);
+                    //}
+                    //if (messageOKDsValki != null)
+                    //{
+                    //    ConMessageOKDsValki = messageOKDsValki;
 
-                    LogSystem.Write("Дрессировка. Запись в таблицу перевалок валков", Direction.Ok, dtOKDsValki, ConMessageOKDsValki, 100, 24, true);
-                }
+                    //    LogSystem.Write("Дрессировка. Запись в таблицу перевалок валков", Direction.Ok, dtOKDsValki, ConMessageOKDsValki, 100, 24, true);
+                    //}
 
 
                 #endregion
@@ -429,7 +438,6 @@ namespace consoleRS2toBD
                 
                 messageOKSt100mc = null;
                 messageErrorSt101mc = null;
-                messageOKSt101mc = null;
                 messageErrorSt200mc = null;
                 messageOKSt200mc = null;
                 messageErrorSt1c = null;
@@ -440,6 +448,10 @@ namespace consoleRS2toBD
                 messageOKStProizvodstvo = null;
                 messageErrorStValki = null;
                 messageOKStValki = null;
+
+
+                messageOKSt101mc = null; //прокатка рулона
+                intConMessageOKSt101mc = 0;
 
                 messageErrorDs100mc = null;
                 messageOKDs100mc = null;
@@ -456,22 +468,27 @@ namespace consoleRS2toBD
                 messageErrorDsValki = null;
                 messageOKDsValki = null;
 
+                
+
                 #endregion
 
-                if (Console.KeyAvailable)
-                {
-                    ConsoleKeyInfo keyInfo = Console.ReadKey(true);
-                    if (keyInfo.Key == ConsoleKey.C) clean = true;
-                    else break;
-
-                    if (clean)
+                #region Очистка Сообщений на экране
+                if (Console.KeyAvailable) //Очистка Сообщений на экране
                     {
-                        Console.Clear();
+                        ConsoleKeyInfo keyInfo = Console.ReadKey(true);
+                        if (keyInfo.Key == ConsoleKey.C) clean = true;
+                        else break;
+
+                        if (clean)
+                        {
+                            Console.Clear();
+                        }
+
+                        System.Threading.Thread.Sleep(1000);
+
                     }
+                #endregion
 
-                    System.Threading.Thread.Sleep(1000);
-
-                }
 
 
             }

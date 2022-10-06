@@ -32,9 +32,9 @@ namespace consoleRS2toBD
         byte[] buffer;          //данные c контроллера 100ms
         byte[] bufferPLC;       //Промежуточное хранение даных
         byte[] bufferSQL;       //Данные 101мс
-        byte[] bufferMessage;   //Данные сообщений
-        byte[] bufferMessageOld;//Данные сообщений
-        byte[] buffer1s;        //Технологические данные
+      //  byte[] bufferMessage;   //Данные сообщений
+      //  byte[] bufferMessageOld;//Данные сообщений
+      //  byte[] buffer1s;        //Технологические данные
         byte[] bufferNet;       //Передача по сети (визуализация)
 
         readonly object locker = new object();

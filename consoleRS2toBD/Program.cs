@@ -59,8 +59,13 @@ namespace consoleRS2toBD
         public static DateTime dtErrorStProizvodstvo;
         public static string messageOKStProizvodstvo;
         public static DateTime dtOKStProizvodstvo;
+        public static DateTime dtOKStProizvodstvo1;
+        public static DateTime dtOKStProizvodstvo2;
+        public static DateTime dtOKStProizvodstvo3;
         public static string ConMessageErrorStProizvodstvo;
-        public static string ConMessageOKStProizvodstvo;
+        public static string ConMessageOKStProizvodstvo1;
+        public static string ConMessageOKStProizvodstvo2;
+        public static string ConMessageOKStProizvodstvo3;
 
 
         public static string messageErrorStValki;
@@ -329,8 +334,35 @@ namespace consoleRS2toBD
                 
                 if (messageOKStProizvodstvo != null)
                 {
-                    ConMessageOKStProizvodstvo = messageOKStProizvodstvo;
-                    LogSystem.Write("Стан1700. Производствo", Direction.Ok, dtOKStProizvodstvo, ConMessageOKStProizvodstvo, 1, 21, true);
+                    if (ConMessageOKStProizvodstvo1 != messageOKStProizvodstvo)
+                    {
+                        ConMessageOKStProizvodstvo3 = ConMessageOKStProizvodstvo2;
+                        dtOKStProizvodstvo3 = dtOKStProizvodstvo2;
+
+                        ConMessageOKStProizvodstvo2 = ConMessageOKStProizvodstvo1;
+                        dtOKStProizvodstvo2 = dtOKStProizvodstvo1;
+
+                        ConMessageOKStProizvodstvo1 = messageOKStProizvodstvo;
+                        dtOKStProizvodstvo1 = dtOKStProizvodstvo;
+
+                        if (ConMessageOKStProizvodstvo1 != null)
+                        {
+                            LogSystem.Write("Стан1700. Производствo", Direction.Ok, dtOKStProizvodstvo1, ConMessageOKStProizvodstvo1, 1, 21, true);
+                        }
+                        if (ConMessageOKStProizvodstvo2 != null)
+                        {
+                            LogSystem.Write("Стан1700. Производствo", Direction.Ok, dtOKStProizvodstvo2, ConMessageOKStProizvodstvo2, 1, 22, true);
+                        }
+                        if (ConMessageOKStProizvodstvo3 != null)
+                        {
+                            LogSystem.Write("Стан1700. Производствo", Direction.Ok, dtOKStProizvodstvo3, ConMessageOKStProizvodstvo3, 1, 23, true);
+                        }
+
+                        
+                    }
+                    
+                   
+                    
                 }
                 if (messageErrorStValki != null)
                 {

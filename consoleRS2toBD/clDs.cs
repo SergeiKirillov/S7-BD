@@ -178,14 +178,14 @@ namespace consoleRS2toBD
             byte[] dsbufferMessage;   //Данные сообщений
             byte[] dsbufferMessageOld;//Данные сообщений
             byte[] dsbuffer1s;        //Технологические данные
-            byte[] dsbufferNet;       //Передача по сети (визуализация)
+           // byte[] dsbufferNet;       //Передача по сети (визуализация)
 
             int dsmount = 150; //Размер буфера для принятия данных в байтах
 
             byte[] dsIPconnPLC = new byte[] { 192, 168, 0, 21 }; //Передаем адресс контроллера
             int dsconnect = 1;
 
-            double dsdMot = 0.615;
+          // double dsdMot = 0.615;
 
             string dsNamePLC = "Дрессировочный стан";
             int dsSlotconnPC = 2;
@@ -198,20 +198,20 @@ namespace consoleRS2toBD
             readonly object dslocker3 = new object();
             readonly object dslocker4 = new object();
 
-            float dsspeed4kl, dsH_work, dshw, dsBw,  dsB_Work,  dsVes_Work, dsDlina_Work;
+            //float dsspeed4kl, dsH_work, dshw, dsBw,  dsB_Work,  dsVes_Work, dsDlina_Work;
         int dsD_tek_mot = 0;
         float dsD_pred_mot = 0;
 
         //DataTable dtds101ms;
 
-        bool bldsRulonProkatSaveInData101ms;
+        //bool bldsRulonProkatSaveInData101ms;
             private DateTime dsTimeStart;
             private bool blRulonStart = false;
-            private string messageRulon;
+         //   private string messageRulon;
             private bool blRulonStop = false;
             private string connectionString = "Data Source = 192.168.0.46; Initial Catalog = rs2ds; User ID = rs2admin; Password = 159951";
             private string numberTable;
-            private float speed4kl;
+        //    private float speed4kl;
             private float H_work;
             private int B_Work;
             private float Ves_Work;
@@ -220,11 +220,11 @@ namespace consoleRS2toBD
 
             
 
-            private int d1_pred;
-            private int d2_pred;
-            private int d3_pred;
-            private int d4_pred;
-            private int d5_pred;
+            //private int d1_pred;
+           // private int d2_pred;
+           // private int d3_pred;
+           // private int d4_pred;
+           // private int d5_pred;
             DataTable dtPerevalkids;
             DataTable dtMessageds;
             DateTime dtMessage;

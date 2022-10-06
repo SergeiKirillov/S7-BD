@@ -1608,7 +1608,7 @@ namespace consoleRS2toBD
                         conSQL1s1.Close();
                     }
 
-                    #region В Insert используем передачу параметров через Переменную
+                    #region  // В Insert используем передачу параметров через Переменную
                     // string comRulon1s1 = "INSERT INTO " + "Stan1s" + numberTable +
                     //" (datetime1s,s191HL,s192HL,s193BL,s194BL,s191HR,s192HR,s193BR,s194BR,s281NL,s282NL,s283BL,s284BL,s281NR,s282NR," +
                     //"s283BR,s284BR,s301BL,s302BL,s303HL,s304HL,s301BR,s302BR,s303HR,s304HR,s321BL,s322BL,s323HL,s324HL,s321BR,s322BR," +
@@ -1961,10 +1961,10 @@ namespace consoleRS2toBD
 
                     #endregion
 
-                    #region Расчет параметров прокатанного рулона после окончания прокатки
+                    #region //Расчет параметров прокатанного рулона после окончания прокатки
 
-                   // stanD_tek_mot = (float)(BitConverter.ToInt16(stanbuffer1s, 20));
-                    #region  Время начало прокатки рулона ver 1
+                    // stanD_tek_mot = (float)(BitConverter.ToInt16(stanbuffer1s, 20));
+                    #region  //Время начало прокатки рулона ver 1
 
                     // if (stanD_pred_mot == 0)
                     //{
@@ -1986,288 +1986,290 @@ namespace consoleRS2toBD
                     //{
                     //      //blRulonStart = false;
                     //}
-                   
-                   
-                    #endregion 
-
-                    #region Толщина и ширина прокатываемого рулона
-                    speed4kl = (float)(BitConverter.ToInt16(stanbuffer1s, 6)) / 100;
-                    if ((stanTimeStart != new DateTime()) && (H5_work == 0) && (stanD_tek_mot > 700) && (speed4kl > 2))
-                    {
-                        H5_work = (float)(BitConverter.ToInt16(stanbuffer1s, 12)) / 1000;
-                        B_Work = (int)BitConverter.ToInt16(stanbuffer1s, 14);
-                    }
-                    #endregion
-
-                    #region Формирование сигнала окончания прокатки
-                    if ((stanTimeStart != new DateTime()) && (H5_work != 0) && (stanD_tek_mot < 610) && (stanD_tek_mot < stanD_pred_mot))
-                    {
-                        Ves_Work = (((((stanD_pred_mot * stanD_pred_mot)/1000000 - 0.36F) * 3.141593F) / 4) * (B_Work / 1000)) * 7.85F;
-                        stanTimeStop = DateTime.Now;
-                        Dlina_Work = ((Ves_Work / 7.85F) / (B_Work / 1000)) / (H5_work / 1000);
-                        blRulonStop = true;
-                        blRulonStart = false;
-
-                        //messageRulon = stanTimeStart.ToString("HH:mm:ss.fff") + " - " + stanTimeStop.ToString("HH:mm:ss.fff") + "   " + B_Work + "*" + H5_work + "=" + Ves_Work;
-
-
-                        #region База производство
-
-                        #region Создание БД
-
-                        string comWorkStanCreate = "if not exists (select * from sysobjects where name ='work_stan' and xtype='U') create table work_stan" +
-                       "(" +
-                       "numberRulona bigint, " +
-                       "start datetime , " +
-                       "stop datetime , " +
-                       "h5 float , " +
-                       "b float , " +
-                       "ves float , " +
-                       "dlinna float , " +
-                       "t1 float , " +
-                       "t2 float , " +
-                       "t3 float , " +
-                       "t4 float , " +
-                       "t5 float  " +
-
-                       ")";
-
-                        using (SqlConnection conSQL1sWork1 = new SqlConnection(connectionString))
-                        {
-                            conSQL1sWork1.Open();
-                            SqlCommand command = new SqlCommand(comWorkStanCreate, conSQL1sWork1);
-                            command.ExecuteNonQuery();
-                            conSQL1sWork1.Close();
-                        }
-                        #endregion;
-
-                        #region Заполнение производство
-                        string comWorkStan = "INSERT INTO work_stan( " +
-                            "numberRulona," +
-                            "start," +
-                            "stop," +
-                            "h5," +
-                            "b," +
-                            "ves," +
-                            "dlinna" +
-                            ") " +
-                            "VALUES(" +
-                            "@NumberRulon, " +
-                            "@TimeStart, " +
-                            "@TimeStop, " +
-                            "@H5_work, " +
-                            "@B_Work, " +
-                            "@Ves_Work, " +
-                            "@Dlina_Work)";
-
-                        string beginWork = stanTimeStart.ToString("ddMMyyyyHHmm");
-                        string endWork = stanTimeStop.ToString("HHmm");
-                        string strNumberRulona = beginWork + endWork;
-
-                        //Добавляем в таблицу прокатанных рулонов данные по рулонам
-                        using (SqlConnection con3 = new SqlConnection(connectionString))
-                        {
-                            try
-                            {
-                                con3.Open();
-                                SqlCommand command = new SqlCommand(comWorkStan, con3);
-
-                                command.Parameters.AddWithValue("@NumberRulon", strNumberRulona);
-
-                                command.Parameters.AddWithValue("@TimeStart", stanTimeStart);
-                                command.Parameters.AddWithValue("@TimeStop", stanTimeStop);
-                                command.Parameters.AddWithValue("@H5_work", H5_work);
-                                command.Parameters.AddWithValue("@B_Work", B_Work);
-                                command.Parameters.AddWithValue("@Ves_Work", Ves_Work);
-                                command.Parameters.AddWithValue("@Dlina_Work", Dlina_Work);
-
-                                int WriteSQL = command.ExecuteNonQuery();
-
-                                Program.messageOKStProizvodstvo = strNumberRulona+"("+ stanTimeStart.ToString("HH:mm")+"-"+ stanTimeStop.ToString("HH:mm")+") "+ H5_work  +"*"+ B_Work + "->"+ Ves_Work;
-                                //messageOKProizvodstvo = "производство";
-                                Program.dtOKStProizvodstvo = DateTime.Now;
-                            }
-                            catch (Exception ex)
-                            {
-                                Program.messageErrorStProizvodstvo = "Ошибка в сохранении данных о прокатанном рулоне " + ex.Message + " Insert запрос: " + comWorkStan;
-                                Program.dtErrorStProizvodstvo = DateTime.Now;
-
-                            }
-                            
-                        }
-                        #endregion
-
-                        #endregion
-
-
-
-                        #region //Очищаем базу временных рулонов
-                        //using (SqlConnection conSQL1s3 = new SqlConnection(connectionString))
-                        //{
-                        //    conSQL1s3.Open();
-                        //    string comRulon1s2 = "DELETE FROM TEMPstan101ms";
-                        //    SqlCommand command = new SqlCommand(comRulon1s2, conSQL1s3);
-                        //    command.ExecuteNonQuery();
-
-
-                        //}
-                        #endregion
-
-
-
-
-                        #region Мпереименовываем временную базу в базу с именем stan100mc(дата+время начала)(время окончания)
-                        using (SqlConnection conSQL1s3 = new SqlConnection(connectionString))
-                        {
-                            try
-                            {
-                                conSQL1s3.Open();
-                                string begin = stanTimeStart.ToString("ddMMyyyyHHmm");
-                                string end = stanTimeStop.ToString("HHmm");
-                                string comRulon1s2 = "sp_rename 'TEMPstan101ms','" + begin + end + "'";
-                                SqlCommand command = new SqlCommand(comRulon1s2, conSQL1s3);
-                                command.ExecuteNonQuery();
-                                Program.messageOKStRulon = "Временная база -> " + begin + end;
-                                Program.dtOKStRulon = DateTime.Now;
-                                conSQL1s3.Close();
-                            }
-                            catch (Exception ex)
-                            {
-
-                                Program.messageErrorStRulon = "Временная база не переименована " + ex.Message;
-                                Program.dtErrorStRulon = DateTime.Now;
-                            }
-                            
-
-
-                        }
-                        #endregion
-
-
-                        #region Если БД не существует то создаем
-                        string comRulon101ms1 = "if not exists (select * from sysobjects where name ='TEMPstan101ms' and xtype='U') create table TEMPstan101ms " +
-                           "(" +
-                           "datetime101ms datetime , " +
-                           "v1 float," +
-                           "v2 float," +
-                           "v3 float," +
-                           "v4 float," +
-                           "v5 float," +
-                           "h1 float," +
-                           "h5 float," +
-                           "b int," +
-                           "dvip float," +
-                           "drazm float," +
-                           "dmot float," +
-                           "vvip float," +
-                           "d1 int," +
-                           "d2 int," +
-                           "d3 int," +
-                           "d4 int," +
-                           "d5 int," +
-                           "e2 float," +
-                           "e3 float," +
-                           "e4 float," +
-                           "e5 float," +
-                           "n1l float," +
-                           "n1p float," +
-                           "n2l float," +
-                           "n2p float," +
-                           "n3l float," +
-                           "n3p float," +
-                           "n4l float," +
-                           "n4p float," +
-                           "n5l float," +
-                           "n5p float," +
-                           "reserv1 float," +
-                           "reserv2 float," +
-                           "t1 float," +
-                           "t2 float," +
-                           "t3 float," +
-                           "t4 float," +
-                           "t1l float," +
-                           "t2l float," +
-                           "t3l float," +
-                           "t4l float," +
-                           "t1p float," +
-                           "t2p float," +
-                           "t3p float," +
-                           "t4p float," +
-                           "t1z float," +
-                           "t2z float," +
-                           "t3z float," +
-                           "t4z float," +
-                           "erazm float," +
-                           "ivozbrazm float," +
-                           "izadrazm float," +
-                           "w1 float," +
-                           "w2v float," +
-                           "w2n float," +
-                           "w3v float," +
-                           "w3n float," +
-                           "w4v float," +
-                           "w4n float," +
-                           "w5v float," +
-                           "w5n float," +
-                           "wmot float," +
-                           "imot int," +
-                           "izadmot int," +
-                           "u1 float," +
-                           "u2v float," +
-                           "u2n float," +
-                           "u3v float," +
-                           "u3n float," +
-                           "u4v float," +
-                           "u4n float," +
-                           "u5v float," +
-                           "u5n float," +
-                           "umot float," +
-                           "i1 int," +
-                           "i2v int," +
-                           "i2n int," +
-                           "i3v int," +
-                           "i3n int," +
-                           "i4v int," +
-                           "i4n int," +
-                           "i5v int," +
-                           "i5n int," +
-                           "rtv float," +
-                           "dt1 float," +
-                           "dt2 float," +
-                           "dt3 float," +
-                           "dt4 float," +
-                           "grt float," +
-                           "trt float," +
-                           "mv1 float," +
-                           "mv2 float," +
-                           "mv3 float," +
-                           "dh1 float," +
-                           "dh5 float," +
-                           "os1klvb int," +
-                           "rezerv int," +
-                           "mezdoza4 int" +
-                           ")";
-
-                        using (SqlConnection conSQL101ms1 = new SqlConnection(connectionString))
-                        {
-                            conSQL101ms1.Open();
-                            SqlCommand command = new SqlCommand(comRulon101ms1, conSQL101ms1);
-                            command.ExecuteNonQuery();
-                            conSQL101ms1.Close();
-
-                        }
-                        #endregion
-
-                    }
-                    #endregion
 
 
                     #endregion
 
-                    stanD_pred_mot = stanD_tek_mot;
+                    #region //Толщина и ширина прокатываемого рулона
+                    //speed4kl = (float)(BitConverter.ToInt16(stanbuffer1s, 6)) / 100;
+                    //if ((stanTimeStart != new DateTime()) && (H5_work == 0) && (stanD_tek_mot > 700) && (speed4kl > 2))
+                    //{
+                    //    H5_work = (float)(BitConverter.ToInt16(stanbuffer1s, 12)) / 1000;
+                    //    B_Work = (int)BitConverter.ToInt16(stanbuffer1s, 14);
+                    //}
+                    #endregion
+
+                    #region //Формирование сигнала окончания прокатки
+                    //if ((stanTimeStart != new DateTime()) && (H5_work != 0) && (stanD_tek_mot < 610) && (stanD_tek_mot < stanD_pred_mot))
+                    //{
+                    //    Ves_Work = (((((stanD_pred_mot * stanD_pred_mot)/1000000 - 0.36F) * 3.141593F) / 4) * (B_Work / 1000)) * 7.85F;
+                    //    stanTimeStop = DateTime.Now;
+                    //    Dlina_Work = ((Ves_Work / 7.85F) / (B_Work / 1000)) / (H5_work / 1000);
+                    //    blRulonStop = true;
+                    //    blRulonStart = false;
+
+                    //    //messageRulon = stanTimeStart.ToString("HH:mm:ss.fff") + " - " + stanTimeStop.ToString("HH:mm:ss.fff") + "   " + B_Work + "*" + H5_work + "=" + Ves_Work;
+
+
+                    //    #region //База производство
+
+                    //    #region //Создание БД
+
+                    //   // string comWorkStanCreate = "if not exists (select * from sysobjects where name ='work_stan' and xtype='U') create table work_stan" +
+                    //   //"(" +
+                    //   //"numberRulona bigint, " +
+                    //   //"start datetime , " +
+                    //   //"stop datetime , " +
+                    //   //"h5 float , " +
+                    //   //"b float , " +
+                    //   //"ves float , " +
+                    //   //"dlinna float , " +
+                    //   //"t1 float , " +
+                    //   //"t2 float , " +
+                    //   //"t3 float , " +
+                    //   //"t4 float , " +
+                    //   //"t5 float  " +
+
+                    //   //")";
+
+                    //   // using (SqlConnection conSQL1sWork1 = new SqlConnection(connectionString))
+                    //   // {
+                    //   //     conSQL1sWork1.Open();
+                    //   //     SqlCommand command = new SqlCommand(comWorkStanCreate, conSQL1sWork1);
+                    //   //     command.ExecuteNonQuery();
+                    //   //     conSQL1sWork1.Close();
+                    //   // }
+                    //    #endregion;
+
+                    //    #region //Заполнение производство
+                    //    //string comWorkStan = "INSERT INTO work_stan( " +
+                    //    //    "numberRulona," +
+                    //    //    "start," +
+                    //    //    "stop," +
+                    //    //    "h5," +
+                    //    //    "b," +
+                    //    //    "ves," +
+                    //    //    "dlinna" +
+                    //    //    ") " +
+                    //    //    "VALUES(" +
+                    //    //    "@NumberRulon, " +
+                    //    //    "@TimeStart, " +
+                    //    //    "@TimeStop, " +
+                    //    //    "@H5_work, " +
+                    //    //    "@B_Work, " +
+                    //    //    "@Ves_Work, " +
+                    //    //    "@Dlina_Work)";
+
+                    //    //string beginWork = stanTimeStart.ToString("ddMMyyyyHHmm");
+                    //    //string endWork = stanTimeStop.ToString("HHmm");
+                    //    //string strNumberRulona = beginWork + endWork;
+
+                    //    ////Добавляем в таблицу прокатанных рулонов данные по рулонам
+                    //    //using (SqlConnection con3 = new SqlConnection(connectionString))
+                    //    //{
+                    //    //    try
+                    //    //    {
+                    //    //        con3.Open();
+                    //    //        SqlCommand command = new SqlCommand(comWorkStan, con3);
+
+                    //    //        command.Parameters.AddWithValue("@NumberRulon", strNumberRulona);
+
+                    //    //        command.Parameters.AddWithValue("@TimeStart", stanTimeStart);
+                    //    //        command.Parameters.AddWithValue("@TimeStop", stanTimeStop);
+                    //    //        command.Parameters.AddWithValue("@H5_work", H5_work);
+                    //    //        command.Parameters.AddWithValue("@B_Work", B_Work);
+                    //    //        command.Parameters.AddWithValue("@Ves_Work", Ves_Work);
+                    //    //        command.Parameters.AddWithValue("@Dlina_Work", Dlina_Work);
+
+                    //    //        int WriteSQL = command.ExecuteNonQuery();
+
+                    //    //        Program.messageOKStProizvodstvo = strNumberRulona+"("+ stanTimeStart.ToString("HH:mm")+"-"+ stanTimeStop.ToString("HH:mm")+") "+ H5_work  +"*"+ B_Work + "->"+ Ves_Work;
+                    //    //        //messageOKProizvodstvo = "производство";
+                    //    //        Program.dtOKStProizvodstvo = DateTime.Now;
+                    //    //    }
+                    //    //    catch (Exception ex)
+                    //    //    {
+                    //    //        Program.messageErrorStProizvodstvo = "Ошибка в сохранении данных о прокатанном рулоне " + ex.Message + " Insert запрос: " + comWorkStan;
+                    //    //        Program.dtErrorStProizvodstvo = DateTime.Now;
+
+                    //    //    }
+
+                    //    //}
+                    //    #endregion
+
+                    //    #endregion
+
+
+
+                    //    #region //Очищаем базу временных рулонов
+                    //    //using (SqlConnection conSQL1s3 = new SqlConnection(connectionString))
+                    //    //{
+                    //    //    conSQL1s3.Open();
+                    //    //    string comRulon1s2 = "DELETE FROM TEMPstan101ms";
+                    //    //    SqlCommand command = new SqlCommand(comRulon1s2, conSQL1s3);
+                    //    //    command.ExecuteNonQuery();
+
+
+                    //    //}
+                    //    #endregion
+
+
+
+
+                    //    #region //Мпереименовываем временную базу в базу с именем stan100mc(дата+время начала)(время окончания)
+                    //    //using (SqlConnection conSQL1s3 = new SqlConnection(connectionString))
+                    //    //{
+                    //    //    try
+                    //    //    {
+                    //    //        conSQL1s3.Open();
+                    //    //        string begin = stanTimeStart.ToString("ddMMyyyyHHmm");
+                    //    //        string end = stanTimeStop.ToString("HHmm");
+                    //    //        string comRulon1s2 = "sp_rename 'TEMPstan101ms','" + begin + end + "'";
+                    //    //        SqlCommand command = new SqlCommand(comRulon1s2, conSQL1s3);
+                    //    //        command.ExecuteNonQuery();
+                    //    //        Program.messageOKStRulon = "Временная база -> " + begin + end;
+                    //    //        Program.dtOKStRulon = DateTime.Now;
+                    //    //        conSQL1s3.Close();
+                    //    //    }
+                    //    //    catch (Exception ex)
+                    //    //    {
+
+                    //    //        Program.messageErrorStRulon = "Временная база не переименована " + ex.Message;
+                    //    //        Program.dtErrorStRulon = DateTime.Now;
+                    //    //    }
+
+
+
+                    //    }
+                    //    #endregion
+
+
+                    //    #region //Если БД не существует то создаем
+                    ////    string comRulon101ms1 = "if not exists (select * from sysobjects where name ='TEMPstan101ms' and xtype='U') create table TEMPstan101ms " +
+                    ////       "(" +
+                    ////       "datetime101ms datetime , " +
+                    ////       "v1 float," +
+                    ////       "v2 float," +
+                    ////       "v3 float," +
+                    ////       "v4 float," +
+                    ////       "v5 float," +
+                    ////       "h1 float," +
+                    ////       "h5 float," +
+                    ////       "b int," +
+                    ////       "dvip float," +
+                    ////       "drazm float," +
+                    ////       "dmot float," +
+                    ////       "vvip float," +
+                    ////       "d1 int," +
+                    ////       "d2 int," +
+                    ////       "d3 int," +
+                    ////       "d4 int," +
+                    ////       "d5 int," +
+                    ////       "e2 float," +
+                    ////       "e3 float," +
+                    ////       "e4 float," +
+                    ////       "e5 float," +
+                    ////       "n1l float," +
+                    ////       "n1p float," +
+                    ////       "n2l float," +
+                    ////       "n2p float," +
+                    ////       "n3l float," +
+                    ////       "n3p float," +
+                    ////       "n4l float," +
+                    ////       "n4p float," +
+                    ////       "n5l float," +
+                    ////       "n5p float," +
+                    ////       "reserv1 float," +
+                    ////       "reserv2 float," +
+                    ////       "t1 float," +
+                    ////       "t2 float," +
+                    ////       "t3 float," +
+                    ////       "t4 float," +
+                    ////       "t1l float," +
+                    ////       "t2l float," +
+                    ////       "t3l float," +
+                    ////       "t4l float," +
+                    ////       "t1p float," +
+                    ////       "t2p float," +
+                    ////       "t3p float," +
+                    ////       "t4p float," +
+                    ////       "t1z float," +
+                    ////       "t2z float," +
+                    ////       "t3z float," +
+                    ////       "t4z float," +
+                    ////       "erazm float," +
+                    ////       "ivozbrazm float," +
+                    ////       "izadrazm float," +
+                    ////       "w1 float," +
+                    ////       "w2v float," +
+                    ////       "w2n float," +
+                    ////       "w3v float," +
+                    ////       "w3n float," +
+                    ////       "w4v float," +
+                    ////       "w4n float," +
+                    ////       "w5v float," +
+                    ////       "w5n float," +
+                    ////       "wmot float," +
+                    ////       "imot int," +
+                    ////       "izadmot int," +
+                    ////       "u1 float," +
+                    ////       "u2v float," +
+                    ////       "u2n float," +
+                    ////       "u3v float," +
+                    ////       "u3n float," +
+                    ////       "u4v float," +
+                    ////       "u4n float," +
+                    ////       "u5v float," +
+                    ////       "u5n float," +
+                    ////       "umot float," +
+                    ////       "i1 int," +
+                    ////       "i2v int," +
+                    ////       "i2n int," +
+                    ////       "i3v int," +
+                    ////       "i3n int," +
+                    ////       "i4v int," +
+                    ////       "i4n int," +
+                    ////       "i5v int," +
+                    ////       "i5n int," +
+                    ////       "rtv float," +
+                    ////       "dt1 float," +
+                    ////       "dt2 float," +
+                    ////       "dt3 float," +
+                    ////       "dt4 float," +
+                    ////       "grt float," +
+                    ////       "trt float," +
+                    ////       "mv1 float," +
+                    ////       "mv2 float," +
+                    ////       "mv3 float," +
+                    ////       "dh1 float," +
+                    ////       "dh5 float," +
+                    ////       "os1klvb int," +
+                    ////       "rezerv int," +
+                    ////       "mezdoza4 int" +
+                    ////       ")";
+
+                    ////    using (SqlConnection conSQL101ms1 = new SqlConnection(connectionString))
+                    ////    {
+                    ////        conSQL101ms1.Open();
+                    ////        SqlCommand command = new SqlCommand(comRulon101ms1, conSQL101ms1);
+                    ////        command.ExecuteNonQuery();
+                    ////        conSQL101ms1.Close();
+
+                    ////    }
+                    ////    #endregion
+
+                    ////}
+                    //#endregion
+
+
+                    #endregion
+
+                    // stanD_pred_mot = stanD_tek_mot;
+
+                    #endregion
 
                     #region Перевалки 
-                    
+
                     int d1 = (int)BitConverter.ToInt16(stanbuffer1s, 24);
                     int d2 = (int)BitConverter.ToInt16(stanbuffer1s, 26);
                     int d3 = (int)BitConverter.ToInt16(stanbuffer1s, 28);

@@ -282,19 +282,33 @@ namespace consoleRS2toBD
                 }
                 if (messageOKSt101mc != null)
                 {
-                    LogSystem.Write("Стан1700. Read PLC and Write во временную таблицу (цикл 101mc)", Direction.Ok, dtOKSt101mc, "                                                                 ", 1, 9, true);
+                    LogSystem.Write("Стан1700. Запись во временную таблицу только с НАЧАЛА рулона (цикл 101mc)", Direction.Ok, dtOKSt101mc, "                                                                 ", 1, 9, true);
                     ConMessageOKSt101mc = messageOKSt101mc;
-                    LogSystem.Write("Стан1700. Read PLC and Write во временную таблицу (цикл 101mc)", Direction.Ok, dtOKSt101mc, ConMessageOKSt101mc+"("+intConMessageOKSt101mc+")", 1, 9, true);
+                    LogSystem.Write("Стан1700. Запись во временную таблицу только с НАЧАЛА рулона(цикл 101mc)", Direction.Ok, dtOKSt101mc, ConMessageOKSt101mc+"("+intConMessageOKSt101mc+")", 1, 9, true);
                 }
+
+                if (messageOKStRulon != null)
+                {
+                    ConMessageOKStRulon = messageOKStRulon;
+                    LogSystem.Write("Стан1700. Rename-", Direction.Ok, dtOKStRulon, ConMessageOKStRulon, 1, 11, true);
+                }
+                if (messageErrorStProizvodstvo != null)
+                {
+                    ConMessageErrorStProizvodstvo = messageErrorStProizvodstvo;
+
+                    LogSystem.Write("Стан1700 ERROR записи в таблицу Производства", Direction.ERROR, dtErrorStProizvodstvo, ConMessageErrorStProizvodstvo, 1, 10, true);
+                }
+
+
                 if (messageErrorSt200mc != null)
                 {
                     ConMessageErrorSt200mc = messageErrorSt200mc;
-                    LogSystem.Write("Стан1700 ERROR цикла 200mc", Direction.ERROR, dtErrorSt200mc, ConMessageErrorSt200mc, 1, 11, true);
+                    LogSystem.Write("Стан1700 ERROR цикла 200mc", Direction.ERROR, dtErrorSt200mc, ConMessageErrorSt200mc, 1, 12, true);
                 }
                 if (messageOKSt200mc != null)
                 {
                     ConMessageOKSt200mc = messageOKSt200mc;
-                    LogSystem.Write("Стан1700 Сообщения(цикл 200mc)", Direction.Ok, dtOKSt200mc, ConMessageOKSt200mc, 1, 12, true);
+                    LogSystem.Write("Стан1700 Сообщения(цикл 200mc)", Direction.Ok, dtOKSt200mc, ConMessageOKSt200mc, 1, 13, true);
                 }
                 if (messageErrorSt1c != null)
                 {
@@ -312,21 +326,11 @@ namespace consoleRS2toBD
                     ConMessageErrorStRulon = messageErrorStRulon;
                     LogSystem.Write("Стан1700 ERROR при переименовании таблицы рулонов", Direction.ERROR, dtErrorStRulon, ConMessageErrorStRulon, 1, 17, true);
                 }
-                if (messageOKStRulon != null)
-                {
-                    ConMessageOKStRulon = messageOKStRulon;
-                    LogSystem.Write("Стан1700. Rename-", Direction.Ok, dtOKStRulon, ConMessageOKStRulon, 1, 18, true);
-                }
-                if (messageErrorStProizvodstvo != null)
-                {
-                    ConMessageErrorStProizvodstvo = messageErrorStProizvodstvo;
-                    
-                    LogSystem.Write("Стан1700 ERROR записи в таблицу Производства", Direction.ERROR, dtErrorStProizvodstvo, ConMessageErrorStProizvodstvo, 1, 20, true);
-                }
+                
                 if (messageOKStProizvodstvo != null)
                 {
                     ConMessageOKStProizvodstvo = messageOKStProizvodstvo;
-                    LogSystem.Write("Стан1700. Производствo.", Direction.Ok, dtOKStProizvodstvo, ConMessageOKStProizvodstvo, 1, 21, true);
+                    LogSystem.Write("Стан1700. Производствo", Direction.Ok, dtOKStProizvodstvo, ConMessageOKStProizvodstvo, 1, 21, true);
                 }
                 if (messageErrorStValki != null)
                 {
@@ -347,95 +351,95 @@ namespace consoleRS2toBD
                 #region Вывод на консоль сообщений по дрессировке -- отключен - причина; одновременно не может работать два класса 
 
 
-                    //LogSystem.Write("Дрессировка", Direction.Ok, "Информация о работе методов класса Дрессировочного стана ( Цикл 5сек )", 100, 3, true);
+                //LogSystem.Write("Дрессировка", Direction.Ok, "Информация о работе методов класса Дрессировочного стана ( Цикл 5сек )", 100, 3, true);
 
-                    //if (messageErrorDs100mc != null)
-                    //{
-                    //    ConMessageErrorDs100mc = messageErrorDs100mc;
-                    
-                    //    LogSystem.Write("Дрессировка. ERROR цикла 70mc", Direction.ERROR, dtErrorDs100mc, ConMessageErrorDs100mc, 100, 5, true);
-                    //}
-                    //if (messageOKDs100mc != null)
-                    //{
-                    //    ConMessageOKDs100mc = messageOKDs100mc;
-                    //    LogSystem.Write("Дрессировка. Сonnection (цикл 70mc)", Direction.Ok, dtOKDs100mc, ConMessageOKDs100mc, 100, 6, true);
-                    //}
-                    //if (messageErrorDs101mc != null)
-                    //{
-                    //    ConMessageErrorDs101mc = messageErrorDs101mc;
-                    
-                    //    LogSystem.Write("Дрессировка. ERROR цикла 80mc", Direction.ERROR, dtErrorDs101mc, ConMessageErrorDs101mc, 100, 8, true);
-                    //}
-                    //if (messageOKDs101mc != null)
-                    //{
-                    //    ConMessageOKDs101mc = messageOKDs101mc;
-                    //    LogSystem.Write("Дрессировка. Read PLC and Write во временную таблицу (цикл 80mc)", Direction.Ok, dtOKDs101mc, ConMessageOKDs101mc, 100, 9, true);
-                    //}
-                    //if (messageErrorDs200mc != null)
-                    //{
-                    //    ConMessageErrorDs200mc = messageErrorDs200mc;
-                    
-                    //    LogSystem.Write("Дрессировка.ERROR цикла 200mc", Direction.ERROR, dtErrorDs200mc, ConMessageErrorDs200mc, 100, 11, true);
-                    //}
-                    //if (messageOKDs200mc != null)
-                    //{
-                    //    ConMessageOKDs200mc = messageOKDs200mc;
-                    //    LogSystem.Write("Дрессировка.Сообщения(цикл 200mc)", Direction.Ok, dtOKDs200mc, ConMessageOKDs200mc, 100, 12, true);
-                    //}
-                    //if (messageErrorDs1c != null)
-                    //{
-                    //    ConMessageErrorDs1c = messageErrorDs1c;
-                    
-                    //    LogSystem.Write("Дрессировка.ERROR цикла 1c", Direction.ERROR, dtErrorDs1c, ConMessageErrorDs1c, 100, 14, true);
-                    //}
-                    //if (messageOKDs1c != null)
-                    //{
-                    //    ConMessageOKDs1c = messageOKDs1c;
-                    //    LogSystem.Write("Дрессировка.Цикл 1c.", Direction.Ok, dtOKDs1c, ConMessageOKDs1c, 100, 15, true);
-                    //}
-                    //if (messageErrorDsRulon != null)
-                    //{
-                    //    ConMessageErrorDsRulon = messageErrorDsRulon;
-                    
-                    //    LogSystem.Write("Дрессировка. ERROR Rename", Direction.ERROR, dtErrorDsRulon, ConMessageErrorDsRulon, 100, 17, true);
-                    //}
-                    //if (messageOKDsRulon != null)
-                    //{
-                    //    ConMessageOKDsRulon = messageOKDsRulon;
+                //if (messageErrorDs100mc != null)
+                //{
+                //    ConMessageErrorDs100mc = messageErrorDs100mc;
 
-                    //    LogSystem.Write("Дрессировка. Rename", Direction.Ok, dtOKDsRulon, ConMessageOKDsRulon, 100, 18, true);
-                    //}
-                    //if (messageErrorDsProizvodstvo != null)
-                    //{
-                    //    ConMessageErrorDsProizvodstvo = messageErrorDsProizvodstvo;
-                    
-                    //    LogSystem.Write("Дрессировка. ERROR Write Производства", Direction.ERROR, dtErrorDsProizvodstvo, ConMessageErrorDsProizvodstvo, 100, 20, true);
-                    //}
-                    //if (messageOKDsProizvodstvo != null)
-                    //{
-                    //    ConMessageOKDsProizvodstvo = messageOKDsProizvodstvo;
+                //    LogSystem.Write("Дрессировка. ERROR цикла 70mc", Direction.ERROR, dtErrorDs100mc, ConMessageErrorDs100mc, 100, 5, true);
+                //}
+                //if (messageOKDs100mc != null)
+                //{
+                //    ConMessageOKDs100mc = messageOKDs100mc;
+                //    LogSystem.Write("Дрессировка. Сonnection (цикл 70mc)", Direction.Ok, dtOKDs100mc, ConMessageOKDs100mc, 100, 6, true);
+                //}
+                //if (messageErrorDs101mc != null)
+                //{
+                //    ConMessageErrorDs101mc = messageErrorDs101mc;
 
-                    //    LogSystem.Write("Дрессировка. Производство", Direction.Ok, dtOKDsProizvodstvo, ConMessageOKDsProizvodstvo, 100, 21, true);
-                    //}
-                    //if (messageErrorDsValki != null)
-                    //{
-                    //    ConMessageErrorDsValki = messageErrorDsValki;
-                    
-                    //    LogSystem.Write("Дрессировка. ERROR записи в таблицу перевалок валков", Direction.ERROR, dtErrorDsValki, ConMessageErrorDsValki, 100, 23, true);
-                    //}
-                    //if (messageOKDsValki != null)
-                    //{
-                    //    ConMessageOKDsValki = messageOKDsValki;
+                //    LogSystem.Write("Дрессировка. ERROR цикла 80mc", Direction.ERROR, dtErrorDs101mc, ConMessageErrorDs101mc, 100, 8, true);
+                //}
+                //if (messageOKDs101mc != null)
+                //{
+                //    ConMessageOKDs101mc = messageOKDs101mc;
+                //    LogSystem.Write("Дрессировка. Read PLC and Write во временную таблицу (цикл 80mc)", Direction.Ok, dtOKDs101mc, ConMessageOKDs101mc, 100, 9, true);
+                //}
+                //if (messageErrorDs200mc != null)
+                //{
+                //    ConMessageErrorDs200mc = messageErrorDs200mc;
 
-                    //    LogSystem.Write("Дрессировка. Запись в таблицу перевалок валков", Direction.Ok, dtOKDsValki, ConMessageOKDsValki, 100, 24, true);
-                    //}
+                //    LogSystem.Write("Дрессировка.ERROR цикла 200mc", Direction.ERROR, dtErrorDs200mc, ConMessageErrorDs200mc, 100, 11, true);
+                //}
+                //if (messageOKDs200mc != null)
+                //{
+                //    ConMessageOKDs200mc = messageOKDs200mc;
+                //    LogSystem.Write("Дрессировка.Сообщения(цикл 200mc)", Direction.Ok, dtOKDs200mc, ConMessageOKDs200mc, 100, 12, true);
+                //}
+                //if (messageErrorDs1c != null)
+                //{
+                //    ConMessageErrorDs1c = messageErrorDs1c;
+
+                //    LogSystem.Write("Дрессировка.ERROR цикла 1c", Direction.ERROR, dtErrorDs1c, ConMessageErrorDs1c, 100, 14, true);
+                //}
+                //if (messageOKDs1c != null)
+                //{
+                //    ConMessageOKDs1c = messageOKDs1c;
+                //    LogSystem.Write("Дрессировка.Цикл 1c.", Direction.Ok, dtOKDs1c, ConMessageOKDs1c, 100, 15, true);
+                //}
+                //if (messageErrorDsRulon != null)
+                //{
+                //    ConMessageErrorDsRulon = messageErrorDsRulon;
+
+                //    LogSystem.Write("Дрессировка. ERROR Rename", Direction.ERROR, dtErrorDsRulon, ConMessageErrorDsRulon, 100, 17, true);
+                //}
+                //if (messageOKDsRulon != null)
+                //{
+                //    ConMessageOKDsRulon = messageOKDsRulon;
+
+                //    LogSystem.Write("Дрессировка. Rename", Direction.Ok, dtOKDsRulon, ConMessageOKDsRulon, 100, 18, true);
+                //}
+                //if (messageErrorDsProizvodstvo != null)
+                //{
+                //    ConMessageErrorDsProizvodstvo = messageErrorDsProizvodstvo;
+
+                //    LogSystem.Write("Дрессировка. ERROR Write Производства", Direction.ERROR, dtErrorDsProizvodstvo, ConMessageErrorDsProizvodstvo, 100, 20, true);
+                //}
+                //if (messageOKDsProizvodstvo != null)
+                //{
+                //    ConMessageOKDsProizvodstvo = messageOKDsProizvodstvo;
+
+                //    LogSystem.Write("Дрессировка. Производство", Direction.Ok, dtOKDsProizvodstvo, ConMessageOKDsProizvodstvo, 100, 21, true);
+                //}
+                //if (messageErrorDsValki != null)
+                //{
+                //    ConMessageErrorDsValki = messageErrorDsValki;
+
+                //    LogSystem.Write("Дрессировка. ERROR записи в таблицу перевалок валков", Direction.ERROR, dtErrorDsValki, ConMessageErrorDsValki, 100, 23, true);
+                //}
+                //if (messageOKDsValki != null)
+                //{
+                //    ConMessageOKDsValki = messageOKDsValki;
+
+                //    LogSystem.Write("Дрессировка. Запись в таблицу перевалок валков", Direction.Ok, dtOKDsValki, ConMessageOKDsValki, 100, 24, true);
+                //}
 
 
                 #endregion
 
                 #region Сброс сообщений в конце цикла
 
-                
+                messageErrorSt100mc = null;
                 messageOKSt100mc = null;
                 messageErrorSt101mc = null;
                 messageErrorSt200mc = null;
@@ -450,7 +454,7 @@ namespace consoleRS2toBD
                 messageOKStValki = null;
 
 
-                messageOKSt101mc = null; //прокатка рулона
+                messageOKSt101mc = ""; //прокатка рулона
                 intConMessageOKSt101mc = 0;
 
                 messageErrorDs100mc = null;

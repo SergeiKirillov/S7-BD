@@ -1041,8 +1041,13 @@ namespace consoleRS2toBD
                     }
 
                     if (stanD_tek_mot > stanD_pred_mot)
-                    {
-                        if (stanD_pred_mot < 615) //запись в таблицу TEMP только с начала рулона
+                    { 
+
+                        if (stanD_pred_mot == 600) //
+                        {
+                            blRulonStart = false; //бит записи в таблицу Temp - не записываем
+                        }
+                        else if (stanD_pred_mot < 615) //запись в таблицу TEMP только с начала рулона
                         {
                             stanTimeStart = DateTime.Now;
                             blRulonStart = true; //бит записи в таблицу Temp -записываем
@@ -1050,10 +1055,10 @@ namespace consoleRS2toBD
 
                     }
 
-                    if (stanD_pred_mot==600) //
-                    {
-                        blRulonStart = false; //бит записи в таблицу Temp - не записываем
-                    }
+                    //if (stanD_pred_mot==600) //
+                    //{
+                    //    blRulonStart = false; //бит записи в таблицу Temp - не записываем
+                    //}
 
                     #endregion
 
@@ -1073,11 +1078,10 @@ namespace consoleRS2toBD
                         Ves_Work = (((((stanD_pred_mot * stanD_pred_mot) / 1000000 - 0.36F) * 3.141593F) / 4) * (B_Work / 1000)) * 7.85F;
                         stanTimeStop = DateTime.Now;
                         Dlina_Work = ((Ves_Work / 7.85F) / (B_Work / 1000)) / (H5_work / 1000);
-                       // blRulonStop = true;
                         blRulonStart = false;
 
 
-                    //Формируем имя рулона
+                            //Формируем имя рулона
                     
 
                         #region Переименовываем временную базу в базу с именем stan100mc(дата+время начала)(время окончания)

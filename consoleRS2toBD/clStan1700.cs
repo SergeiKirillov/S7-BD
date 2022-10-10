@@ -2344,32 +2344,32 @@ namespace consoleRS2toBD
                         {
                             blSave = true;
                             dtPerevalkiStan.Rows.Add(DateTime.Now, d1, 0, 0, 0, 0);
-                            Perevalki = Perevalki + ", d1=" + d1;
+                            Perevalki = Perevalki + " d1=" + d1;
                         }
                         if (d2_pred != d2)
                         {
                            blSave = true;
                             dtPerevalkiStan.Rows.Add(DateTime.Now, 0, d2, 0, 0, 0);
-                            Perevalki = Perevalki + ", d2=" + d2;
+                            Perevalki = Perevalki + " d2=" + d2;
                         }
                         if (d3_pred != d3)
                         {
                            blSave = true;
                             dtPerevalkiStan.Rows.Add(DateTime.Now, 0, 0, d3, 0, 0);
-                            Perevalki = Perevalki + ", d3=" + d3;
+                            Perevalki = Perevalki + " d3=" + d3;
                         }
                         if (d4_pred != d4)
                         {
                             blSave = true;
                             dtPerevalkiStan.Rows.Add(DateTime.Now, 0, 0, 0, d4, 0);
-                            Perevalki = Perevalki + ", d4=" + d4;
+                            Perevalki = Perevalki + " d4=" + d4;
 
                         }
                         if (d5_pred != d5)
                         {
                              blSave = true;
                             dtPerevalkiStan.Rows.Add(DateTime.Now, 0, 0, 0, 0, d5);
-                            Perevalki = Perevalki + ", d5=" + d5;
+                            Perevalki = Perevalki + " d5=" + d5;
                         }
 
                         

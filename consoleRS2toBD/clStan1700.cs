@@ -336,6 +336,8 @@ namespace consoleRS2toBD
         private int intCountMessageOKStPLC;
         private string strCountMessageOKStPLC;
 
+
+
         //private string messageError100mc;
         //private string messageOK100mc;
         //private string messageError101mc;
@@ -420,8 +422,8 @@ namespace consoleRS2toBD
             //Thread queryMes = new Thread(stanMessage200ms);
             //queryMes.Start();
 
-            //Thread query1s = new Thread(stanSQL1s);
-            //query1s.Start();
+            Thread query1s = new Thread(stanSQL1s);
+            query1s.Start();
 
 
 
@@ -750,7 +752,7 @@ namespace consoleRS2toBD
         #endregion
 
 
-       // #region Запись данных(101ms) с контроллера в Базу Данных
+       #region Запись данных(101ms) с контроллера в Базу Данных
 
         private void stanSQL101ms()
         {
@@ -765,7 +767,7 @@ namespace consoleRS2toBD
 
                     #region Формируем SQL запрос с циклом 101мс и записываем его во временную БД
 
-                    #region //Если БД не существует то создаем -> 1sec
+                    #region //Если БД не существует то создаем -> TEMPstan101ms
                     string comRulon101ms1 = "if not exists (select * from sysobjects where name ='TEMPstan101ms' and xtype='U') create table TEMPstan101ms " +
                        "(" +
                        "datetime101ms datetime , " +
@@ -1026,6 +1028,7 @@ namespace consoleRS2toBD
 
 
                     }
+                    #endregion
 
                     #region Расчет параметров прокатанного рулона после окончания прокатки
 
@@ -1394,18 +1397,46 @@ namespace consoleRS2toBD
 
                     numberTable = "";
 
-                    if (Convert.ToInt32(DateTime.Now.ToString("HH")) >= 7 && Convert.ToInt32(DateTime.Now.ToString("HH")) < 19)
+                    TimeSpan NowTime = DateTime.Now.TimeOfDay;
+                    TimeSpan Time1 = new TimeSpan(07, 00, 00);
+                    TimeSpan Time2 = new TimeSpan(19, 00, 00);
+
+
+
+                    //if (Convert.ToInt32(DateTime.Now.ToString("HH")) >= 7 && Convert.ToInt32(DateTime.Now.ToString("HH")) < 19)
+                    //{
+                    //    numberTable = DateTime.Now.ToString("yyyyMMdd") + "2";
+                    //}
+                    //else if ((Convert.ToInt32(DateTime.Now.ToString("HH")) < 7) && (Convert.ToInt32(DateTime.Now.ToString("mm")) == 00))
+                    //{
+                    //    numberTable = DateTime.Now.ToString("yyyyMMdd") + "1";
+                    //}
+                    //else if ((Convert.ToInt32(DateTime.Now.ToString("HH")) >= 19) && (Convert.ToInt32(DateTime.Now.ToString("mm")) == 00))
+                    //{
+                    //    numberTable = DateTime.Now.AddDays(1).ToString("yyyyMMdd") + "1";
+                    //}
+
+                    if ((NowTime>Time1)&&(NowTime<Time2))
                     {
+                        //2 смена
                         numberTable = DateTime.Now.ToString("yyyyMMdd") + "2";
                     }
-                    else if (Convert.ToInt32(DateTime.Now.ToString("HH")) < 7)
+                    else if ((NowTime < Time1)||(NowTime > Time2))
                     {
-                        numberTable = DateTime.Now.ToString("yyyyMMdd") + "1";
+                        //1 смена
+                        if (NowTime > Time2)
+                        {
+                            //1 смена после 19
+                            numberTable = DateTime.Now.AddDays(1).ToString("yyyyMMdd") + "1";
+                        }
+                        else
+                        {
+                            //1 смена до 7
+                            numberTable = DateTime.Now.ToString("yyyyMMdd") + "1";
+                        }
                     }
-                    else if (Convert.ToInt32(DateTime.Now.ToString("HH")) >= 19)
-                    {
-                        numberTable = DateTime.Now.AddDays(1).ToString("yyyyMMdd") + "1";
-                    }
+                    
+
 
                     #endregion
 
@@ -1606,10 +1637,21 @@ namespace consoleRS2toBD
 
                     using (SqlConnection conSQL1s1 = new SqlConnection(connectionString))
                     {
-                        conSQL1s1.Open();
-                        SqlCommand command = new SqlCommand(comBD, conSQL1s1);
-                        command.ExecuteNonQuery();
-                        conSQL1s1.Close();
+                        try
+                        {
+                            conSQL1s1.Open();
+                            SqlCommand command = new SqlCommand(comBD, conSQL1s1);
+                            command.ExecuteNonQuery();
+                            conSQL1s1.Close();
+                        }
+                        catch (Exception)
+                        {
+                            //Program.messageErrorSt1c = "Stan1s" + numberTable + " НЕ ЗАПИСАНЫ - " + ex.Message + " Insert запрос: " + comRulon1s1;
+                            Program.messageErrorSt1cTab = "Stan1s" + numberTable + " НЕ СОЗДАНА ";
+                            Program.dtErrorSt1cTab = DateTime.Now;
+
+                        }
+                        
                     }
 
                     #region  // В Insert используем передачу параметров через Переменную
@@ -1948,13 +1990,18 @@ namespace consoleRS2toBD
                             command.Parameters.AddWithValue("@datetime1sStan", DateTime.Now);
                             command.ExecuteNonQuery();
                             conSQL1s2.Close();
-                            Program.messageOKSt1c = "Данные в БД(" + "Stan1s" + numberTable + ") 1s записаны";
+                            Program.intConMessageOKSt1c = Program.intConMessageOKSt1c + 1;
+                            Program.messageOKSt1c1 = "Данные в БД(" + "Stan1s" + numberTable + ") 1s записаны";
+                            Program.messageOKSt1c2 = Program.messageOKSt1c2+".";
                             Program.dtOKSt1c = DateTime.Now;
+
+                           
                         }
                         catch (Exception ex)
                         {
 
-                            Program.messageErrorSt1c = "1s НЕ ЗАПИСАНЫ - " + ex.Message + " Insert запрос: " + comRulon1s1;
+                            //Program.messageErrorSt1c = "Stan1s" + numberTable + " НЕ ЗАПИСАНЫ - " + ex.Message + " Insert запрос: " + comRulon1s1;
+                            Program.messageErrorSt1c = "Stan1s" + numberTable + " НЕ ЗАПИСАНЫ ";
                             Program.dtErrorSt1c = DateTime.Now;
                         }
 
@@ -2285,7 +2332,10 @@ namespace consoleRS2toBD
                     if (d3_pred == 0) d3_pred = d3;
                     if (d4_pred == 0) d4_pred = d4;
                     if (d5_pred == 0) d5_pred = d5;
+
                     bool blSave = false;
+
+                    string Perevalki = "";
 
                     try
                     {
@@ -2294,62 +2344,44 @@ namespace consoleRS2toBD
                         {
                             blSave = true;
                             dtPerevalkiStan.Rows.Add(DateTime.Now, d1, 0, 0, 0, 0);
+                            Perevalki = Perevalki + ", d1=" + d1;
                         }
                         if (d2_pred != d2)
                         {
-                            blSave = true;
+                           blSave = true;
                             dtPerevalkiStan.Rows.Add(DateTime.Now, 0, d2, 0, 0, 0);
+                            Perevalki = Perevalki + ", d2=" + d2;
                         }
                         if (d3_pred != d3)
                         {
-                            blSave = true;
+                           blSave = true;
                             dtPerevalkiStan.Rows.Add(DateTime.Now, 0, 0, d3, 0, 0);
+                            Perevalki = Perevalki + ", d3=" + d3;
                         }
                         if (d4_pred != d4)
                         {
                             blSave = true;
                             dtPerevalkiStan.Rows.Add(DateTime.Now, 0, 0, 0, d4, 0);
+                            Perevalki = Perevalki + ", d4=" + d4;
+
                         }
                         if (d5_pred != d5)
                         {
-                            blSave = true;
+                             blSave = true;
                             dtPerevalkiStan.Rows.Add(DateTime.Now, 0, 0, 0, 0, d5);
+                            Perevalki = Perevalki + ", d5=" + d5;
                         }
 
-                        //if (d1_pred != (int)BitConverter.ToInt16(stanbuffer1s, 24))
-                        //{
-                        //    blSave = true;
-                        //    dtPerevalkiStan.Rows.Add(DateTime.Now, buf85, 0, 0, 0, 0);
-                        //}
-                        //if (d2_pred != BitConverter.ToInt16(stanbuffer1s, 26))
-                        //{
-                        //    blSave = true;
-                        //    dtPerevalkiStan.Rows.Add(DateTime.Now, 0, buf87, 0, 0, 0);
-                        //}
-                        //if (d3_pred != BitConverter.ToInt16(stanbuffer1s, 28))
-                        //{
-                        //    blSave = true;
-                        //    dtPerevalkiStan.Rows.Add(DateTime.Now, 0, 0, buf89, 0, 0);
-                        //}
-                        //if (d4_pred != BitConverter.ToInt16(stanbuffer1s, 30))
-                        //{
-                        //    blSave = true;
-                        //    dtPerevalkiStan.Rows.Add(DateTime.Now, 0, 0, 0, buf91, 0);
-                        //}
-                        //if (d5_pred != BitConverter.ToInt16(stanbuffer1s, 32))
-                        //{
-                        //    blSave = true;
-                        //    dtPerevalkiStan.Rows.Add(DateTime.Now, 0, 0, 0, 0, buf93);
-                        //}
+                        
                     }
                     catch (Exception ex)
                     {
                         //ошибка
-                        Program.messageErrorStValki = "Ошибка формировании таблицы валков - "+ ex.Message;
+                        Program.messageErrorStValki = "Ошибка формировании таблицы валков - " + ex.Message;
                         Program.dtErrorStValki = DateTime.Now; ;
                     }
 
-                    
+
 
                     d1_pred = d1;
                     d2_pred = d2;
@@ -2360,6 +2392,7 @@ namespace consoleRS2toBD
 
 
                     #region Перевалки сохраняем в БД
+
                     if (blSave)
                     {
                         string strTableNamePerevalki = "StanPerevalki" + DateTime.Now.ToString("yyyyMM");
@@ -2390,8 +2423,8 @@ namespace consoleRS2toBD
                                 Program.dtErrorStValki = DateTime.Now;
 
                             }
-                            
-                            
+
+
                         }
                         //записываем в таблицу прокатанного рулона данные по прокатке этого рулона
                         using (SqlConnection conPerevalki2 = new SqlConnection(connectionString))
@@ -2403,7 +2436,7 @@ namespace consoleRS2toBD
                                 {
                                     bulk.DestinationTableName = strTableNamePerevalki;
                                     bulk.WriteToServer(dtPerevalkiStan);
-                                    Program.messageOKStValki = "Перевалки -->" + strTableNamePerevalki;
+                                    Program.messageOKStValki = "Перевалки (" + strTableNamePerevalki+")="+Perevalki;
                                     Program.dtOKStValki = DateTime.Now;
 
 
@@ -2411,10 +2444,10 @@ namespace consoleRS2toBD
                                 }
                                 conPerevalki2.Close();
 
-                                 
+
 
                             }
-                            catch (Exception ex )
+                            catch (Exception ex)
                             {
                                 Program.messageErrorStValki = "Ошибка записи в таблицу валков " + ex.Message;
                                 Program.dtErrorStValki = DateTime.Now;

@@ -33,6 +33,8 @@ namespace consoleRS2toBD
         public static string ConMessageErrorSt101mc;
         public static string ConMessageOKSt101mc;
         public static int intConMessageOKSt101mc;
+        public static int intConMessageOKSt1c;
+
 
         public static string messageErrorSt200mc;
         public static DateTime dtErrorSt200mc;
@@ -42,10 +44,15 @@ namespace consoleRS2toBD
         public static string ConMessageOKSt200mc;
 
         public static string messageErrorSt1c;
+        public static string messageErrorSt1cTab;
         public static DateTime dtErrorSt1c;
+        public static DateTime dtErrorSt1cTab;
         public static string messageOKSt1c;
+        public static string messageOKSt1c1;
+        public static string messageOKSt1c2;
         public static DateTime dtOKSt1c;
         public static string ConMessageErrorSt1c;
+        public static string ConMessageErrorSt1cTab;
         public static string ConMessageOKSt1c;
 
         public static string messageErrorStRulon;
@@ -72,8 +79,19 @@ namespace consoleRS2toBD
         public static DateTime dtErrorStValki;
         public static string messageOKStValki;
         public static DateTime dtOKStValki;
+        public static DateTime dtOKStValki1;
+        public static DateTime dtOKStValki2;
+        public static DateTime dtOKStValki3;
+        public static DateTime dtOKStValki4;
+        public static DateTime dtOKStValki5;
+
         public static string ConMessageErrorStValki;
         public static string ConMessageOKStValki;
+        public static string ConMessageOKStValki1;
+        public static string ConMessageOKStValki2;
+        public static string ConMessageOKStValki3;
+        public static string ConMessageOKStValki4;
+        public static string ConMessageOKStValki5;
 
         #endregion
 
@@ -229,7 +247,10 @@ namespace consoleRS2toBD
                     messageErrorSt200mc = null;
                     messageOKSt200mc = null;
                     messageErrorSt1c = null;
+                    messageErrorSt1cTab = null;
                     messageOKSt1c = null;
+                    messageOKSt1c1 = null;
+                    messageOKSt1c2 = null;
                     messageErrorStRulon = null;
                     messageOKStRulon = null;
                     messageErrorStProizvodstvo = null;
@@ -315,17 +336,26 @@ namespace consoleRS2toBD
                     ConMessageOKSt200mc = messageOKSt200mc;
                     LogSystem.Write("Стан1700 Сообщения(цикл 200mc)", Direction.Ok, dtOKSt200mc, ConMessageOKSt200mc, 1, 13, true);
                 }
+
+                if (messageErrorSt1cTab != null)
+                {                 
+                    ConMessageErrorSt1cTab = messageErrorSt1cTab;
+                    LogSystem.Write("Стан1700 ERROR цикла 1c", Direction.ERROR, dtErrorSt1cTab, ConMessageErrorSt1cTab, 1, 14, true);
+                }
                 if (messageErrorSt1c != null)
                 {
                     ConMessageErrorSt1c = messageErrorSt1c;
-               
-                    LogSystem.Write("Стан1700 ERROR цикла 1c", Direction.ERROR, dtErrorSt1c, ConMessageErrorSt1c, 1, 14, true);
+                    LogSystem.Write("Стан1700 ERROR цикла 1c", Direction.ERROR, dtErrorSt1c, ConMessageErrorSt1c, 1, 15, true);
                 }
-                if (messageOKSt1c != null)
+                if (messageOKSt1c2 != null)
                 {
-                    ConMessageOKSt1c = messageOKSt1c;
-                    LogSystem.Write("Стан1700. Цикл 1c.", Direction.Ok, dtOKSt1c, ConMessageOKSt1c, 1, 15, true);
+                   
+                    LogSystem.Write("Стан1700. Цикл 1c.", Direction.Ok, dtOKSt1c, "                                                                 ", 1, 16, true);
+                    ConMessageOKSt1c = messageOKSt1c1+ messageOKSt1c2;
+                    LogSystem.Write("Стан1700. Запись в таблицу 1c. ", Direction.Ok, dtOKSt1c, ConMessageOKSt1c + "("+intConMessageOKSt1c+")", 1, 16, true);
                 }
+
+
                 if (messageErrorStRulon != null)
                 {
                     ConMessageErrorStRulon = messageErrorStRulon;
@@ -368,13 +398,46 @@ namespace consoleRS2toBD
                 {
                     ConMessageErrorStValki = messageErrorStValki;
                     
-                    LogSystem.Write("Стан1700 ERROR записи в таблицу перевалок валков", Direction.ERROR, dtErrorStValki, ConMessageErrorStValki, 1, 23, true);
+                    LogSystem.Write("Стан1700 ERROR записи в таблицу перевалок валков", Direction.ERROR, dtErrorStValki, ConMessageErrorStValki, 1, 24, true);
                 }
                 if (messageOKStValki != null)
                 {
-                    ConMessageOKStValki = messageOKStValki;
+                    ConMessageOKStValki5 = ConMessageOKStValki4;
+                    dtOKStValki5 = dtOKStValki4;
+                    ConMessageOKStValki4 = ConMessageOKStValki3;
+                    dtOKStValki4 = dtOKStValki3;
+                    ConMessageOKStValki3 = ConMessageOKStValki2;
+                    dtOKStValki3 = dtOKStValki2;
+                    ConMessageOKStValki2 = ConMessageOKStValki1;
+                    dtOKStValki2 = dtOKStValki1;
+                    ConMessageOKStValki1 = messageOKStValki;
+                    dtOKStValki1 = dtOKStValki;
 
-                    LogSystem.Write("Стан1700. Write перевалок валков.", Direction.Ok, dtOKStValki, ConMessageOKStValki, 1, 24, true);
+
+                    if (ConMessageOKStValki1!=null)
+                    {
+                        LogSystem.Write("Стан1700. Write перевалок валков.", Direction.Ok, dtOKStValki1, ConMessageOKStValki1, 1, 25, true);
+                    }
+                    if (ConMessageOKStValki2 != null)
+                    {
+                        LogSystem.Write("Стан1700. Write перевалок валков.", Direction.Ok, dtOKStValki2, ConMessageOKStValki2, 1, 26, true);
+                    }
+                    if (ConMessageOKStValki3 != null)
+                    {
+                        LogSystem.Write("Стан1700. Write перевалок валков.", Direction.Ok, dtOKStValki3, ConMessageOKStValki3, 1, 27, true);
+
+                    }
+                    if (ConMessageOKStValki4 != null)
+                    {
+                        LogSystem.Write("Стан1700. Write перевалок валков.", Direction.Ok, dtOKStValki4, ConMessageOKStValki4, 1, 28, true);
+                    }
+                    if (ConMessageOKStValki5 != null)
+                    {
+                        LogSystem.Write("Стан1700. Write перевалок валков.", Direction.Ok, dtOKStValki5, ConMessageOKStValki5, 1, 29, true);
+                    }
+
+
+
                 }
 
 
@@ -477,7 +540,11 @@ namespace consoleRS2toBD
                 messageErrorSt200mc = null;
                 messageOKSt200mc = null;
                 messageErrorSt1c = null;
+                messageErrorSt1cTab = null;
                 messageOKSt1c = null;
+                messageOKSt1c1 = null;
+                messageOKSt1c2 = null;
+
                 messageErrorStRulon = null;
                 messageOKStRulon = null;
                 messageErrorStProizvodstvo = null;
@@ -488,6 +555,7 @@ namespace consoleRS2toBD
 
                 messageOKSt101mc = ""; //прокатка рулона
                 intConMessageOKSt101mc = 0;
+                intConMessageOKSt1c = 0;
 
                 messageErrorDs100mc = null;
                 messageOKDs100mc = null;

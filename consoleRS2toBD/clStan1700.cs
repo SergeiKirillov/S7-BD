@@ -1365,7 +1365,7 @@ namespace consoleRS2toBD
         #region Формируем и записываем данные  1c. Название таблицы формируется по принципу YYYYmmddW (W - смена(1 ночная(с 19-07), 2дневная(07-19)))
         private void stanSQL1s()
         {
-            byte[] stanbuf1s = new byte[95];
+            byte[] stanbuf1s = new byte[96];
 
             //#region Формируем шифр таблицы numberTable = stan1syyyyMMddсмена
 
@@ -1526,26 +1526,29 @@ namespace consoleRS2toBD
                     stanbuf1s[82] = stanbuffer1s[306];          //D20", 
                     stanbuf1s[83] = stanbuffer1s[307];          //U64", 
                     stanbuf1s[84] = stanbuffer1s[308];          //RasxCD
-                    stanbuf1s[85] = stanbuffer1s[24];          //D1_pred 
-                    stanbuf1s[86] = stanbuffer1s[25];          //D1_pred
-                    stanbuf1s[87] = stanbuffer1s[26];          //D2_pred 
-                    stanbuf1s[88] = stanbuffer1s[27];          //D2_pred
-                    stanbuf1s[89] = stanbuffer1s[28];          //D3_pred 
-                    stanbuf1s[90] = stanbuffer1s[29];          //D3_pred
-                    stanbuf1s[91] = stanbuffer1s[30];          //D4_pred 
-                    stanbuf1s[92] = stanbuffer1s[31];          //D4_pred
-                    stanbuf1s[93] = stanbuffer1s[32];          //D5_pred 
-                    stanbuf1s[94] = stanbuffer1s[33];          //D5_pred
+                    //stanbuf1s[85] = stanbuffer1s[24];          //D1_pred 
+                    //stanbuf1s[86] = stanbuffer1s[25];          //D1_pred
+                    //stanbuf1s[87] = stanbuffer1s[26];          //D2_pred 
+                    //stanbuf1s[88] = stanbuffer1s[27];          //D2_pred
+                    //stanbuf1s[89] = stanbuffer1s[28];          //D3_pred 
+                    //stanbuf1s[90] = stanbuffer1s[29];          //D3_pred
+                    //stanbuf1s[91] = stanbuffer1s[30];          //D4_pred 
+                    //stanbuf1s[92] = stanbuffer1s[31];          //D4_pred
+                    //stanbuf1s[93] = stanbuffer1s[32];          //D5_pred 
+                    //stanbuf1s[94] = stanbuffer1s[33];          //D5_pred
+                    stanbuf1s[85] = stanbuffer1s[6];             //speeed 
+                    stanbuf1s[86] = stanbuffer1s[7];             //speeed 
+
+
+                    //speed4kl = (float)(BitConverter.ToInt16(stanbuffer1s, 6)) / 100;
 
 
 
-
-                  
 
                     #region Запись данных 1s
 
-                    
-                    string comBD = "if not exists (select * from sysobjects where name ='" + "Stan1s" + numberTable + "' and xtype='U') create table " + "Stan1s" + numberTable +
+
+                    string comBD = "if not exists (select * from sysobjects where name ='" + "stan1s" + numberTable + "' and xtype='U') create table " + "stan1s" + numberTable +
                        "(" +
                        "datetime1s datetime , " +
                        "s191HL int , " +
@@ -1632,7 +1635,8 @@ namespace consoleRS2toBD
                        "sD19 float , " +
                        "sD20 float , " +
                        "sU64 int , " +
-                       "sRasxCD int " +
+                       "sRasxCD int, " +
+                       "speed float " +
                        ")";
 
                     using (SqlConnection conSQL1s1 = new SqlConnection(connectionString))
@@ -1647,7 +1651,7 @@ namespace consoleRS2toBD
                         catch (Exception)
                         {
                             //Program.messageErrorSt1c = "Stan1s" + numberTable + " НЕ ЗАПИСАНЫ - " + ex.Message + " Insert запрос: " + comRulon1s1;
-                            Program.messageErrorSt1cTab = "Stan1s" + numberTable + " НЕ СОЗДАНА ";
+                            Program.messageErrorSt1cTab = "stan1s" + numberTable + " НЕ СОЗДАНА ";
                             Program.dtErrorSt1cTab = DateTime.Now;
 
                         }
@@ -1885,12 +1889,12 @@ namespace consoleRS2toBD
                     //")";
                     #endregion
 
-                    string comRulon1s1 = "INSERT INTO " + "Stan1s" + numberTable +
+                    string comRulon1s1 = "INSERT INTO " + "stan1s" + numberTable +
                   " (datetime1s,s191HL,s192HL,s193BL,s194BL,s191HR,s192HR,s193BR,s194BR,s281NL,s282NL,s283BL,s284BL,s281NR,s282NR," +
                   "s283BR,s284BR,s301BL,s302BL,s303HL,s304HL,s301BR,s302BR,s303HR,s304HR,s321BL,s322BL,s323HL,s324HL,s321BR,s322BR," +
                   "s323HR,s324HR,s341BL,s342BL,s343HL,s344HL,s341BR,s342BR,s343HR,s344HR,s461L,s462L,s463L,s461R,s462R,s463R,sG11L," +
                   "sG12L,sG13L,sG14L,sG15L,sG16L,sG17L,sG11R,sG12R,sG13R,sG14R,sG15R,sG16R,sG17R,sG21L,sG22L,sG23L,sG24L,sG25L,sG26L," +
-                  "sG27L,sG21R,sG22R,sG23R,sG24R,sG25R,sG26R,sG27R,sD12,sD13,sD14,sD15,sD16,sD17,sD18,sD19,sD20,sU64,sRasxCD) " +
+                  "sG27L,sG21R,sG22R,sG23R,sG24R,sG25R,sG26R,sG27R,sD12,sD13,sD14,sD15,sD16,sD17,sD18,sD19,sD20,sU64,sRasxCD,speed) " +
                   "VALUES" +
                   " (" +
                   " @datetime1sStan, " +
@@ -1978,8 +1982,15 @@ namespace consoleRS2toBD
                   (float)(BitConverter.ToInt16(stanbuf1s, 81)) / 10 + "," +
                   (float)(BitConverter.ToInt16(stanbuf1s, 82)) / 10 + "," +
                   (int)(BitConverter.ToInt16(stanbuf1s, 83) * 10) + "," +
-                  (int)(BitConverter.ToInt16(stanbuf1s, 84) * 10) +
+                  (int)(BitConverter.ToInt16(stanbuf1s, 84) * 10) + "," +
+                  //(float)(BitConverter.ToInt16(stanbuffer1s, 6)) / 100 + 
+                  (float)(BitConverter.ToInt16(stanbuf1s, 85)) / 100 +
                   ")";
+                    //speed4kl = (float)(BitConverter.ToInt16(stanbuffer1s, 6)) / 100;
+                    //(float)(BitConverter.ToInt16(stanbuf1s, 85)) / 100
+                    //(float)(BitConverter.ToInt16(stanbuf1s, 95)) / 100
+                    // (float)(BitConverter.ToInt16(stanbuffer1s, 6)) / 100
+                    //(float)(BitConverter.ToInt16(stanbufferSQL, 6)) / 100
 
                     using (SqlConnection conSQL1s2 = new SqlConnection(connectionString))
                     {
@@ -1991,7 +2002,7 @@ namespace consoleRS2toBD
                             command.ExecuteNonQuery();
                             conSQL1s2.Close();
                             Program.intConMessageOKSt1c = Program.intConMessageOKSt1c + 1;
-                            Program.messageOKSt1c1 = "Данные в БД(" + "Stan1s" + numberTable + ") 1s записаны";
+                            Program.messageOKSt1c1 = "Данные в БД(" + "stan1s" + numberTable + ") 1s записаны";
                             Program.messageOKSt1c2 = Program.messageOKSt1c2+".";
                             Program.dtOKSt1c = DateTime.Now;
 
@@ -2001,7 +2012,7 @@ namespace consoleRS2toBD
                         {
 
                             //Program.messageErrorSt1c = "Stan1s" + numberTable + " НЕ ЗАПИСАНЫ - " + ex.Message + " Insert запрос: " + comRulon1s1;
-                            Program.messageErrorSt1c = "Stan1s" + numberTable + " НЕ ЗАПИСАНЫ ";
+                            Program.messageErrorSt1c = "stan1s" + numberTable + " НЕ ЗАПИСАНЫ ";
                             Program.dtErrorSt1c = DateTime.Now;
                         }
 
@@ -2436,7 +2447,7 @@ namespace consoleRS2toBD
                                 {
                                     bulk.DestinationTableName = strTableNamePerevalki;
                                     bulk.WriteToServer(dtPerevalkiStan);
-                                    Program.messageOKStValki = "Перевалки (" + strTableNamePerevalki+")="+Perevalki;
+                                    Program.messageOKStValki = "Перевалки (" + strTableNamePerevalki+")"+Perevalki;
                                     Program.dtOKStValki = DateTime.Now;
 
 

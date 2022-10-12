@@ -419,8 +419,8 @@ namespace consoleRS2toBD
             Thread querySQL = new Thread(stanSQL101ms);
             querySQL.Start();
 
-            //Thread queryMes = new Thread(stanMessage200ms);
-            //queryMes.Start();
+            Thread queryMes = new Thread(stanMessage200ms);
+            queryMes.Start();
 
             Thread query1s = new Thread(stanSQL1s);
             query1s.Start();
@@ -2490,7 +2490,7 @@ namespace consoleRS2toBD
        #endregion
 
 
-        #region Формируем и записываем сообщения в Базу
+        #region 200мс  - Формируем и записываем сообщения в Базу
         private void stanMessage200ms()
         {
             try
@@ -2498,6 +2498,10 @@ namespace consoleRS2toBD
                 while (true)
                 {
                     Thread.Sleep(200);
+
+                    //Program.intmessageOKSt200mc = Program.intmessageOKSt200mc + 1;
+                    Program.messageOKSt200mc1 = Program.messageOKSt200mc1 + ".";
+                    Program.dtOKSt200mc = dtMessage;
 
                     dtMessage = DateTime.Now;
 
@@ -2537,7 +2541,7 @@ namespace consoleRS2toBD
                     if (writeMessage>300)
                     {
                         writeMessage = 0;
-                        string strTableName = "StanMessage"+numberTable;
+                        string strTableName = "stanmess"+numberTable;
                         string comBDMessage = "if not exists (select * from sysobjects where name='" + strTableName + "' and xtype='U') create table " + strTableName +
                                     "(" +
                                     "dtmes datetime NOT NULL, " +
@@ -2548,32 +2552,55 @@ namespace consoleRS2toBD
                         //создаем таблицу сообщений стана 
                         using (SqlConnection con1Mess = new SqlConnection(connectionString))
                         {
-                            con1Mess.Open();
-                            SqlCommand command = new SqlCommand(comBDMessage, con1Mess);
-                            int WriteSQL = command.ExecuteNonQuery();
-                            con1Mess.Close();
+                            try
+                            {
+                                con1Mess.Open();
+                                SqlCommand command = new SqlCommand(comBDMessage, con1Mess);
+                                int WriteSQL = command.ExecuteNonQuery();
+                                con1Mess.Close();
+                            }
+                            catch (Exception)
+                            {
+                                Program.dtErrorSt200mc = DateTime.Now;
+                                Program.messageErrorSt200mc = "Ошибка при создании таблицы Сообщений ("+ strTableName+")";
+                            }
+                            
                         }
                         if (dtMessagestan.Rows.Count > 0)
                         {
                             //записываем в таблицу прокатанного рулона данные по прокатке этого рулона
-                            using (SqlConnection con2Mess = new SqlConnection(connectionString))
+                            try
                             {
-                                con2Mess.Open();
-                                using (var bulkMessage = new SqlBulkCopy(con2Mess))
+                                using (SqlConnection con2Mess = new SqlConnection(connectionString))
                                 {
-                                    bulkMessage.DestinationTableName = strTableName;
-                                    bulkMessage.WriteToServer(dtMessagestan);
-                                    Program.messageOKSt200mc = "Message -->" + strTableName + " = " + dtMessagestan.Rows.Count;
-                                    Program.dtOKSt200mc = dtMessage;
+                                    con2Mess.Open();
+                                    using (var bulkMessage = new SqlBulkCopy(con2Mess))
+                                    {
+                                        bulkMessage.DestinationTableName = strTableName;
+                                        bulkMessage.WriteToServer(dtMessagestan);
+                                       // Program.messageOKSt200mc1 = Program.messageOKSt200mc1 + ".";
+                                        Program.intmessageOKSt200mc = Program.intmessageOKSt200mc + dtMessagestan.Rows.Count;
+                                        Program.messageOKSt200mc = "В таблицу " + strTableName + " за 5с записано ["+Program.intmessageOKSt200mc+"|"+dtMessagestan.Rows.Count+":"+ writeMessage + "]";
+                                        Program.dtOKSt200mc = dtMessage;
+                                    }
                                 }
+                                dtMessagestan.Clear();
                             }
-                            dtMessagestan.Clear();
+                            catch (Exception)
+                            {
+                                Program.dtErrorSt200mc = DateTime.Now;
+                                Program.messageErrorSt200mc = "Ошибка при записи в таблицу Сообщений (" + strTableName + ")";
+
+                            }
+
+
                         }
                         else
                         {
 
                             Program.messageOKSt200mc = "Сообщений не было с " + DateTime.Now.AddMinutes(-1).ToString("dd:MM HH:mm") + " по " + DateTime.Now.ToString("HH:mm");
                             Program.dtOKSt200mc = dtMessage;
+
                         }
 
                     }
@@ -2589,9 +2616,10 @@ namespace consoleRS2toBD
             {
                 Program.messageErrorSt200mc = "Global Error в модуле формирования сообщения " + ex.Message;
                 Program.dtOKSt200mc = DateTime.Now;
-
-
                 
+
+
+
             }
         }
         #endregion

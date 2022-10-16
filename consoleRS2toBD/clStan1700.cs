@@ -286,6 +286,176 @@ namespace consoleRS2toBD
             [127] = new MessageClass(0, "", 0, ""),
         };
 
+        public struct TByte_Signal
+        {
+            public short RegTD;
+            public short RegRazg;
+            public short RegNO;
+            public short RegFO;
+            public short Vip;
+            public short T10;
+            public short T20;
+            public short T30;
+            public short ZS;
+            public short TD;
+            public short RS;
+            public short NO;
+            public short FO;
+            public short MaxSpeedPeregr;
+            public short UstavkaSpeed;
+            public short MaxSpeed;
+            public short LK4;
+            public short LK5;
+            public short Got_64kg;
+            public short Rnz12;
+            public short Rnz23;
+            public short Rnz34;
+            public short GrtVkl;
+            public short TrtVkl;
+            public short T40;
+            public short Tmot;
+            public short Trazm;
+            public short LKmot;
+            public short LKrazm;
+            public short LK1;
+            public short LK2;
+            public short LK3;
+            public short NalPol;
+            public short Knp;
+            public short GotStan;
+            public short MaxV1;
+            public short MaxV2;
+            public short MaxV3;
+            public short MaxV4;
+            public short MaxV5;
+            public short RKDVVkl;
+            public short RpvVkl;
+            public short Rnv12;
+            public short Rnv23;
+            public short Rnv34;
+            public short Rnz45;
+            public short Rtv;
+            public short Got_100kg;
+            public short g12;
+            public short g13;
+            public short g14;
+            public short g15;
+            public short g16;
+            public short NatshUsl;
+            public short GotEmuls;
+            public short g17;
+            public short g18;
+            public short g19;
+            public short g20;
+            public short temp_POU;
+            public short davl_redukt;
+            public short davl_PGT;
+            public short temp_privod;
+            public short got_sinhr;
+            public short OgrRdn2nv;
+            public short Ig140pr2nv;
+            public short BpvVkl;
+            public short Peregr1;
+            public short Peregr2;
+            public short Peregr3;
+            public short Peregr4;
+            public short Peregr5;
+            public short PtP2nv;
+            public short LkOmOn2nv;
+            public short LkSimOn2nv;
+            public short SimRdy2nv;
+            public short BkLkShuntRt2nv;
+            public short Dv2pr09sec2nv;
+            public short OgrRsRt2nv;
+            public short OgrRt2nv;
+            public short OgrRdn2vv;
+            public short Ig140pr2vv;
+            public short R31;
+            public short TrazmProval;
+            public short T12proval;
+            public short T23proval;
+            public short T34proval;
+            public short T45proval;
+            public short PtP2vv;
+            public short LkOmOn2vv;
+            public short LkSimOn2vv;
+            public short SimRdy2vv;
+            public short Dv2pr09sec2vv;
+            public short OgrRsRt2vv;
+            public short OgrRt2vv;
+            public short OgrRdn3nv;
+            public short Ig140pr3nv;
+            public short R41;
+            public short R42;
+            public short R43;
+            public short R44;
+            public short PtP3nv;
+            public short LkOmOn3nv;
+            public short LkSimOn3nv;
+            public short SimRdy3nv;
+            public short BkLkShuntRT3nv;
+            public short Dv2pr09sec3nv;
+            public short OgrRtRs3nv;
+            public short OgrRt3nv;
+            public short OgrRdn3vv;
+            public short Ig140pr3vv;
+            public short KnAOsus;
+            public short SmGot;
+            public short KteRazm;
+            public short AOrele;
+            public short FOknop;
+            public short R56;
+            public short PtP3vv;
+            public short LkOmOn3vv;
+            public short LkSimOn3vv;
+            public short SimRdy3vv;
+            public short Dv2pr09sec3vv;
+            public short OgrRsRt3vv;
+            public short OgrRt3vv;
+            public short OgragdMot;
+            public short ZaxlestOtMot;
+            public short NOTempGP;
+            public short NOSinxr;
+            public short NOPanPultStar;
+            public short NOPURazm;
+            public short NOPU1;
+            public short NOPU2;
+            public short NOPU3;
+            public short NOPU4;
+            public short NOPU5;
+            public short FOPanPultStar;
+            public short FOPU5;
+            public short AOPUR;
+            public short FOPU4;
+            public short FOPU3;
+            public short FOPU2;
+            public short FOPU1;
+            public short FOPUR;
+            public short AOSUSknopka;
+            public short AO5klet;
+            public short Vent_101G;
+            public short Vent_102G;
+            public short Vent_103G;
+            public short Vent_105G;
+            public short Vent_106G;
+            public short Vent_podpor_PA1;
+            public short Vent_112G;
+            public short Vent_111G;
+            public short Vent_110G;
+            public short Vent_108G;
+            public short Vent_107G;
+            public short Vent_podpor_PA2;
+            public short Vent_1kl;
+            public short Vent_2kl;
+            public short Vent_3kl;
+            public short Vent_4kl;
+            public short Vent_5kl;
+            public short Vent_mot;
+            public short  Vent_podpor_GP1;
+            public short Vent_podpor_GP2;
+            public short Vent_NV;
+        }
+
 
 
         byte[] stanbuffer;          //данные c контроллера 100ms
@@ -752,7 +922,7 @@ namespace consoleRS2toBD
         #endregion
 
 
-       #region Запись данных(101ms) с контроллера в Базу Данных
+        #region Запись данных(101ms) с контроллера в Базу Данных
 
         private void stanSQL101ms()
         {
@@ -2493,13 +2663,54 @@ namespace consoleRS2toBD
         #region 200мс  - Формируем и записываем сообщения в Базу
         private void stanMessage200ms()
         {
+            TByte_Signal arr, arr_minus = new TByte_Signal();
+
+            arr = default(TByte_Signal);
+            
+
             try
             {
                 while (true)
                 {
                     Thread.Sleep(200);
 
+
+                    #region Формируем шифр таблицы numberTable = stanmessyyyyMMddсмена
+
+                    numberTable = "";
+
+                    TimeSpan NowTime = DateTime.Now.TimeOfDay;
+                    TimeSpan Time1 = new TimeSpan(07, 00, 00);
+                    TimeSpan Time2 = new TimeSpan(19, 00, 00);
+
+                    if ((NowTime > Time1) && (NowTime < Time2))
+                    {
+                        //2 смена
+                        numberTable = DateTime.Now.ToString("yyyyMMdd") + "2";
+                    }
+                    else if ((NowTime < Time1) || (NowTime > Time2))
+                    {
+                        //1 смена
+                        if (NowTime > Time2)
+                        {
+                            //1 смена после 19
+                            numberTable = DateTime.Now.AddDays(1).ToString("yyyyMMdd") + "1";
+                        }
+                        else
+                        {
+                            //1 смена до 7
+                            numberTable = DateTime.Now.ToString("yyyyMMdd") + "1";
+                        }
+                    }
+
+                    string strTableName = "stanmess" + numberTable;
+
+                    #endregion
+
+
                     //Program.intmessageOKSt200mc = Program.intmessageOKSt200mc + 1;
+
+                    Program.messageOKSt200mc = "(" + strTableName + ")";
                     Program.messageOKSt200mc1 = Program.messageOKSt200mc1 + ".";
                     Program.dtOKSt200mc = dtMessage;
 
@@ -2509,109 +2720,567 @@ namespace consoleRS2toBD
 
 
                     int numberMessage = 0;
-                    for (int i = 0; i < 15; i++)
+
+                    #region //Версия 1 - не происходит сбора данных
+                    //for (int i = 0; i < 15; i++)
+                    //{
+                    //    for (int b = 0; b < 8; b++)
+                    //    {
+                    //        int z = Convert.ToInt32(Math.Pow(2, b));
+                    //        if (((byte)(stanbufferMessageOld[i] & z) - (byte)(stanbufferMessage[i] & z)) < 0)
+                    //        {
+                    //            if (MessageStan[numberMessage].statusMenshe != 0)
+                    //            {
+                    //                string mes = MessageStan[numberMessage].MinusMess;
+                    //                int status = MessageStan[numberMessage].statusMenshe;
+                    //                dtMessagestan.Rows.Add(dtMessage.ToString("HH:mm:ss.fff"), status, mes, speed);
+                    //            }
+                    //        }
+                    //        else if (((byte)(stanbufferMessageOld[i] & z) - (byte)(stanbufferMessage[i] & z)) > 0)
+                    //        {
+                    //            if (MessageStan[numberMessage].statusBolshe != 0)
+                    //            {
+                    //                string mes = MessageStan[numberMessage].PlusMess;
+                    //                int status = MessageStan[numberMessage].statusBolshe;
+                    //                dtMessagestan.Rows.Add(dtMessage.ToString("HH:mm:ss.fff"), status, mes, speed);
+                    //            }
+                    //        }
+                    //        numberMessage++;
+
+                    //    }
+                    //}
+
+                    //TODO запись сообщений в БД каждую минуту  
+
+                    //if (writeMessage > 300)
+                    //{
+                    //    writeMessage = 0;
+                    //    string strTableName = "stanmess" + numberTable;
+
+                    //    #region Проверяем создана ли таблица
+                    //    string comBDMessage = "if not exists (select * from sysobjects where name='" + strTableName + "' and xtype='U') create table " + strTableName +
+                    //                "(" +
+                    //                "dtmes datetime NOT NULL, " +
+                    //                "status int NOT NULL, " +
+                    //                "message text NOT NULL, " +
+                    //                "speed float NOT NULL)";
+
+                    //    //создаем таблицу сообщений стана 
+                    //    using (SqlConnection con1Mess = new SqlConnection(connectionString))
+                    //    {
+                    //        try
+                    //        {
+                    //            con1Mess.Open();
+                    //            SqlCommand command = new SqlCommand(comBDMessage, con1Mess);
+                    //            int WriteSQL = command.ExecuteNonQuery();
+                    //            con1Mess.Close();
+                    //        }
+                    //        catch (Exception)
+                    //        {
+                    //            Program.dtErrorSt200mc = DateTime.Now;
+                    //            Program.messageErrorSt200mc = "Ошибка при создании таблицы Сообщений (" + strTableName + ")";
+                    //        }
+
+                    //    }
+                    //    #endregion
+
+                    //    #region Сохраняем данные в таблицу
+                    //    if (dtMessagestan.Rows.Count > 0)
+                    //    {
+                    //        //записываем в таблицу прокатанного рулона данные по прокатке этого рулона
+                    //        try
+                    //        {
+                    //            using (SqlConnection con2Mess = new SqlConnection(connectionString))
+                    //            {
+                    //                con2Mess.Open();
+                    //                using (var bulkMessage = new SqlBulkCopy(con2Mess))
+                    //                {
+                    //                    bulkMessage.DestinationTableName = strTableName;
+                    //                    bulkMessage.WriteToServer(dtMessagestan);
+                    //                    // Program.messageOKSt200mc1 = Program.messageOKSt200mc1 + ".";
+                    //                    Program.intmessageOKSt200mc = Program.intmessageOKSt200mc + dtMessagestan.Rows.Count;
+                    //                    Program.messageOKSt200mc = "В таблицу " + strTableName + " за 5с записано [" + Program.intmessageOKSt200mc + "|" + dtMessagestan.Rows.Count + ":" + writeMessage + "]";
+                    //                    Program.dtOKSt200mc = dtMessage;
+                    //                }
+                    //            }
+                    //            dtMessagestan.Clear();
+                    //        }
+                    //        catch (Exception)
+                    //        {
+                    //            Program.dtErrorSt200mc = DateTime.Now;
+                    //            Program.messageErrorSt200mc = "Ошибка при записи в таблицу Сообщений (" + strTableName + ")";
+
+                    //        }
+
+
+                    //    }
+                    //    else
+                    //    {
+
+                    //        Program.messageOKSt200mc = "Сообщений не было с " + DateTime.Now.AddMinutes(-1).ToString("dd:MM HH:mm") + " по " + DateTime.Now.ToString("HH:mm");
+                    //        Program.dtOKSt200mc = dtMessage;
+
+                    //    }
+                    //    #endregion
+
+
+                    //}
+                    //else
+                    //{
+                    //    writeMessage++;
+                    //}
+
+                    #endregion
+
+
+                    #region Версия 2  - 
+
+                    #region Преобразование сигнала в структуру
+                    arr.RegTD = (byte)(stanbufferMessage[0] & 1);
+                    arr.RegRazg = (byte)(stanbufferMessage[0] & 2);
+                    arr.RegNO = (byte)(stanbufferMessage[0] & 4);
+                    arr.RegFO = (byte)(stanbufferMessage[0] & 8);
+                    arr.Vip = (byte)(stanbufferMessage[0] & 16);
+                    arr.T10 = (byte)(stanbufferMessage[0] & 32);
+                    arr.T20 = (byte)(stanbufferMessage[0] & 64);
+                    arr.T30 = (byte)(stanbufferMessage[0] & 128);
+
+                    arr.ZS = (byte)(stanbufferMessage[1] & 1);
+                    arr.TD = (byte)(stanbufferMessage[1] & 2);
+                    arr.RS = (byte)(stanbufferMessage[1] & 4);
+                    arr.NO = (byte)(stanbufferMessage[1] & 8);
+                    arr.FO = (byte)(stanbufferMessage[1] & 16);
+                    arr.MaxSpeedPeregr = (byte)(stanbufferMessage[1] & 32);
+                    arr.UstavkaSpeed = (byte)(stanbufferMessage[1] & 64);
+                    arr.MaxSpeed = (byte)(stanbufferMessage[1] & 128);
+
+                    //mb3069-mb3068
+                    arr.LKmot = (byte)(stanbufferMessage[2] & 1);
+                    arr.LKrazm = (byte)(stanbufferMessage[2] & 2);
+                    arr.Got_64kg = (byte)(stanbufferMessage[2] & 4);
+                    arr.Rnz12 = (byte)(stanbufferMessage[2] & 8);
+                    arr.Rnz23 = (byte)(stanbufferMessage[2] & 16);
+                    arr.Rnz34 = (byte)(stanbufferMessage[2] & 32);
+                    arr.GrtVkl = (byte)(stanbufferMessage[2] & 64);
+                    arr.TrtVkl = (byte)(stanbufferMessage[2] & 128);
+
+                    arr.T40 = (byte)(stanbufferMessage[3] & 1);
+                    arr.Tmot = (byte)(stanbufferMessage[3] & 2);
+                    arr.Trazm = (byte)(stanbufferMessage[3] & 4);
+                    arr.LK1 = (byte)(stanbufferMessage[3] & 8);
+                    arr.LK2 = (byte)(stanbufferMessage[3] & 16);
+                    arr.LK3 = (byte)(stanbufferMessage[3] & 32);
+                    arr.LK4 = (byte)(stanbufferMessage[3] & 64);
+                    arr.LK5 = (byte)(stanbufferMessage[3] & 128);
+
+                    //mb3071-mb3070
+                    arr.NalPol = (byte)(stanbufferMessage[4] & 1);
+                    arr.Knp = (byte)(stanbufferMessage[4] & 2);
+                    arr.GotStan = (byte)(stanbufferMessage[4] & 4);
+                    arr.MaxV1 = (byte)(stanbufferMessage[4] & 8);
+                    arr.MaxV2 = (byte)(stanbufferMessage[4] & 16);
+                    arr.MaxV3 = (byte)(stanbufferMessage[4] & 32);
+                    arr.MaxV4 = (byte)(stanbufferMessage[4] & 64);
+                    arr.MaxV5 = (byte)(stanbufferMessage[4] & 128);
+
+                    arr.RKDVVkl = (byte)(stanbufferMessage[5] & 1);
+                    arr.RpvVkl = (byte)(stanbufferMessage[5] & 2);
+                    arr.Rnv12 = (byte)(stanbufferMessage[5] & 4);
+                    arr.Rnv23 = (byte)(stanbufferMessage[5] & 8);
+                    arr.Rnv34 = (byte)(stanbufferMessage[5] & 16);
+                    arr.Rnz45 = (byte)(stanbufferMessage[5] & 32);
+                    arr.Rtv = (byte)(stanbufferMessage[5] & 64);
+                    arr.Got_100kg = (byte)(stanbufferMessage[5] & 128);
+
+                    //m3103-m3102
+                    arr.g12 = (byte)(stanbufferMessage[6] & 1);
+                    arr.g13 = (byte)(stanbufferMessage[6] & 2);
+                    arr.g14 = (byte)(stanbufferMessage[6] & 4);
+                    arr.g15 = (byte)(stanbufferMessage[6] & 8);
+                    arr.g16 = (byte)(stanbufferMessage[6] & 16);
+                    arr.NatshUsl = (byte)(stanbufferMessage[6] & 32);
+                    arr.GotEmuls = (byte)(stanbufferMessage[6] & 64);
+                    arr.g17 = (byte)(stanbufferMessage[6] & 128);
+
+                    arr.g18 = (byte)(stanbufferMessage[7] & 1);
+                    arr.g19 = (byte)(stanbufferMessage[7] & 2);
+                    arr.g20 = (byte)(stanbufferMessage[7] & 4);
+                    arr.temp_POU = (byte)(stanbufferMessage[7] & 8);
+                    arr.davl_redukt = (byte)(stanbufferMessage[7] & 16);
+                    arr.davl_PGT = (byte)(stanbufferMessage[7] & 32);
+                    arr.temp_privod = (byte)(stanbufferMessage[7] & 64);
+                    arr.got_sinhr = (byte)(stanbufferMessage[7] & 128);
+
+                    //m3105-m3104
+                    arr.OgragdMot = (byte)(stanbufferMessage[8] & 1);
+                    arr.ZaxlestOtMot = (byte)(stanbufferMessage[8] & 2);
+                    arr.NOTempGP = (byte)(stanbufferMessage[8] & 4);
+                    arr.Peregr1 = (byte)(stanbufferMessage[8] & 8);
+                    arr.Peregr2 = (byte)(stanbufferMessage[8] & 16);
+                    arr.Peregr3 = (byte)(stanbufferMessage[8] & 32);
+                    arr.Peregr4 = (byte)(stanbufferMessage[8] & 64);
+                    arr.Peregr5 = (byte)(stanbufferMessage[8] & 128);
+
+                    arr.NOSinxr = (byte)(stanbufferMessage[9] & 1);
+                    arr.NOPanPultStar = (byte)(stanbufferMessage[9] & 2);
+                    arr.NOPURazm = (byte)(stanbufferMessage[9] & 4);
+                    arr.NOPU1 = (byte)(stanbufferMessage[9] & 8);
+                    arr.NOPU2 = (byte)(stanbufferMessage[9] & 16);
+                    arr.NOPU3 = (byte)(stanbufferMessage[9] & 32);
+                    arr.NOPU4 = (byte)(stanbufferMessage[9] & 64);
+                    arr.NOPU5 = (byte)(stanbufferMessage[9] & 128);
+
+                    //m3103-m3102
+                    arr.FOPanPultStar = (byte)(stanbufferMessage[10] & 1);
+                    arr.FOPU5 = (byte)(stanbufferMessage[10] & 2);
+                    arr.AOPUR = (byte)(stanbufferMessage[10] & 4);
+                    arr.TrazmProval = (byte)(stanbufferMessage[10] & 8);
+                    arr.T12proval = (byte)(stanbufferMessage[10] & 16);
+                    arr.T23proval = (byte)(stanbufferMessage[10] & 32);
+                    arr.T34proval = (byte)(stanbufferMessage[10] & 64);
+                    arr.T45proval = (byte)(stanbufferMessage[10] & 128);
+
+                    arr.Vent_101G = (byte)(stanbufferMessage[11] & 1);
+                    arr.Vent_102G = (byte)(stanbufferMessage[11] & 2);
+                    arr.Vent_103G = (byte)(stanbufferMessage[11] & 4);
+                    arr.Vent_105G = (byte)(stanbufferMessage[11] & 8);
+                    arr.Vent_106G = (byte)(stanbufferMessage[11] & 16);
+                    arr.Vent_podpor_PA1 = (byte)(stanbufferMessage[11] & 32);
+                    arr.Vent_112G = (byte)(stanbufferMessage[11] & 64);
+                    arr.Vent_111G = (byte)(stanbufferMessage[11] & 128);
+                    
+                    //m3103-m3102
+                    arr.Vent_110G = (byte)(stanbufferMessage[12] & 1);
+                    arr.Vent_108G = (byte)(stanbufferMessage[12] & 2);
+                    arr.Vent_107G = (byte)(stanbufferMessage[12] & 4);
+                    arr.Vent_podpor_PA2 = (byte)(stanbufferMessage[12] & 8);
+                    arr.Vent_1kl = (byte)(stanbufferMessage[12] & 16);
+                    arr.Vent_2kl = (byte)(stanbufferMessage[12] & 32);
+                    arr.Vent_3kl = (byte)(stanbufferMessage[12] & 64);
+                    arr.Vent_4kl = (byte)(stanbufferMessage[12] & 128);
+
+                    arr.FOPU4 = (byte)(stanbufferMessage[13] & 1);
+                    arr.FOPU3 = (byte)(stanbufferMessage[13] & 2);
+                    arr.FOPU2 = (byte)(stanbufferMessage[13] & 4);
+                    arr.FOPU1 = (byte)(stanbufferMessage[13] & 8);
+                    arr.FOPUR = (byte)(stanbufferMessage[13] & 16);
+                    arr.AOSUSknopka = (byte)(stanbufferMessage[13] & 22);
+                    arr.AO5klet = (byte)(stanbufferMessage[13] & 64);
+                    //arr.OgrRdn3nv = (byte)(stanbufferMessage[13] & 128);
+
+
+                    //m3103-m3102
+                    //arr.OgrRdn3vv = (byte)(stanbufferMessage[14] & 1);
+                    //arr.Ig140pr3vv = (byte)(stanbufferMessage[14] & 2);
+                    arr.KnAOsus = (byte)(stanbufferMessage[14] & 4);
+                    arr.SmGot = (byte)(stanbufferMessage[14] & 8);
+                    arr.KteRazm = (byte)(stanbufferMessage[14] & 16);
+                    arr.AOrele = (byte)(stanbufferMessage[14] & 32);
+                    arr.FOknop = (byte)(stanbufferMessage[14] & 64);
+                    arr.R56 = (byte)(stanbufferMessage[14] & 128);
+
+                    arr.Vent_5kl = (byte)(stanbufferMessage[15] & 1);
+                    arr.Vent_mot = (byte)(stanbufferMessage[15] & 2);
+                    arr.Vent_podpor_GP1 = (byte)(stanbufferMessage[15] & 4);
+                    arr.Vent_podpor_GP2 = (byte)(stanbufferMessage[15] & 8);
+                    arr.Vent_NV = (byte)(stanbufferMessage[15] & 16);
+                    arr.Dv2pr09sec3vv = (byte)(stanbufferMessage[15] & 32);
+                    //arr.OgrRsRt3vv = (byte)(stanbufferMessage[15] & 64);
+                    //arr.OgrRt3vv = (byte)(stanbufferMessage[15] & 128);
+
+                    #endregion
+
+                    #region для таблицы View
+                    string chema = (arr.GotStan > 0) ? "Собрана" : "Разобрана";
+                    string emuls = (arr.GotEmuls > 0) ? "Готова" : "Не готова";
+                    string regim = (arr.RegRazg > 0) ? "Разгон" : "Форсированный останов";
+                    regim = (arr.RegTD > 0) ? "Так держать" : "Форсированный останов";
+                    regim = (arr.RegNO > 0) ? "Нормальный останов" : "Форсированный останов";
+                    string predel = (arr.Vip > 0) ? "Выпуск" : "Ноль скорости";
+                    predel = (arr.UstavkaSpeed > 0) ? "Уставка скорости" : "Ноль скорости";
+                    predel = (arr.MaxSpeed > 0) ? "Максимальная скорость" : "Ноль скорости";
+                    predel = (arr.MaxSpeedPeregr > 0) ? "Перегруз по скорости" : "Ноль скорости";
+                    string polosa5 = (arr.NalPol > 0) ? "Есть" : "Нет";
+                    string trazm = (arr.Trazm > 0) ? "Есть" : "Нет";
+                    string tmot = (arr.Tmot > 0) ? "Есть" : "Нет";
+
+                    #endregion
+
+                    string QuerySQL = "";
+                    int QueryCount = 0;
+
+                    #region QuerySQL - Формирование сообщений в таблицу сообщений "(1,'" + dtMessage.ToString() + "','Сообшение'," + speed.ToString() + "),"; QueryCount++;
+
+                    if ((arr_minus.TD - arr.TD) < 0) { QuerySQL = QuerySQL + "(1,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Ключ ТАК ДЕРЖАТЬ'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.ZS - arr.ZS) < 0) { QuerySQL = QuerySQL + "(2,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Кнопка ЗАПРАВКА'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.RS - arr.RS) < 0) { QuerySQL = QuerySQL + "(2,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Ключ РАЗГОН'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.NO - arr.NO) < 0) { QuerySQL = QuerySQL + "(3,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Кнопка НОРМАЛЬНЫЙ ОСТАНОВ'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.FO - arr.FO) < 0) { QuerySQL = QuerySQL + "(4,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Кнопка ФОРСИРОВАННЫЙ ОСТАНОВ'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.RegTD - arr.RegTD) < 0) { QuerySQL = QuerySQL + "(1,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Режим ТАК ДЕРЖАТЬ'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.RegRazg - arr.RegRazg) < 0) { QuerySQL = QuerySQL + "(2,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Режим РАЗГОНА'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.RegNO - arr.RegNO) < 0) { QuerySQL = QuerySQL + "(3,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Режим НОРМАЛЬНОГО ОСТАНОВА'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.RegFO - arr.RegFO) < 0) { QuerySQL = QuerySQL + "(2,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Режим ФОРСИРОВАННОГО ОСТАНОВА'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.Vip - arr.Vip) < 0) { QuerySQL = QuerySQL + "(5,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Режим ВЫПУСКА'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.Trazm - arr.Trazm) < 0) { QuerySQL = QuerySQL + "(6,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Натяжение на разматывателе'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.Trazm - arr.Trazm) < 0) { QuerySQL = QuerySQL + "(7,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Отсутствие натяжения на разматывателе'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.T10 - arr.T10) < 0) { QuerySQL = QuerySQL + "(6,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Натяжение в 1 промежутке'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.T10 - arr.T10) > 0) { QuerySQL = QuerySQL + "(7,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Отсутствие натяжения в 1 промежутке '," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.T20 - arr.T20) < 0) { QuerySQL = QuerySQL + "(6,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Натяжение в 2 промежутке'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.T20 - arr.T20) > 0) { QuerySQL = QuerySQL + "(7,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Отсутствие натяжения в 2 промежутке '," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.T30 - arr.T30) < 0) { QuerySQL = QuerySQL + "(6,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Натяжение в 3 промежутке'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.T30 - arr.T30) > 0) { QuerySQL = QuerySQL + "(7,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Отсутствие натяжения в 3 промежутке '," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.T40 - arr.T40) < 0) { QuerySQL = QuerySQL + "(6,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Натяжение в 4 промежутке'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.T40 - arr.T40) > 0) { QuerySQL = QuerySQL + "(7,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Отсутствие натяжения в 4 промежутке '," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.Tmot - arr.Tmot) < 0) { QuerySQL = QuerySQL + "(6,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Натяжение на моталке'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.Tmot - arr.Tmot) > 0) { QuerySQL = QuerySQL + "(7,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Отсутствие натяжения на моталке '," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.MaxSpeedPeregr - arr.MaxSpeedPeregr) < 0) { QuerySQL = QuerySQL + "(6,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Максимальный перегруз'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.MaxSpeedPeregr - arr.MaxSpeedPeregr) > 0) { QuerySQL = QuerySQL + "(7,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Отсутствие максимального перегруза'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.UstavkaSpeed - arr.UstavkaSpeed) < 0) { QuerySQL = QuerySQL + "(1,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Уставка рабочей скорости'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.MaxSpeed - arr.MaxSpeed) < 0) { QuerySQL = QuerySQL + "(2,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Перегруз по скорости'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.Rnz12 - arr.Rnz12) > 0) { QuerySQL = QuerySQL + "(6,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','РНЗ 12 включено'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.Rnz12 - arr.Rnz12) < 0) { QuerySQL = QuerySQL + "(7,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','РНЗ 12 выключено'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.Rnz23 - arr.Rnz23) < 0) { QuerySQL = QuerySQL + "(6,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','РНЗ 23 включено'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.Rnz23 - arr.Rnz23) > 0) { QuerySQL = QuerySQL + "(7,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','РНЗ 23 выключено'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.Rnz34 - arr.Rnz34) < 0) { QuerySQL = QuerySQL + "(6,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','РНЗ 34 включено'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.Rnz34 - arr.Rnz34) > 0) { QuerySQL = QuerySQL + "(7,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','РНЗ 34 выключено'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.Rnz45 - arr.Rnz45) < 0) { QuerySQL = QuerySQL + "(6,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','РНЗ 45 включено'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.Rnz45 - arr.Rnz45) > 0) { QuerySQL = QuerySQL + "(7,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','РНЗ 45 выключено'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.GrtVkl - arr.GrtVkl) < 0) { QuerySQL = QuerySQL + "(6,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','ГРТ включено'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.GrtVkl - arr.GrtVkl) > 0) { QuerySQL = QuerySQL + "(7,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','ГРТ выключено'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.TrtVkl - arr.TrtVkl) < 0) { QuerySQL = QuerySQL + "(6,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','ТРТ включено'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.TrtVkl - arr.TrtVkl) > 0) { QuerySQL = QuerySQL + "(7,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','ТРТ выключено'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.NalPol - arr.NalPol) < 0) { QuerySQL = QuerySQL + "(6,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Наличие полосы в толщиномере за 5 клетью'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.NalPol - arr.NalPol) > 0) { QuerySQL = QuerySQL + "(7,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Отсутствие полосы в толщиномере за 5 клетью'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.Knp - arr.Knp) < 0) { QuerySQL = QuerySQL + "(1,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Ноль задания скорости'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.Knp - arr.Knp) > 0) { QuerySQL = QuerySQL + "(2,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Поехали'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.GotStan - arr.GotStan) < 0) { QuerySQL = QuerySQL + "(1,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Сборка схемы стана'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.GotStan - arr.GotStan) > 0) { QuerySQL = QuerySQL + "(4,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Развал схемы стана'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.MaxV1 - arr.MaxV1) < 0) { QuerySQL = QuerySQL + "(4,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Максимальная скорость клети 1'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.MaxV1 - arr.MaxV1) > 0) { QuerySQL = QuerySQL + "(5,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Конец максимальной скорости клети 1'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.MaxV2 - arr.MaxV2) < 0) { QuerySQL = QuerySQL + "(4,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Максимальная скорость клети 2'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.MaxV2 - arr.MaxV2) > 0) { QuerySQL = QuerySQL + "(5,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Конец максимальной скорости клети 2'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.MaxV3 - arr.MaxV3) < 0) { QuerySQL = QuerySQL + "(4,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Максимальная скорость клети 3'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.MaxV3 - arr.MaxV3) > 0) { QuerySQL = QuerySQL + "(5,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Конец максимальной скорости клети 3'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.MaxV4 - arr.MaxV4) < 0) { QuerySQL = QuerySQL + "(4,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Максимальная скорость клети 4'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.MaxV4 - arr.MaxV4) > 0) { QuerySQL = QuerySQL + "(5,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Конец максимальной скорости клети 4'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.MaxV5 - arr.MaxV5) < 0) { QuerySQL = QuerySQL + "(4,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Максимальная скорость клети 5'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.MaxV5 - arr.MaxV5) > 0) { QuerySQL = QuerySQL + "(5,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Конец максимальной скорости клети 5'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.RKDVVkl - arr.RKDVVkl) < 0) { QuerySQL = QuerySQL + "(6,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','РКДВ включен'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.RKDVVkl - arr.RKDVVkl) > 0) { QuerySQL = QuerySQL + "(7,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','РКДВ выключен'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.RpvVkl - arr.RpvVkl) < 0) { QuerySQL = QuerySQL + "(6,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','РПВ включен'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.RpvVkl - arr.RpvVkl) > 0) { QuerySQL = QuerySQL + "(7,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','РПВ выключен'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.Rnv12 - arr.Rnv12) < 0) { QuerySQL = QuerySQL + "(1,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','РНВ12 включен'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.Rnv12 - arr.Rnv12) > 0) { QuerySQL = QuerySQL + "(4,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','РНВ12 выключен'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.Rnv23 - arr.Rnv23) < 0) { QuerySQL = QuerySQL + "(1,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','РНВ23 включен'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.Rnv23 - arr.Rnv23) > 0) { QuerySQL = QuerySQL + "(4,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','РНВ23 выключен'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.Rnv34 - arr.Rnv34) < 0) { QuerySQL = QuerySQL + "(1,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','РНВ34 включен'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.Rnv34 - arr.Rnv34) > 0) { QuerySQL = QuerySQL + "(4,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','РНВ34 выключен'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.Rnz45 - arr.Rnz45) < 0) { QuerySQL = QuerySQL + "(1,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','РН45 включен'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.Rnz45 - arr.Rnz45) > 0) { QuerySQL = QuerySQL + "(4,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','РН45 выключен'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.Rtv - arr.Rtv) < 0) { QuerySQL = QuerySQL + "(1,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','РТВ включен'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.Rtv - arr.Rtv) > 0) { QuerySQL = QuerySQL + "(7,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','РТВ выключен'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.Got_64kg - arr.Got_64kg) < 0) { QuerySQL = QuerySQL + "(1,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Гидравлика 64 кг готова'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.Got_64kg - arr.Got_64kg) > 0) { QuerySQL = QuerySQL + "(4,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Гидравлика 64 кг не готова'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.Got_100kg - arr.Got_100kg) < 0) { QuerySQL = QuerySQL + "(1,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Гидравлика 100 кг готова'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.Got_100kg - arr.Got_100kg) > 0) { QuerySQL = QuerySQL + "(4,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Гидравлика 100 кг не готова'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.g12 - arr.g12) < 0) { QuerySQL = QuerySQL + "(1,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','ПЖТ Ж-12 готова'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.g12 - arr.g12) > 0) { QuerySQL = QuerySQL + "(4,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','ПЖТ Ж-12 не готова'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.GotEmuls - arr.GotEmuls) < 0) { QuerySQL = QuerySQL + "(1,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Эмульсионная система готова'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.GotEmuls - arr.GotEmuls) > 0) { QuerySQL = QuerySQL + "(4,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Эмульсионная система не готова'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.NatshUsl - arr.NatshUsl) < 0) { QuerySQL = QuerySQL + "(5,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Начальные условия'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.g13 - arr.g13) < 0) { QuerySQL = QuerySQL + "(1,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','ПЖТ Ж-13 готова'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.g13 - arr.g13) > 0) { QuerySQL = QuerySQL + "(4,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','ПЖТ Ж-13 не готова'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.g14 - arr.g14) < 0) { QuerySQL = QuerySQL + "(1,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','ПЖТ Ж-14 готова'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.g14 - arr.g14) > 0) { QuerySQL = QuerySQL + "(4,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','ПЖТ Ж-14 не готова'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.g15 - arr.g15) < 0) { QuerySQL = QuerySQL + "(1,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','ПЖТ Ж-15 готова'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.g15 - arr.g15) > 0) { QuerySQL = QuerySQL + "(4,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','ПЖТ Ж-15 не готова'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.LKmot - arr.LKmot) < 0) { QuerySQL = QuerySQL + "(2,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','ЛК моталки включены'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.LKmot - arr.LKmot) > 0) { QuerySQL = QuerySQL + "(6,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','ЛК моталки выключены'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.g16 - arr.g16) < 0) { QuerySQL = QuerySQL + "(1,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Смазка Ж-16 готова'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.g16 - arr.g16) > 0) { QuerySQL = QuerySQL + "(4,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Смазка Ж-16 не готова'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.g17 - arr.g17) < 0) { QuerySQL = QuerySQL + "(1,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Смазка Ж-17 готова'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.g17 - arr.g17) > 0) { QuerySQL = QuerySQL + "(4,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Смазка Ж-17 не готова'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.g18 - arr.g18) < 0) { QuerySQL = QuerySQL + "(1,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Смазка Ж-18 готова'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.g18 - arr.g18) > 0) { QuerySQL = QuerySQL + "(4,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Смазка Ж-18 не готова'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.g19 - arr.g19) < 0) { QuerySQL = QuerySQL + "(1,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Смазка Ж-19 готова'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.g19 - arr.g19) > 0) { QuerySQL = QuerySQL + "(4,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Смазка Ж-19 не готова'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.g20 - arr.g20) < 0) { QuerySQL = QuerySQL + "(1,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Смазка Ж-20 готова'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.g20 - arr.g20) > 0) { QuerySQL = QuerySQL + "(4,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Смазка Ж-20 не готова'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.Peregr1 - arr.Peregr1) < 0) { QuerySQL = QuerySQL + "(1,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Перегруз клети 1'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.Peregr1 - arr.Peregr1) > 0) { QuerySQL = QuerySQL + "(5,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Конец перегруза клети 1'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.Peregr2 - arr.Peregr2) < 0) { QuerySQL = QuerySQL + "(1,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Перегруз клети 2'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.Peregr2 - arr.Peregr2) > 0) { QuerySQL = QuerySQL + "(5,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Конец перегруза клети 2'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.Peregr3 - arr.Peregr3) < 0) { QuerySQL = QuerySQL + "(1,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Перегруз клети 3'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.Peregr3 - arr.Peregr3) > 0) { QuerySQL = QuerySQL + "(5,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Конец перегруза клети 3'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.Peregr4 - arr.Peregr4) < 0) { QuerySQL = QuerySQL + "(1,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Перегруз клети 4'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.Peregr4 - arr.Peregr4) > 0) { QuerySQL = QuerySQL + "(5,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Конец перегруза клети 4'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.Peregr5 - arr.Peregr5) < 0) { QuerySQL = QuerySQL + "(1,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Перегруз клети 5'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.Peregr5 - arr.Peregr5) > 0) { QuerySQL = QuerySQL + "(5,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Конец перегруза клети 5'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.temp_POU - arr.temp_POU) < 0) { QuerySQL = QuerySQL + "(4,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Температура в ПОУ высокая'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.temp_POU - arr.temp_POU) > 0) { QuerySQL = QuerySQL + "(1,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Температура в ПОУ нормальная'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.davl_redukt - arr.davl_redukt) < 0) { QuerySQL = QuerySQL + "(1,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Давление редукторов низкое'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.davl_redukt - arr.davl_redukt) > 0) { QuerySQL = QuerySQL + "(4,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Давление редукторов нормальное'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.davl_PGT - arr.davl_PGT) < 0) { QuerySQL = QuerySQL + "(1,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Давление ПЖТ низкое'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.davl_PGT - arr.davl_PGT) > 0) { QuerySQL = QuerySQL + "(4,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Давление ПЖТ нормальное'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.LKrazm - arr.LKrazm) < 0) { QuerySQL = QuerySQL + "(2,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','ЛК разматывателя включены'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.LKrazm - arr.LKrazm) > 0) { QuerySQL = QuerySQL + "(6,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','ЛК разматывателя выключены'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.temp_privod - arr.temp_privod) < 0) { QuerySQL = QuerySQL + "(1,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Вентиляция готова'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.temp_privod - arr.temp_privod) > 0) { QuerySQL = QuerySQL + "(4,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Вентиляция не готова'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.got_sinhr - arr.got_sinhr) < 0) { QuerySQL = QuerySQL + "(1,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Синхронные двигатели готовы'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.got_sinhr - arr.got_sinhr) > 0) { QuerySQL = QuerySQL + "(4,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Синхронные двигатели не готовы'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.OgragdMot - arr.OgragdMot) < 0) { QuerySQL = QuerySQL + "(1,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Ограждение моталки закрыто'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.OgragdMot - arr.OgragdMot) > 0) { QuerySQL = QuerySQL + "(4,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Ограждение моталки открыто НО'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.ZaxlestOtMot - arr.ZaxlestOtMot) < 0) { QuerySQL = QuerySQL + "(1,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Захлестыватель у моталки НО'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.ZaxlestOtMot - arr.ZaxlestOtMot) > 0) { QuerySQL = QuerySQL + "(4,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Захлестыватель отведен'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.NOTempGP - arr.NOTempGP) < 0) { QuerySQL = QuerySQL + "(1,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Высокая температура ПЖТ ГП'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.NOTempGP - arr.NOTempGP) > 0) { QuerySQL = QuerySQL + "(4,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Нормальная температура ПЖТ ГП'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.NOSinxr - arr.NOSinxr) < 0) { QuerySQL = QuerySQL + "(1,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Высокая температура ПЖТ СД'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.NOSinxr - arr.NOSinxr) > 0) { QuerySQL = QuerySQL + "(4,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Нормальная температура ПЖТ СД'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.NOPanPultStar - arr.NOPanPultStar) < 0) { QuerySQL = QuerySQL + "(1,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Кнопка НО на ПУ старшего нажата'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.NOPanPultStar - arr.NOPanPultStar) > 0) { QuerySQL = QuerySQL + "(4,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Кнопка НО на ПУР нажата'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.NOPU1 - arr.NOPU1) > 0) { QuerySQL = QuerySQL + "(4,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Кнопка НО на ПУ1 нажата'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.NOPU2 - arr.NOPU2) > 0) { QuerySQL = QuerySQL + "(4,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Кнопка НО на ПУ2 нажата'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.NOPU3 - arr.NOPU3) > 0) { QuerySQL = QuerySQL + "(4,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Кнопка НО на ПУ3 нажата'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.NOPU4 - arr.NOPU4) > 0) { QuerySQL = QuerySQL + "(4,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Кнопка НО на ПУ4 нажата'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.NOPU5 - arr.NOPU5) > 0) { QuerySQL = QuerySQL + "(4,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Кнопка НО на ПУ5 нажата'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.FOPanPultStar - arr.FOPanPultStar) < 0) { QuerySQL = QuerySQL + "(4,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Кнопка ФО на ПУ старшего нажата'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.FOPUR - arr.FOPUR) > 0) { QuerySQL = QuerySQL + "(4,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Кнопка ФО на ПУР нажата'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.FOPU1 - arr.FOPU1) > 0) { QuerySQL = QuerySQL + "(4,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Кнопка ФО на ПУ1 нажата'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.FOPU2 - arr.FOPU2) > 0) { QuerySQL = QuerySQL + "(4,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Кнопка ФО на ПУ2 нажата'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.FOPU3 - arr.FOPU3) > 0) { QuerySQL = QuerySQL + "(4,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Кнопка ФО на ПУ3 нажата'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.FOPU4 - arr.FOPU4) > 0) { QuerySQL = QuerySQL + "(4,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Кнопка ФО на ПУ4 нажата'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.FOPU5 - arr.FOPU5) > 0) { QuerySQL = QuerySQL + "(4,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Кнопка ФО на ПУ5 нажата'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.AOPUR - arr.AOPUR) > 0) { QuerySQL = QuerySQL + "(4,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Кнопка АО на ПУР нажата'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.AOSUSknopka - arr.AOSUSknopka) > 0) { QuerySQL = QuerySQL + "(4,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Кнопка АО на СУС нажата'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.AO5klet - arr.AO5klet) > 0) { QuerySQL = QuerySQL + "(4,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Кнопка АО на ПУ5 нажата'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.TrazmProval - arr.TrazmProval) < 0) { QuerySQL = QuerySQL + "(4,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Провал натяжения на разматывателе ФО'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.TrazmProval - arr.TrazmProval) > 0) { QuerySQL = QuerySQL + "(1,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Восстановление натяжения на разматывателе ТД'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.T12proval - arr.T12proval) < 0) { QuerySQL = QuerySQL + "(4,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Провал натяжения в 1 промежутке ФО'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.T12proval - arr.T12proval) > 0) { QuerySQL = QuerySQL + "(1,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Восстановление натяжения в 1 промежутке ТД'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.T23proval - arr.T23proval) < 0) { QuerySQL = QuerySQL + "(4,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Провал натяжения в 2 промежутке ФО'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.T23proval - arr.T23proval) > 0) { QuerySQL = QuerySQL + "(1,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Восстановление натяжения в 2 промежутке ТД'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.T34proval - arr.T34proval) < 0) { QuerySQL = QuerySQL + "(4,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Провал натяжения в 3 промежутке ФО'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.T34proval - arr.T34proval) > 0) { QuerySQL = QuerySQL + "(1,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Восстановление натяжения в 3 промежутке ТД'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.T45proval - arr.T45proval) < 0) { QuerySQL = QuerySQL + "(4,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Провал натяжения в 4 промежутке ФО'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.T45proval - arr.T45proval) > 0) { QuerySQL = QuerySQL + "(1,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Восстановление натяжения в 4 промежутке ТД'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.LK1 - arr.LK1) < 0) { QuerySQL = QuerySQL + "(2,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','ЛК клети 1 включены'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.LK1 - arr.LK1) > 0) { QuerySQL = QuerySQL + "(6,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','ЛК клети 1 выключены'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.LK2 - arr.LK2) < 0) { QuerySQL = QuerySQL + "(2,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','ЛК клети 2 включены'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.LK2 - arr.LK2) > 0) { QuerySQL = QuerySQL + "(6,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','ЛК клети 2 выключены'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.LK3 - arr.LK3) < 0) { QuerySQL = QuerySQL + "(2,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','ЛК клети 3 включены'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.LK3 - arr.LK3) > 0) { QuerySQL = QuerySQL + "(6,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','ЛК клети 3 выключены'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.LK4 - arr.LK4) < 0) { QuerySQL = QuerySQL + "(2,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','ЛК клети 4 включены'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.LK4 - arr.LK4) > 0) { QuerySQL = QuerySQL + "(6,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','ЛК клети 4 выключены'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.LK5 - arr.LK5) < 0) { QuerySQL = QuerySQL + "(2,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','ЛК клети 5 включены'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.LK5 - arr.LK5) > 0) { QuerySQL = QuerySQL + "(6,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','ЛК клети 5 выключены'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.KnAOsus - arr.KnAOsus) < 0) { QuerySQL = QuerySQL + "(4,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Кнопка АО на СУС нажата'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.Vent_101G - arr.Vent_101G) < 0) { QuerySQL = QuerySQL + "(4,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Вентилятор обдува 101Г выключен НО'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.Vent_102G - arr.Vent_102G) < 0) { QuerySQL = QuerySQL + "(4,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Вентилятор обдува 102Г выключен НО'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.Vent_103G - arr.Vent_103G) < 0) { QuerySQL = QuerySQL + "(4,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Вентилятор обдува 103Г выключен НО'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.Vent_105G - arr.Vent_105G) < 0) { QuerySQL = QuerySQL + "(4,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Вентилятор обдува 105Г выключен НО'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.Vent_106G - arr.Vent_106G) < 0) { QuerySQL = QuerySQL + "(4,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Вентилятор обдува 106Г выключен НО'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.Vent_112G - arr.Vent_112G) < 0) { QuerySQL = QuerySQL + "(4,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Вентилятор обдува 112Г выключен НО'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.Vent_111G - arr.Vent_111G) < 0) { QuerySQL = QuerySQL + "(4,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Вентилятор обдува 111Г выключен НО'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.Vent_110G - arr.Vent_110G) < 0) { QuerySQL = QuerySQL + "(4,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Вентилятор обдува 110Г выключен НО'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.Vent_108G - arr.Vent_108G) < 0) { QuerySQL = QuerySQL + "(4,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Вентилятор обдува 108Г выключен НО'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.Vent_107G - arr.Vent_107G) < 0) { QuerySQL = QuerySQL + "(4,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Вентилятор обдува 107Г выключен НО'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.Vent_podpor_PA1 - arr.Vent_podpor_PA1) < 0) { QuerySQL = QuerySQL + "(4,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Вентилятор подпора ПА-1 выключен'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.Vent_podpor_PA2 - arr.Vent_podpor_PA2) < 0) { QuerySQL = QuerySQL + "(4,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Вентилятор подпора ПА-2 выключен'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.Vent_1kl - arr.Vent_1kl) < 0) { QuerySQL = QuerySQL + "(4,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Вентилятор обдува ГП 1 клети выключен НО'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.Vent_2kl - arr.Vent_2kl) < 0) { QuerySQL = QuerySQL + "(4,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Вентилятор обдува ГП 2 клети выключен НО'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.Vent_3kl - arr.Vent_3kl) < 0) { QuerySQL = QuerySQL + "(4,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Вентилятор обдува ГП 3 клети выключен НО'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.Vent_4kl - arr.Vent_4kl) < 0) { QuerySQL = QuerySQL + "(4,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Вентилятор обдува ГП 4 клети выключен НО'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.Vent_5kl - arr.Vent_5kl) < 0) { QuerySQL = QuerySQL + "(4,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Вентилятор обдува ГП 5 клети выключен НО'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.Vent_podpor_GP1 - arr.Vent_podpor_GP1) < 0) { QuerySQL = QuerySQL + "(4,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Вентилятор подпора ГП-1 выключен'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.Vent_podpor_GP2 - arr.Vent_podpor_GP2) < 0) { QuerySQL = QuerySQL + "(4,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Вентилятор подпора ГП-2 выключен'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.Vent_NV - arr.Vent_NV) < 0) { QuerySQL = QuerySQL + "(4,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','Вентилятор обдува нажимных винтов выключен НО'," + speed.ToString() + "),"; QueryCount++; }
+                    if ((arr_minus.Dv2pr09sec3vv - arr.Dv2pr09sec3vv) < 0) { QuerySQL = QuerySQL + "(4,'" + dtMessage.ToString("yyyy-MM-dd HH:mm:ss.fff" ) + "','ХХХ ПЕРЕГРУЗ ГП ХХХ'," + speed.ToString() + "),"; QueryCount++; }
+
+
+
+
+                    #endregion
+
+                    #region БД
+                    
+
+                    #region Проверяем создана ли таблица
+                    string comBDMessage = "if not exists (select * from sysobjects where name='" + strTableName + "' and xtype='U') create table " + strTableName +
+                                "(" +
+                                "status int NOT NULL, " +
+                                "dtmes datetime NOT NULL, " +
+                                "message text NOT NULL, " +
+                                "speed float NOT NULL)";
+
+                    //создаем таблицу сообщений стана 
+                    using (SqlConnection con1Mess = new SqlConnection(connectionString))
                     {
-                        for (int b = 0; b < 8; b++)
+                        try
                         {
-                            int z = Convert.ToInt32(Math.Pow(2,b));
-                            if (((byte)(stanbufferMessageOld[i]&z)-(byte)(stanbufferMessage[i]&z))<0)
-                            {
-                                if(MessageStan[numberMessage].statusMenshe != 0)
-                                {
-                                    string mes = MessageStan[numberMessage].MinusMess;
-                                    int status = MessageStan[numberMessage].statusMenshe;
-                                    dtMessagestan.Rows.Add(dtMessage.ToString("HH:mm:ss.fff"), status, mes, speed);
-                                }
-                            }
-                            else if (((byte)(stanbufferMessageOld[i] & z) - (byte)(stanbufferMessage[i] & z)) > 0)
-                            {
-                                if(MessageStan[numberMessage].statusBolshe != 0)
-                                {
-                                    string mes = MessageStan[numberMessage].PlusMess;
-                                    int status = MessageStan[numberMessage].statusBolshe;
-                                    dtMessagestan.Rows.Add(dtMessage.ToString("HH:mm:ss.fff"), status, mes, speed);
-                                }
-                            }
-                            numberMessage++;
-
-                        }
-                    }
-
-                    //TODO запись сообщений в БД каждую минуту    
-                    if (writeMessage>300)
-                    {
-                        writeMessage = 0;
-                        string strTableName = "stanmess"+numberTable;
-                        string comBDMessage = "if not exists (select * from sysobjects where name='" + strTableName + "' and xtype='U') create table " + strTableName +
-                                    "(" +
-                                    "dtmes datetime NOT NULL, " +
-                                    "status int NOT NULL, " +
-                                    "message text NOT NULL, " +
-                                    "speed float NOT NULL)";
-
-                        //создаем таблицу сообщений стана 
-                        using (SqlConnection con1Mess = new SqlConnection(connectionString))
-                        {
-                            try
-                            {
-                                con1Mess.Open();
-                                SqlCommand command = new SqlCommand(comBDMessage, con1Mess);
-                                int WriteSQL = command.ExecuteNonQuery();
-                                con1Mess.Close();
-                            }
-                            catch (Exception)
-                            {
-                                Program.dtErrorSt200mc = DateTime.Now;
-                                Program.messageErrorSt200mc = "Ошибка при создании таблицы Сообщений ("+ strTableName+")";
-                            }
+                            con1Mess.Open();
+                            SqlCommand command = new SqlCommand(comBDMessage, con1Mess);
+                            int WriteSQL = command.ExecuteNonQuery();
+                            con1Mess.Close();
                             
                         }
-                        if (dtMessagestan.Rows.Count > 0)
+                        catch (Exception)
                         {
-                            //записываем в таблицу прокатанного рулона данные по прокатке этого рулона
+                            Program.dtErrorSt200mc = DateTime.Now;
+                            Program.messageErrorSt200mc = "Ошибка при создании таблицы Сообщений (" + strTableName + ")";
+                        }
+
+                    }
+                    #endregion
+
+
+                    #region Сохраняем данные в таблицу
+                    
+
+                    if (QuerySQL.Length > 0)
+                    {
+                        QuerySQL = QuerySQL.Substring(0, QuerySQL.Length - 1);
+                        string SQLMessage = "INSERT INTO " + strTableName + " Values " + QuerySQL;
+
+                        using (SqlConnection con2Mess = new SqlConnection(connectionString))
+                        {
                             try
                             {
-                                using (SqlConnection con2Mess = new SqlConnection(connectionString))
-                                {
-                                    con2Mess.Open();
-                                    using (var bulkMessage = new SqlBulkCopy(con2Mess))
-                                    {
-                                        bulkMessage.DestinationTableName = strTableName;
-                                        bulkMessage.WriteToServer(dtMessagestan);
-                                       // Program.messageOKSt200mc1 = Program.messageOKSt200mc1 + ".";
-                                        Program.intmessageOKSt200mc = Program.intmessageOKSt200mc + dtMessagestan.Rows.Count;
-                                        Program.messageOKSt200mc = "В таблицу " + strTableName + " за 5с записано ["+Program.intmessageOKSt200mc+"|"+dtMessagestan.Rows.Count+":"+ writeMessage + "]";
-                                        Program.dtOKSt200mc = dtMessage;
-                                    }
-                                }
-                                dtMessagestan.Clear();
+                                con2Mess.Open();
+                                SqlCommand command = new SqlCommand(SQLMessage, con2Mess);
+                                //command.Parameters.AddWithValue("@datetimeStanMess", DateTime.Now);
+                                int WriteSQL = command.ExecuteNonQuery();
+
+                                Program.intmessageOKSt200mc = Program.intmessageOKSt200mc + QueryCount;
+
+                                
+                                Program.messageOKSt200mc1 = Program.messageOKSt200mc1 + "(" + QueryCount + ")";
+                                
+
+                                con2Mess.Close();
+
+                                arr_minus = arr;
+
+
+
                             }
-                            catch (Exception)
+                            catch (Exception ex)
                             {
                                 Program.dtErrorSt200mc = DateTime.Now;
-                                Program.messageErrorSt200mc = "Ошибка при записи в таблицу Сообщений (" + strTableName + ")";
+                                Program.messageErrorSt200mc = "Ошибка при ЗАПИСИ в таблицу Сообщений (" + strTableName + ")";
 
                             }
-
-
                         }
-                        else
-                        {
-
-                            Program.messageOKSt200mc = "Сообщений не было с " + DateTime.Now.AddMinutes(-1).ToString("dd:MM HH:mm") + " по " + DateTime.Now.ToString("HH:mm");
-                            Program.dtOKSt200mc = dtMessage;
-
-                        }
-
-                    }
-                    else
-                    {
-                        writeMessage++;
                     }
 
+                    #endregion
+
+
+                    #endregion
+
+                    #endregion
                 }
 
-            }
+            }   
             catch (Exception ex)
             {
                 Program.messageErrorSt200mc = "Global Error в модуле формирования сообщения " + ex.Message;

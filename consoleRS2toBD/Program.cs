@@ -343,9 +343,10 @@ namespace consoleRS2toBD
                 }
                 if (messageOKSt200mc1 != null)
                 {
-                    //LogSystem.Write("Стан1700 Сообщения(цикл 200mc)", Direction.Ok, dtOKSt200mc, "                                                                                             ", 1, 13, true);
-                    ConMessageOKSt200mc = messageOKSt200mc1 + messageOKSt200mc;
-                    LogSystem.Write("Стан1700 Сообщения(цикл 200mc)", Direction.Ok, dtOKSt200mc, ConMessageOKSt200mc + "(" + intmessageOKSt200mc + ")", 1, 13, true);
+
+                    LogSystem.Write("Стан1700 Сообщения(цикл 200mc)", Direction.Ok, dtOKSt200mc, "                                                                                                                                                  ", 1, 13, true);
+                    ConMessageOKSt200mc = "В таблицу сообщений " + messageOKSt200mc + " за 5с записано " + messageOKSt200mc1;
+                    LogSystem.Write("Стан1700 Сообщения(цикл 200mc)", Direction.Ok, dtOKSt200mc, ConMessageOKSt200mc + "[=" + intmessageOKSt200mc + "=]", 1, 13, true);
                 }
 
                 #endregion

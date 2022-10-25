@@ -280,7 +280,7 @@ namespace consoleRS2toBD
                 }
 
 
-
+                
                 LogSystem.Write("Время запуска программы: ", Direction.Ok, MesMain, 20, 0, true);
 
                 LogSystem.Write("Version: ", Direction.Ok, strVersionData, 120, 0, true);
@@ -344,9 +344,9 @@ namespace consoleRS2toBD
                 if (messageOKSt200mc1 != null)
                 {
 
-                    LogSystem.Write("Стан1700 Сообщения(цикл 200mc)", Direction.Ok, dtOKSt200mc, "                                                                                                                                                  ", 1, 13, true);
+                    LogSystem.Write("Стан1700 Сообщения(цикл 200mc)", Direction.OkStanMessage, dtOKSt200mc, "                                                                                                                                                  ", 1, 13, true);
                     ConMessageOKSt200mc = "В таблицу сообщений " + messageOKSt200mc + " за 5с записано " + messageOKSt200mc1;
-                    LogSystem.Write("Стан1700 Сообщения(цикл 200mc)", Direction.Ok, dtOKSt200mc, ConMessageOKSt200mc + "[=" + intmessageOKSt200mc + "=]", 1, 13, true);
+                    LogSystem.Write("Стан1700 Сообщения(цикл 200mc)", Direction.OkStanMessage, dtOKSt200mc, ConMessageOKSt200mc + "[=" + intmessageOKSt200mc + "=]", 1, 13, true);
                 }
 
                 #endregion
@@ -366,9 +366,9 @@ namespace consoleRS2toBD
                 if (messageOKSt1c2 != null)
                 {
                    
-                    LogSystem.Write("Стан1700. Цикл 1c.", Direction.Ok, dtOKSt1c, "                                                                 ", 1, 16, true);
+                    LogSystem.Write("Стан1700. Цикл 1c.", Direction.OkStan1s, dtOKSt1c, "                                                                 ", 1, 16, true);
                     ConMessageOKSt1c = messageOKSt1c1+ messageOKSt1c2;
-                    LogSystem.Write("Стан1700. Запись в таблицу 1c. ", Direction.Ok, dtOKSt1c, ConMessageOKSt1c + "("+intConMessageOKSt1c+")", 1, 16, true);
+                    LogSystem.Write("Стан1700. Запись в таблицу 1c. ", Direction.OkStan1s, dtOKSt1c, ConMessageOKSt1c + "("+intConMessageOKSt1c+")", 1, 16, true);
                 }
 
                 #endregion
@@ -393,15 +393,15 @@ namespace consoleRS2toBD
 
                         if (ConMessageOKStProizvodstvo1 != null)
                         {
-                            LogSystem.Write("Стан1700. Производствo", Direction.Ok, dtOKStProizvodstvo1, ConMessageOKStProizvodstvo1, 1, 21, true);
+                            LogSystem.Write("Стан1700. Производствo", Direction.OkStanPassportRulona, dtOKStProizvodstvo1, ConMessageOKStProizvodstvo1, 1, 21, true);
                         }
                         if (ConMessageOKStProizvodstvo2 != null)
                         {
-                            LogSystem.Write("Стан1700. Производствo", Direction.Ok, dtOKStProizvodstvo2, ConMessageOKStProizvodstvo2, 1, 22, true);
+                            LogSystem.Write("Стан1700. Производствo", Direction.OkStanPassportRulona, dtOKStProizvodstvo2, ConMessageOKStProizvodstvo2, 1, 22, true);
                         }
                         if (ConMessageOKStProizvodstvo3 != null)
                         {
-                            LogSystem.Write("Стан1700. Производствo", Direction.Ok, dtOKStProizvodstvo3, ConMessageOKStProizvodstvo3, 1, 23, true);
+                            LogSystem.Write("Стан1700. Производствo", Direction.OkStanPassportRulona, dtOKStProizvodstvo3, ConMessageOKStProizvodstvo3, 1, 23, true);
                         }
 
 
@@ -434,24 +434,24 @@ namespace consoleRS2toBD
 
                     if (ConMessageOKStValki1 != null)
                     {
-                        LogSystem.Write("Стан1700. Write перевалок валков.", Direction.Ok, dtOKStValki1, ConMessageOKStValki1, 1, 25, true);
+                        LogSystem.Write("Стан1700. Write перевалок валков.", Direction.OkStanPerevalki, dtOKStValki1, ConMessageOKStValki1, 1, 25, true);
                     }
                     if (ConMessageOKStValki2 != null)
                     {
-                        LogSystem.Write("Стан1700. Write перевалок валков.", Direction.Ok, dtOKStValki2, ConMessageOKStValki2, 1, 26, true);
+                        LogSystem.Write("Стан1700. Write перевалок валков.", Direction.OkStanPerevalki, dtOKStValki2, ConMessageOKStValki2, 1, 26, true);
                     }
                     if (ConMessageOKStValki3 != null)
                     {
-                        LogSystem.Write("Стан1700. Write перевалок валков.", Direction.Ok, dtOKStValki3, ConMessageOKStValki3, 1, 27, true);
+                        LogSystem.Write("Стан1700. Write перевалок валков.", Direction.OkStanPerevalki, dtOKStValki3, ConMessageOKStValki3, 1, 27, true);
 
                     }
                     if (ConMessageOKStValki4 != null)
                     {
-                        LogSystem.Write("Стан1700. Write перевалок валков.", Direction.Ok, dtOKStValki4, ConMessageOKStValki4, 1, 28, true);
+                        LogSystem.Write("Стан1700. Write перевалок валков.", Direction.OkStanPerevalki, dtOKStValki4, ConMessageOKStValki4, 1, 28, true);
                     }
                     if (ConMessageOKStValki5 != null)
                     {
-                        LogSystem.Write("Стан1700. Write перевалок валков.", Direction.Ok, dtOKStValki5, ConMessageOKStValki5, 1, 29, true);
+                        LogSystem.Write("Стан1700. Write перевалок валков.", Direction.OkStanPerevalki, dtOKStValki5, ConMessageOKStValki5, 1, 29, true);
                     }
 
 

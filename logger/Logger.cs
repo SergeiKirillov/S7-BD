@@ -173,32 +173,33 @@ namespace LoggerInSystem
                 case Direction.Ok:
                     Console.BackgroundColor = ConsoleColor.Black;
                     Console.ForegroundColor = ConsoleColor.White;
+                    //Console.ForegroundColor = ConsoleColor.Blue;
                     break;
                 case Direction.ERROR:
-                    Console.BackgroundColor = ConsoleColor.Red;
-                    Console.ForegroundColor = ConsoleColor.Black;
+                    Console.BackgroundColor = ConsoleColor.Black;
+                    Console.ForegroundColor = ConsoleColor.Red;
                     break;
                 case Direction.WARNING:
                     break;
                 case Direction.OkStanMessage:
-                    Console.BackgroundColor = ConsoleColor.Yellow;
-                    Console.ForegroundColor = ConsoleColor.Black;
+                    Console.BackgroundColor = ConsoleColor.Black;
+                    Console.ForegroundColor = ConsoleColor.Yellow;
                     break;
                 case Direction.OkStanMessageNull:
                     Console.BackgroundColor = ConsoleColor.DarkYellow;
                     Console.ForegroundColor = ConsoleColor.Black;
                     break;
                 case Direction.OkStan1s:
-                    Console.BackgroundColor = ConsoleColor.Green;
-                    Console.ForegroundColor = ConsoleColor.Black;
+                    Console.BackgroundColor = ConsoleColor.Black;
+                    Console.ForegroundColor = ConsoleColor.Green;
                     break;
                 case Direction.OkStanPassportRulona:
-                    Console.BackgroundColor = ConsoleColor.Blue;
-                    Console.ForegroundColor = ConsoleColor.White;
+                    Console.BackgroundColor = ConsoleColor.Black;
+                    Console.ForegroundColor = ConsoleColor.Cyan;
                     break;
                 case Direction.OkStanPerevalki:
-                    Console.BackgroundColor = ConsoleColor.DarkYellow;
-                    Console.ForegroundColor = ConsoleColor.Black;
+                    Console.BackgroundColor = ConsoleColor.Black;
+                    Console.ForegroundColor = ConsoleColor.DarkYellow;
                     break;
                 default:
                     break;

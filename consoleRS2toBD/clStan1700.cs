@@ -466,7 +466,7 @@ namespace consoleRS2toBD
         byte[] stanbuffer1s;        //Технологические данные
         byte[] stanbufferNet;       //Передача по сети (визуализация)
 
-        int stanamount = 315; //Размер буфера для принятия данных в байтах
+        int stanamount = 320; //Размер буфера для принятия данных в байтах
 
         byte[] stanIPconnPLC = new byte[] { 192, 168, 0, 11 }; //Передаем адресс контроллера
         int stanconnect = 0;
@@ -940,7 +940,7 @@ namespace consoleRS2toBD
                     #region //Если БД не существует то создаем -> TEMPstan101ms
                     string comRulon101ms1 = "if not exists (select * from sysobjects where name ='TEMPstan101ms' and xtype='U') create table TEMPstan101ms " +
                        "(" +
-                       "datetime101ms datetime , " +
+                       "dtsave datetime , " +
                        "v1 float," +
                        "v2 float," +
                        "v3 float," +
@@ -1067,7 +1067,7 @@ namespace consoleRS2toBD
                     {
                         
                         string comRulon101ms2 = "INSERT INTO TEMPstan101ms" +
-                       "(datetime101ms,v1,v2,v3,v4,v5,h1,h5,b,dvip,drazm,dmot,vvip,d1,d2,d3,d4,d5,e2,e3,e4,e5,n1l,n1p,n2l,n2p,n3l,n3p,n4l,n4p,n5l,n5p,reserv1,reserv2,t1,t2,t3,t4,t1l,t2l,t3l,t4l,t1p,t2p,t3p,t4p,t1z,t2z,t3z,t4z,erazm,ivozbrazm,izadrazm,w1,w2v,w2n,w3v,w3n,w4v,w4n,w5v,w5n,wmot,imot,izadmot,u1,u2v,u2n,u3v,u3n,u4v,u4n,u5v,u5n,umot,i1,i2v,i2n,i3v,i3n,i4v,i4n,i5v,i5n,rtv,dt1,dt2,dt3,dt4,grt,trt,mv1,mv2,mv3,dh1,dh5,os1klvb,rezerv,mezdoza4)" +
+                       "(dtsave,v1,v2,v3,v4,v5,h1,h5,b,dvip,drazm,dmot,vvip,d1,d2,d3,d4,d5,e2,e3,e4,e5,n1l,n1p,n2l,n2p,n3l,n3p,n4l,n4p,n5l,n5p,reserv1,reserv2,t1,t2,t3,t4,t1l,t2l,t3l,t4l,t1p,t2p,t3p,t4p,t1z,t2z,t3z,t4z,erazm,ivozbrazm,izadrazm,w1,w2v,w2n,w3v,w3n,w4v,w4n,w5v,w5n,wmot,imot,izadmot,u1,u2v,u2n,u3v,u3n,u4v,u4n,u5v,u5n,umot,i1,i2v,i2n,i3v,i3n,i4v,i4n,i5v,i5n,rtv,dt1,dt2,dt3,dt4,grt,trt,mv1,mv2,mv3,dh1,dh5,os1klvb,rezerv,mezdoza4)" +
                        " VALUES " +
                        "('" +
                         DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'," +
@@ -1248,9 +1248,9 @@ namespace consoleRS2toBD
                     #region Формирование сигнала окончания прокатки
                     if ((stanTimeStart != new DateTime()) && (H5_work != 0) && (stanD_tek_mot < 610) && (stanD_tek_mot < stanD_pred_mot))
                     {
-                        Ves_Work = (((((stanD_pred_mot * stanD_pred_mot) / 1000000 - 0.36F) * 3.141593F) / 4) * (B_Work / 1000)) * 7.85F;
+                        Ves_Work = (((((stanD_pred_mot * stanD_pred_mot) / 1000000 - 0.36F) * 3.141593F) / 4) * ((float)B_Work / 1000)) * 7.85F;
                         stanTimeStop = DateTime.Now;
-                        Dlina_Work = ((Ves_Work / 7.85F) / (B_Work / 1000)) / (H5_work / 1000);
+                        Dlina_Work = ((Ves_Work / 7.85F) / ((float)B_Work / 1000)) / (H5_work / 1000);
                         blRulonStart = false;
 
 
@@ -1295,6 +1295,7 @@ namespace consoleRS2toBD
 
                         string comWorkStanCreate = "if not exists (select * from sysobjects where name ='stanwork' and xtype='U') create table stanwork" +
                        "(" +
+                       "dtsave datetime, " +
                        "RulonName varchar(100), " +
                        "startRulon datetime , " +
                        "stopRulon datetime , " +
@@ -1315,6 +1316,7 @@ namespace consoleRS2toBD
 
                         #region Заполнение производство
                         string comWorkStan = "INSERT INTO stanwork( " +
+                            "dtsave," +
                             "RulonName," +
                             "startRulon," +
                             "stopRulon," +
@@ -1324,6 +1326,7 @@ namespace consoleRS2toBD
                             "dlina" +
                             ") " +
                             "VALUES(" +
+                            "@TimeNow, " +
                             "@NumberRulon, " +
                             "@TimeStart, " +
                             "@TimeStop, " +
@@ -1341,8 +1344,8 @@ namespace consoleRS2toBD
                                 con3.Open();
                                 SqlCommand command = new SqlCommand(comWorkStan, con3);
 
+                                command.Parameters.AddWithValue("@TimeNow", DateTime.Now);
                                 command.Parameters.AddWithValue("@NumberRulon", NameRulon);
-
                                 command.Parameters.AddWithValue("@TimeStart", stanTimeStart);
                                 command.Parameters.AddWithValue("@TimeStop", stanTimeStop);
                                 command.Parameters.AddWithValue("@H5_work", H5_work);
@@ -1352,9 +1355,20 @@ namespace consoleRS2toBD
 
                                 int WriteSQL = command.ExecuteNonQuery();
 
-                                Program.messageOKStProizvodstvo = NameRulon + "(" + stanTimeStart.ToString("HH:mm") + "-" + stanTimeStop.ToString("HH:mm") + ") " + H5_work + "мм *" + B_Work + "мм -> " + Ves_Work+"т";
+                                Program.messageOKStProizvodstvo = NameRulon + "(" + stanTimeStart.ToString("HH:mm") + "-" + stanTimeStop.ToString("HH:mm") + ")->" + H5_work + "мм/" + B_Work + "мм/" + Ves_Work + "т/" + Dlina_Work + "m";
                                 //messageOKProizvodstvo = "производство";
                                 Program.dtOKStProizvodstvo = DateTime.Now;
+
+                                #region Сброс переменных  после записи
+                                NameRulon = "";
+                                stanTimeStart = new DateTime();
+                                stanTimeStop = new DateTime();
+                                H5_work = 0;
+                                B_Work = 0;
+                                Ves_Work = 0;
+                                Dlina_Work = 0;
+                                #endregion
+
                             }
                             catch (Exception ex)
                             {
@@ -1535,7 +1549,9 @@ namespace consoleRS2toBD
         #region Формируем и записываем данные  1c. Название таблицы формируется по принципу YYYYmmddW (W - смена(1 ночная(с 19-07), 2дневная(07-19)))
         private void stanSQL1s()
         {
-            byte[] stanbuf1s = new byte[96];
+            byte[] stanbuf1s = new byte[100];
+            string NumberTable1s="yyyyMMdd";
+
 
             //#region Формируем шифр таблицы numberTable = stan1syyyyMMddсмена
 
@@ -1589,7 +1605,8 @@ namespace consoleRS2toBD
                     if ((NowTime>Time1)&&(NowTime<Time2))
                     {
                         //2 смена
-                        numberTable = DateTime.Now.ToString("yyyyMMdd") + "2";
+
+                        NumberTable1s = DateTime.Now.ToString("yyyyMMdd") + "2";
                     }
                     else if ((NowTime < Time1)||(NowTime > Time2))
                     {
@@ -1597,12 +1614,12 @@ namespace consoleRS2toBD
                         if (NowTime > Time2)
                         {
                             //1 смена после 19
-                            numberTable = DateTime.Now.AddDays(1).ToString("yyyyMMdd") + "1";
+                            NumberTable1s = DateTime.Now.AddDays(1).ToString("yyyyMMdd") + "1";
                         }
                         else
                         {
                             //1 смена до 7
-                            numberTable = DateTime.Now.ToString("yyyyMMdd") + "1";
+                            NumberTable1s = DateTime.Now.ToString("yyyyMMdd") + "1";
                         }
                     }
                     
@@ -1695,17 +1712,7 @@ namespace consoleRS2toBD
                     stanbuf1s[81] = stanbuffer1s[305];          //D19", 
                     stanbuf1s[82] = stanbuffer1s[306];          //D20", 
                     stanbuf1s[83] = stanbuffer1s[307];          //U64", 
-                    stanbuf1s[84] = stanbuffer1s[308];          //RasxCD
-                    //stanbuf1s[85] = stanbuffer1s[24];          //D1_pred 
-                    //stanbuf1s[86] = stanbuffer1s[25];          //D1_pred
-                    //stanbuf1s[87] = stanbuffer1s[26];          //D2_pred 
-                    //stanbuf1s[88] = stanbuffer1s[27];          //D2_pred
-                    //stanbuf1s[89] = stanbuffer1s[28];          //D3_pred 
-                    //stanbuf1s[90] = stanbuffer1s[29];          //D3_pred
-                    //stanbuf1s[91] = stanbuffer1s[30];          //D4_pred 
-                    //stanbuf1s[92] = stanbuffer1s[31];          //D4_pred
-                    //stanbuf1s[93] = stanbuffer1s[32];          //D5_pred 
-                    //stanbuf1s[94] = stanbuffer1s[33];          //D5_pred
+                    stanbuf1s[84] = stanbuffer1s[309];          //RasxCD
                     stanbuf1s[85] = stanbuffer1s[6];             //speeed 
                     stanbuf1s[86] = stanbuffer1s[7];             //speeed 
 
@@ -1717,97 +1724,193 @@ namespace consoleRS2toBD
 
                     #region Запись данных 1s
 
+                    #region создание Таблицы stan1s
 
-                    string comBD = "if not exists (select * from sysobjects where name ='" + "stan1s" + numberTable + "' and xtype='U') create table " + "stan1s" + numberTable +
+                   
+                    //string comBD = "if not exists (select * from sysobjects where name ='" + "stan1s" + numberTable + "' and xtype='U') create table " + "stan1s" + numberTable +
+                    //   "(" +
+                    //   "dtsave datetime , " +
+                    //   "HL191 int , " +
+                    //   "HL192 int , " +
+                    //   "BL193 int , " +
+                    //   "BL194 int , " +
+                    //   "HR191 int , " +
+                    //   "HR192 int , " +
+                    //   "BR193 int , " +
+                    //   "BR194 int , " +
+                    //   "NL281 int , " +
+                    //   "NL282 int , " +
+                    //   "BL283 int , " +
+                    //   "BL284 int , " +
+                    //   "NR281 int , " +
+                    //   "NR282 int , " +
+                    //   "BR283 int , " +
+                    //   "BR284 int , " +
+                    //   "BL301 int , " +
+                    //   "BL302 int , " +
+                    //   "HL303 int , " +
+                    //   "HL304 int , " +
+                    //   "BR301 int , " +
+                    //   "BR302 int , " +
+                    //   "HR303 int , " +
+                    //   "HR304 int , " +
+                    //   "BL321 int , " +
+                    //   "BL322 int , " +
+                    //   "HL323 int , " +
+                    //   "HL324 int , " +
+                    //   "BR321 int , " +
+                    //   "BR322 int , " +
+                    //   "HR323 int , " +
+                    //   "HR324 int , " +
+                    //   "BL341 int , " +
+                    //   "BL342 int , " +
+                    //   "HL343 int , " +
+                    //   "HL344 int , " +
+                    //   "BR341 int , " +
+                    //   "BR342 int , " +
+                    //   "HR343 int , " +
+                    //   "HR344 int , " +
+                    //   "L461 int , " +
+                    //   "L462 int , " +
+                    //   "L463 int , " +
+                    //   "R461 int , " +
+                    //   "R462 int , " +
+                    //   "R463 int , " +
+                    //   "G11L int , " +
+                    //   "G12L int , " +
+                    //   "G13L int , " +
+                    //   "G14L int , " +
+                    //   "G15L int , " +
+                    //   "G16L int , " +
+                    //   "G17L int , " +
+                    //   "G11R int , " +
+                    //   "G12R int , " +
+                    //   "G13R int , " +
+                    //   "G14R int , " +
+                    //   "G15R int , " +
+                    //   "G16R int , " +
+                    //   "G17R int , " +
+                    //   "G21L int , " +
+                    //   "G22L int , " +
+                    //   "G23L int , " +
+                    //   "G24L int , " +
+                    //   "G25L int , " +
+                    //   "G26L int , " +
+                    //   "G27L int , " +
+                    //   "G21R int , " +
+                    //   "G22R int , " +
+                    //   "G23R int , " +
+                    //   "G24R int , " +
+                    //   "G25R int , " +
+                    //   "G26R int , " +
+                    //   "G27R int , " +
+                    //   "D12 float , " +
+                    //   "D13 float , " +
+                    //   "D14 float , " +
+                    //   "D15 float , " +
+                    //   "D16 float , " +
+                    //   "D17 float , " +
+                    //   "D18 float , " +
+                    //   "D19 float , " +
+                    //   "D20 float , " +
+                    //   "U64 int , " +
+                    //   "RasxCD int, " +
+                    //   "speed float " +
+                    //   ")";
+
+                    string comBD = "if not exists (select * from sysobjects where name ='" + "stan1s" + NumberTable1s + "' and xtype='U') create table " + "stan1s" + NumberTable1s +
                        "(" +
-                       "datetime1s datetime , " +
-                       "s191HL int , " +
-                       "s192HL int , " +
-                       "s193BL int , " +
-                       "s194BL int , " +
-                       "s191HR int , " +
-                       "s192HR int , " +
-                       "s193BR int , " +
-                       "s194BR int , " +
-                       "s281NL int , " +
-                       "s282NL int , " +
-                       "s283BL int , " +
-                       "s284BL int , " +
-                       "s281NR int , " +
-                       "s282NR int , " +
-                       "s283BR int , " +
-                       "s284BR int , " +
-                       "s301BL int , " +
-                       "s302BL int , " +
-                       "s303HL int , " +
-                       "s304HL int , " +
-                       "s301BR int , " +
-                       "s302BR int , " +
-                       "s303HR int , " +
-                       "s304HR int , " +
-                       "s321BL int , " +
-                       "s322BL int , " +
-                       "s323HL int , " +
-                       "s324HL int , " +
-                       "s321BR int , " +
-                       "s322BR int , " +
-                       "s323HR int , " +
-                       "s324HR int , " +
-                       "s341BL int , " +
-                       "s342BL int , " +
-                       "s343HL int , " +
-                       "s344HL int , " +
-                       "s341BR int , " +
-                       "s342BR int , " +
-                       "s343HR int , " +
-                       "s344HR int , " +
-                       "s461L int , " +
-                       "s462L int , " +
-                       "s463L int , " +
-                       "s461R int , " +
-                       "s462R int , " +
-                       "s463R int , " +
-                       "sG11L int , " +
-                       "sG12L int , " +
-                       "sG13L int , " +
-                       "sG14L int , " +
-                       "sG15L int , " +
-                       "sG16L int , " +
-                       "sG17L int , " +
-                       "sG11R int , " +
-                       "sG12R int , " +
-                       "sG13R int , " +
-                       "sG14R int , " +
-                       "sG15R int , " +
-                       "sG16R int , " +
-                       "sG17R int , " +
-                       "sG21L int , " +
-                       "sG22L int , " +
-                       "sG23L int , " +
-                       "sG24L int , " +
-                       "sG25L int , " +
-                       "sG26L int , " +
-                       "sG27L int , " +
-                       "sG21R int , " +
-                       "sG22R int , " +
-                       "sG23R int , " +
-                       "sG24R int , " +
-                       "sG25R int , " +
-                       "sG26R int , " +
-                       "sG27R int , " +
-                       "sD12 float , " +
-                       "sD13 float , " +
-                       "sD14 float , " +
-                       "sD15 float , " +
-                       "sD16 float , " +
-                       "sD17 float , " +
-                       "sD18 float , " +
-                       "sD19 float , " +
-                       "sD20 float , " +
-                       "sU64 int , " +
-                       "sRasxCD int, " +
-                       "speed float " +
+                       "id bigint IDENTITY(1,1) NOT NULL," +
+                       // "dtsave datetime NULL CONSTRAINT " + "stan1s" + numberTable + "_dtsave  DEFAULT (getdate())," +
+                       "dtsave datetime default NULL," +
+                       "HL191 smallint default NULL," +
+                       "HL192 smallint default NULL," +
+                       "BL193 smallint default NULL," +
+                       "BL194 smallint default NULL," +
+                       "HR191 smallint default NULL," +
+                       "HR192 smallint default NULL," +
+                       "BR193 smallint default NULL," +
+                       "BR194 smallint default NULL," +
+                       "NL281 smallint default NULL," +
+                       "NL282 smallint default NULL," +
+                       "BL283 smallint default NULL," +
+                       "BL284 smallint default NULL," +
+                       "NR281 smallint default NULL," +
+                       "NR282 smallint default NULL," +
+                       "BR283 smallint default NULL," +
+                       "BR284 smallint default NULL," +
+                       "BL301 smallint default NULL," +
+                       "BL302 smallint default NULL," +
+                       "NL303 smallint default NULL," +
+                       "NL304 smallint default NULL," +
+                       "BR301 smallint default NULL," +
+                       "BR302 smallint default NULL," +
+                       "HR303 smallint default NULL," +
+                       "HR304 smallint default NULL," +
+                       "BL321 smallint default NULL," +
+                       "BL322 smallint default NULL," +
+                       "HL323 smallint default NULL," +
+                       "HL324 smallint default NULL," +
+                       "BR321 smallint default NULL," +
+                       "BR322 smallint default NULL," +
+                       "HR323 smallint default NULL," +
+                       "HR324 smallint default NULL," +
+                       "BL341 smallint default NULL," +
+                       "BL342 smallint default NULL," +
+                       "HL343 smallint default NULL," +
+                       "HL344 smallint default NULL," +
+                       "BR341 smallint default NULL," +
+                       "BR342 smallint default NULL," +
+                       "HR343 smallint default NULL," +
+                       "HR344 smallint default NULL," +
+                       "L461 smallint default NULL," +
+                       "L462 smallint default NULL," +
+                       "L463 smallint default NULL," +
+                       "R461 smallint default NULL," +
+                       "R462 smallint default NULL," +
+                       "R463 smallint default NULL," +
+                       "G11L smallint default NULL," +
+                       "G12L smallint default NULL," +
+                       "G13L smallint default NULL," +
+                       "G14L smallint default NULL," +
+                       "G15L smallint default NULL," +
+                       "G16L smallint default NULL," +
+                       "G17L smallint default NULL," +
+                       "G11R smallint default NULL," +
+                       "G12R smallint default NULL," +
+                       "G13R smallint default NULL," +
+                       "G14R smallint default NULL," +
+                       "G15R smallint default NULL," +
+                       "G16R smallint default NULL," +
+                       "G17R smallint default NULL," +
+                       "G21L smallint default NULL," +
+                       "G22L smallint default NULL," +
+                       "G23L smallint default NULL," +
+                       "G24L smallint default NULL," +
+                       "G25L smallint default NULL," +
+                       "G26L smallint default NULL," +
+                       "G27L smallint default NULL," +
+                       "G21R smallint default NULL," +
+                       "G22R smallint default NULL," +
+                       "G23R smallint default NULL," +
+                       "G24R smallint default NULL," +
+                       "G25R smallint default NULL," +
+                       "G26R smallint default NULL," +
+                       "G27R smallint default NULL," +
+                       "D12 float default NULL," +
+                       "D13 float default NULL," +
+                       "D14 float default NULL," +
+                       "D15 float default NULL," +
+                       "D16 float default NULL," +
+                       "D17 float default NULL," +
+                       "D18 float default NULL," +
+                       "D19 float default NULL," +
+                       "D20 float default NULL," +
+                       "U64 smallint default NULL," +
+                       "RasxCD smallint default NULL," +
+                       "speed float default 0" +
                        ")";
+
 
                     using (SqlConnection conSQL1s1 = new SqlConnection(connectionString))
                     {
@@ -1821,12 +1924,14 @@ namespace consoleRS2toBD
                         catch (Exception)
                         {
                             //Program.messageErrorSt1c = "Stan1s" + numberTable + " НЕ ЗАПИСАНЫ - " + ex.Message + " Insert запрос: " + comRulon1s1;
-                            Program.messageErrorSt1cTab = "stan1s" + numberTable + " НЕ СОЗДАНА ";
+                            Program.messageErrorSt1cTab = "stan1s" + NumberTable1s + " НЕ СОЗДАНА ";
                             Program.dtErrorSt1cTab = DateTime.Now;
 
                         }
                         
                     }
+
+                    #endregion
 
                     #region  // В Insert используем передачу параметров через Переменную
                     // string comRulon1s1 = "INSERT INTO " + "Stan1s" + numberTable +
@@ -2059,15 +2164,14 @@ namespace consoleRS2toBD
                     //")";
                     #endregion
 
-                    string comRulon1s1 = "INSERT INTO " + "stan1s" + numberTable +
-                  " (datetime1s,s191HL,s192HL,s193BL,s194BL,s191HR,s192HR,s193BR,s194BR,s281NL,s282NL,s283BL,s284BL,s281NR,s282NR," +
-                  "s283BR,s284BR,s301BL,s302BL,s303HL,s304HL,s301BR,s302BR,s303HR,s304HR,s321BL,s322BL,s323HL,s324HL,s321BR,s322BR," +
-                  "s323HR,s324HR,s341BL,s342BL,s343HL,s344HL,s341BR,s342BR,s343HR,s344HR,s461L,s462L,s463L,s461R,s462R,s463R,sG11L," +
-                  "sG12L,sG13L,sG14L,sG15L,sG16L,sG17L,sG11R,sG12R,sG13R,sG14R,sG15R,sG16R,sG17R,sG21L,sG22L,sG23L,sG24L,sG25L,sG26L," +
-                  "sG27L,sG21R,sG22R,sG23R,sG24R,sG25R,sG26R,sG27R,sD12,sD13,sD14,sD15,sD16,sD17,sD18,sD19,sD20,sU64,sRasxCD,speed) " +
+                    string comRulon1s1 = "INSERT INTO " + "stan1s" + NumberTable1s +
+                  " (dtsave,HL191,HL192,BL193,BL194,HR191,HR192,BR193,BR194,NL281,NL282,BL283,BL284,NR281,NR282,BR283,BR284,BL301,BL302,NL303,NL304,BR301,BR302"+
+                    ",HR303,HR304,BL321,BL322,HL323,HL324,BR321,BR322,HR323,HR324,BL341,BL342,HL343,HL344,BR341,BR342,HR343,HR344,L461,L462,L463,R461,R462,R463" +
+                    ",G11L,G12L,G13L,G14L,G15L,G16L,G17L,G11R,G12R,G13R,G14R,G15R,G16R,G17R,G21L,G22L,G23L,G24L,G25L,G26L,G27L,G21R,G22R,G23R,G24R,G25R,G26R,G27R,D12,D13,D14,D15,D16,D17,D18,D19,D20,U64,RasxCD,speed) " +
                   "VALUES" +
                   " (" +
                   " @datetime1sStan, " +
+                  //DateTime.Now + "," + 
                   stanbuf1s[0] + "," +
                   stanbuf1s[1] + "," +
                   stanbuf1s[2] + "," +
@@ -2142,17 +2246,29 @@ namespace consoleRS2toBD
                   stanbuf1s[71] + "," +
                   stanbuf1s[72] + "," +
                   stanbuf1s[73] + "," +
-                  (float)(BitConverter.ToInt16(stanbuf1s, 74)) / 10 + "," +
-                  (float)(BitConverter.ToInt16(stanbuf1s, 75)) / 10 + "," +
-                  (float)(BitConverter.ToInt16(stanbuf1s, 76)) / 10 + "," +
-                  (float)(BitConverter.ToInt16(stanbuf1s, 77)) / 10 + "," +
-                  (float)(BitConverter.ToInt16(stanbuf1s, 78)) / 10 + "," +
-                  (float)(BitConverter.ToInt16(stanbuf1s, 79)) / 10 + "," +
-                  (float)(BitConverter.ToInt16(stanbuf1s, 80)) / 10 + "," +
-                  (float)(BitConverter.ToInt16(stanbuf1s, 81)) / 10 + "," +
-                  (float)(BitConverter.ToInt16(stanbuf1s, 82)) / 10 + "," +
-                  (int)(BitConverter.ToInt16(stanbuf1s, 83) * 10) + "," +
-                  (int)(BitConverter.ToInt16(stanbuf1s, 84) * 10) + "," +
+                  
+                   //(float)(BitConverter.ToInt16(stanbuf1s, 74)) / 10 + "," +
+                  ((float)stanbuf1s[74])/10 + "," +
+                  //(float)(BitConverter.ToInt16(stanbuf1s, 75)) / 10 + "," +
+                  ((float)stanbuf1s[75]) / 10 + "," +
+                  //(float)(BitConverter.ToInt16(stanbuf1s, 76)) / 10 + "," +
+                  ((float)stanbuf1s[76]) / 10 + "," +
+                  //(float)(BitConverter.ToInt16(stanbuf1s, 77)) / 10 + "," +
+                  ((float)stanbuf1s[77]) / 10 + "," +
+                  //(float)(BitConverter.ToInt16(stanbuf1s, 78)) / 10 + "," +
+                  ((float)stanbuf1s[78]) / 10 + "," +
+                  //(float)(BitConverter.ToInt16(stanbuf1s, 79)) / 10 + "," +
+                  ((float)stanbuf1s[79]) / 10 + "," +
+                  //(float)(BitConverter.ToInt16(stanbuf1s, 80)) / 10 + "," +
+                  ((float)stanbuf1s[80]) / 10 + "," +
+                  //(float)(BitConverter.ToInt16(stanbuf1s, 81)) / 10 + "," +
+                  ((float)stanbuf1s[81]) / 10 + "," +
+                  //(float)(BitConverter.ToInt16(stanbuf1s, 82)) / 10 + "," +
+                  ((float)stanbuf1s[82]) / 10 + "," +
+                  //(int)(BitConverter.ToInt16(stanbuf1s, 83) * 10) + "," +
+                  stanbuf1s[83] * 10 + "," +
+                  //(int)(BitConverter.ToInt16(stanbuf1s, 84) * 10) + "," +
+                  stanbuf1s[84] * 10 + "," +
                   //(float)(BitConverter.ToInt16(stanbuffer1s, 6)) / 100 + 
                   (float)(BitConverter.ToInt16(stanbuf1s, 85)) / 100 +
                   ")";
@@ -2172,7 +2288,7 @@ namespace consoleRS2toBD
                             command.ExecuteNonQuery();
                             conSQL1s2.Close();
                             Program.intConMessageOKSt1c = Program.intConMessageOKSt1c + 1;
-                            Program.messageOKSt1c1 = "Данные в БД(" + "stan1s" + numberTable + ") 1s записаны";
+                            Program.messageOKSt1c1 = "Данные в БД(" + "stan1s" + NumberTable1s + ") 1s записаны";
                             Program.messageOKSt1c2 = Program.messageOKSt1c2+".";
                             Program.dtOKSt1c = DateTime.Now;
 
@@ -2181,8 +2297,8 @@ namespace consoleRS2toBD
                         catch (Exception ex)
                         {
 
-                            //Program.messageErrorSt1c = "Stan1s" + numberTable + " НЕ ЗАПИСАНЫ - " + ex.Message + " Insert запрос: " + comRulon1s1;
-                            Program.messageErrorSt1c = "stan1s" + numberTable + " НЕ ЗАПИСАНЫ ";
+                            Program.messageErrorSt1c = "Stan1s" + numberTable + " НЕ ЗАПИСАНЫ - " + ex.Message + " Insert запрос: " + comRulon1s1;
+                            Program.messageErrorSt1c = "stan1s" + NumberTable1s + " НЕ ЗАПИСАНЫ ";
                             Program.dtErrorSt1c = DateTime.Now;
                         }
 
@@ -2576,10 +2692,11 @@ namespace consoleRS2toBD
 
                     if (blSave)
                     {
-                        string strTableNamePerevalki = "StanPerevalki" + DateTime.Now.ToString("yyyyMM");
+                        //string strTableNamePerevalki = "StanPerevalki" + DateTime.Now.ToString("yyyyMM");
+                        string strTableNamePerevalki = "perevalki";
                         string comBDPerevalki = "if not exists (select * from sysobjects where name='" + strTableNamePerevalki + "' and xtype='U') create table " + strTableNamePerevalki +
                                 "(" +
-                                "dtPerevalki datetime NOT NULL, " +
+                                "dtsave datetime NOT NULL, " +
                                 "kl1 int NOT NULL, " +
                                 "kl2 int NOT NULL, " +
                                 "kl3 int NOT NULL, " +
@@ -3202,14 +3319,16 @@ namespace consoleRS2toBD
                     #endregion
 
                     #region БД
-                    
+
+                    //'dtsave datetime NULL CONSTRAINT ' + BaseName + '_dtsave  DEFAULT (getdate()),' +
 
                     #region Проверяем создана ли таблица
                     string comBDMessage = "if not exists (select * from sysobjects where name='" + strTableName + "' and xtype='U') create table " + strTableName +
                                 "(" +
-                                "status int NOT NULL, " +
-                                "dtmes datetime NOT NULL, " +
-                                "message text NOT NULL, " +
+                                "dtsave datetime NULL CONSTRAINT " + strTableName + "_dtsave  DEFAULT (getdate())," +
+                                "number int NOT NULL, " +
+                                "vremiamess datetime NOT NULL, " +
+                                "note varchar(75) NOT NULL, " +
                                 "speed float NOT NULL)";
 
                     //создаем таблицу сообщений стана 
@@ -3239,7 +3358,7 @@ namespace consoleRS2toBD
                     if (QuerySQL.Length > 0)
                     {
                         QuerySQL = QuerySQL.Substring(0, QuerySQL.Length - 1);
-                        string SQLMessage = "INSERT INTO " + strTableName + " Values " + QuerySQL;
+                        string SQLMessage = "INSERT INTO " + strTableName + " (number,vremiamess,note,speed) Values " + QuerySQL;
 
                         using (SqlConnection con2Mess = new SqlConnection(connectionString))
                         {
